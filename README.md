@@ -12,3 +12,4 @@ Met deze app kan je gemakkelijk je boodschappenlijstje(s) bijhouden en vinden in
 ## Extra app ideas ##
 - ### travel docs ###
 Centrale plek voor alle info omtrent een reis. Bijhouden van links, vergelijken van prijzen van vluchten / verblijven, verdelen van geld.
+
