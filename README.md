@@ -1,4 +1,11 @@
-# Project SELAB1 #
+# Project SELAB1 - Task Manager app #
+
+Soms voelt het alsof je alles zelf doet thuis, of soms vergeten mensen wat je aan hen gevraagd hebt om te doen. Om dit op te lossen is het makkelijk een app te gebruiken met je groep.
+Een app die makkelijk bijhoudt welke taken wie al gedaan heeft. Je kan ook taken geven aan andere gebruikers in je groep. Taken kunnen ook deadlines hebben waar je pushmeldingen van kan krijgen om ze niet te vergeten. Op deze manier is er geen verwarring meer en hopelijk ook een eerlijke verdeling van de taken.
+
+
+# Archived #
+
 ## Mission Statements 3 apps ##
 - ### Shared Calendar ###
 Een app maken die kalenders van je vrienden met die van jou vergelijkt om makkelijker evenementen / afspraken te plannen. Momenteel wordt er vaak gebruikt gemaakt van onoverzichtelijke doodles / polls om data vast te leggen. Het is handig om te kunnen zien wanneer je best iets inplant zodat zo veel mogelijk mensen aanwezig zijn en automatisch in de agenda van je deelnemers zet. Hiermee bespaart iedereen tijd en moeite. Dit kan ook in professionele setting gebruikt worden voor het inplannen van meetings, etc.
