@@ -17,6 +17,8 @@ https://marvelapp.com/prototype/8jci005/screen/85410678
 - Bekijk op 9 februari wat Embiid zijn taken zijn.
 
 ### Vragen voor gebruikers ###
+- Wat zou je nog aan de UI aanpassen?
+- Welke belangrijke functionaliteit ontbreekt nog om de app echt nuttig te maken?
 
 # Archived #
 
