@@ -8,8 +8,11 @@ Een layout prototype kan je vinden hier:
 https://marvelapp.com/prototype/8jci005/screen/85410678
 
 ### User tests ###
-- Voeg een nieuwe taak toe: Zus ophalen van dansles met als deadline 12:00.
-- 
+- Voeg een nieuwe groep toe / join een nieuwe groep.
+- Leave de groep Minecraft House.
+- Nodig iemand uit voor een groep.
+- Voeg een nieuwe taak toe in de groep "Dad's house": Zus ophalen van dansles met als deadline 12:00.
+- Bekijk op 9 februari wat Embiid zijn taken zijn.
 
 # Archived #
 
