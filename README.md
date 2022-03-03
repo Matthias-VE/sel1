@@ -11,6 +11,7 @@ https://marvelapp.com/prototype/8jci005/screen/85410678
 - Maak een nieuwe groep genaamd "Test Group"
 - Leave de groep Minecraft House.
 - Nodig iemand uit voor een groep.
+- Verander de taal.
 - Voeg een nieuwe taak toe in de groep "Dad's house": Zus ophalen van dansles met als deadline 12:00.
 - Bekijk op 9 februari wat Embiid zijn taken zijn.
 
