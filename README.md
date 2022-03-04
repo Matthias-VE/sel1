@@ -3,6 +3,9 @@
 Soms voelt het alsof je alles zelf doet thuis, of soms vergeten mensen wat je aan hen gevraagd hebt om te doen. Om dit op te lossen is het makkelijk een app te gebruiken met je groep.
 Een app die makkelijk bijhoudt welke taken wie al gedaan heeft. Je kan ook taken geven aan andere gebruikers in je groep. Taken kunnen ook deadlines hebben waar je pushmeldingen van kan krijgen om ze niet te vergeten. Op deze manier is er geen verwarring meer en hopelijk ook een eerlijke verdeling van de taken.
 
+### Testrapport ###
+[testrapport](https://github.ugent.be/SELab1/project2022-groep-12/blob/main/testrapport)
+
 ## Prototyping ##
 Een layout prototype kan je vinden hier:
 https://marvelapp.com/prototype/8jci005/screen/85410678
