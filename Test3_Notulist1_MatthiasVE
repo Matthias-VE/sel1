@@ -1,25 +1,33 @@
 Test1 voeg groep toe:
-  
+  IK neem aan dak op de puntjes moet drukken -> new group -> save -> OKE
 
 Test 2 verlaat minecraft house:
-  
+  Neem aan dat op minecraft house moet klikken -> Neen -> Eerst Leave group -> selecteren -> Confirm
 
 Test 3 Nodig iemand iemand uit voor de groep Dad's house:
- 
+  Op klikken -> Settings -> NEEN ->  + -> NEEN -> 3 puntjes -> uitnodigen -> OKE
   
 Test 4: Voltooi de taak take out the trash:
+  Op klikken -> OKE
 
 Test 5: Taal veranderen:
-
-
+  3 puntjes -> settings -> language -> OKE
   
-Test 6: Voeg een nieuwe taak toe:
-
+Test 6: Voeg een nieuwe taak toe in Dad's House:
+  + -> new task -> OKE
   
 Test 7: Dad'shouse -> Overview -> 9 februari -> Zien -> OKE
+  Dad's House -> Overview -> 9 feb -> Embiid -> OKE
 
+Zou je het thuis gebruiken? -> 
+  Niet direct, Misschien met vrienden
 
-Welke functionaliteit ontbreekt er? -> Kan op niks komen
+Welke functionaliteit ontbreekt er? -> 
+  Ik zou doen dat je een melding krijgt als er een taak voor jou is toegevoegd.
 
-
-UI -> 
+Wat was er niet intiuitief->
+  De 3 puntjes op het hoofdscherm
+  Een balk op het groep scherm maar niet op het hoofdscherm (oplossing: ook een balk op het hoofdscherm waarbij dan overview  voor alle taken)
+  
+Extra:
+  join group functionaliteit kan beter -> waarvoor dient die knop als je mensen uitnodigt met link
