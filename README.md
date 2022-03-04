@@ -10,7 +10,7 @@ https://marvelapp.com/prototype/8jci005/screen/85410678
 ### User tests ###
 - Maak een nieuwe groep genaamd "Test Group"
 - Leave de groep Minecraft House.
-- Nodig iemand uit voor een groep.
+- Nodig iemand uit voor de groep Dad's House.
 - Zet de taak "Take out the trash" op voltooid
 - Verander de taal.
 - Voeg een nieuwe taak toe in de groep "Dad's house": Zus ophalen van dansles met als deadline 12:00.
