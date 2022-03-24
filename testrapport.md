@@ -19,9 +19,10 @@ https://marvelapp.com/prototype/8jci005/screen/85410678
 - Welke functionaliteiten komen niet intuïtief over?
 - Wat zou je nog aan de UI aanpassen?
 
-## conclusies ##
+## Conclusies ##
 
 - Taskbar onderaan het scherm, ook op het groepsoverzichtscherm, waardoor de 'all tasks'-knop zal verdwijnen
 - Functionaleiten van de drie puntjes rechts boven verplaatsen naar de taskbar
 - Alle (basis)functionaliteiten zijn aanwezig en de testers wisten niet meteen welke extra functionaliteiten we nog zouden kunnen toevoegen
-- 1 gebruiker gaf aan dat hij de app thuis niet zou gebruiken, bij hem worden taken via sms geregeld
+- 1 gebruiker gaf aan dat hij de app thuis niet zou gebruiken, bij hem worden taken via sms geregeld. Anderen zouden het wel met vrienden gebruiken
+- Een melding voor elke toegewezen taak was ook een meermaals besproken puntje
