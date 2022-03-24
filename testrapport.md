@@ -21,7 +21,7 @@ https://marvelapp.com/prototype/8jci005/screen/85410678
 
 ## conclusies ##
 
-- taskbar onderaan het scherm ook op het groepsoverzichtscherm, waardoor de all tasks knop zal verdwijnen
-- functionaleiten van de drie puntjes rechts boven verplaatsen naar de taskbar
-- alle (basis)functionaliteiten zijn aanwezig en de testers wisten niet meteen welke extra functionaliteiten we nog kunnen toevoegen
+- Taskbar onderaan het scherm, ook op het groepsoverzichtscherm, waardoor de 'all tasks'-knop zal verdwijnen
+- Functionaleiten van de drie puntjes rechts boven verplaatsen naar de taskbar
+- Alle (basis)functionaliteiten zijn aanwezig en de testers wisten niet meteen welke extra functionaliteiten we nog zouden kunnen toevoegen
 - 1 gebruiker gaf aan dat hij de app thuis niet zou gebruiken, bij hem worden taken via sms geregeld
