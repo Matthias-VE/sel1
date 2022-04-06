@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "365904341269",
+    "project_id": "heppi-home",
+    "storage_bucket": "heppi-home.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:365904341269:android:0566d99e5e92d8dca3611c",
+        "android_client_info": {
+          "package_name": "com.heppihome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "365904341269-ver75optul9ulcfp1rf6qc7cqdr0qkq1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heppihome",
+            "certificate_hash": "8334a089c5d7738e46da8fe2a3724c4e4c40ddda"
+          }
+        },
+        {
+          "client_id": "365904341269-t8ku4rt8b1novrleo5qf0q5j37nniqhj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq5_RKMJrSyIG_vFXlqIqQ-eObl3w_FJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "365904341269-t8ku4rt8b1novrleo5qf0q5j37nniqhj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
