@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                    var vm : HomeMainViewModel = viewModel()
-                   MainTest(vm.tasks.collectAsState(), {vm.addTask()},{vm.toggleDone(it)})
+                   MainTest(vm.tasks.collectAsState().value, !vm.loadingPosted.collectAsState().value, {vm.addTaskTest()},{vm.toggleDoneTest(it)})
                 }
             }
         }
@@ -48,26 +48,26 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainTest(tasks : State<List<Task>>, onAdded : () -> Unit, onChecked: (Task) -> Unit) {
+fun MainTest(tasks : List<Task>, addEnabled : Boolean, onAdded : () -> Unit, onChecked: (Task) -> Unit) {
     Column() {
         TopAppBar() {
             Text(text = "Heppi Home", modifier = Modifier.padding(horizontal = 16.dp))
         }
-        Greeting("Matthias")
-        TestFirestore(tasks, onAdded, onChecked)
+        Greeting("Meneer den Alien")
+        TestFirestore(tasks,addEnabled, onAdded, onChecked)
     }
 }
 
 @Composable
-fun TestFirestore(tasks : State<List<Task>>, onAdded : () -> Unit, onChecked: (Task) -> Unit) {
+fun TestFirestore(tasks : List<Task>, addEnabled: Boolean, onAdded : () -> Unit, onChecked: (Task) -> Unit) {
     Column() {
-        for (t in tasks.value) {
+        for (t in tasks) {
             Row() {
                 Checkbox(checked = t.done, onCheckedChange = {onChecked(t)})
                 Text(text= t.text)
             }
         }
-        Button(onClick = onAdded) {
+        Button(onClick = onAdded, enabled = addEnabled) {
             Text(text = "Add Task")
         }
     }

@@ -1,13 +1,13 @@
 package com.heppihome.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.heppihome.data.HomeRepository
+import com.heppihome.data.models.ResultState
 import com.heppihome.data.models.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 
@@ -15,16 +15,26 @@ import javax.inject.Inject
 class HomeMainViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
 
     private val _tasks = MutableStateFlow(listOf(rep.getTask()))
+    private val _loadingPosted = MutableStateFlow(false)
 
     val tasks : StateFlow<List<Task>> = _tasks.asStateFlow()
+    val loadingPosted : StateFlow<Boolean> = _loadingPosted.asStateFlow()
 
-    fun addTask() {
+    val allTasks : StateFlow<ResultState<List<Task>>> = rep.getAllTasks().stateIn(viewModelScope, SharingStarted.Lazily, ResultState.loading())
+
+    suspend fun addTask(t : Task) {
+        rep.addTask(t).collect { s ->
+            _loadingPosted.value = s is ResultState.Loading
+        }
+    }
+
+    fun addTaskTest() {
         val m = mutableListOf<Task>(rep.getTask())
         m.addAll(_tasks.value)
         _tasks.value = m.toList()
     }
 
-    fun toggleDone(t : Task) {
+    fun toggleDoneTest(t : Task) {
         val newt : Task
         if (t.done) {
             newt = Task(t.text, false)
