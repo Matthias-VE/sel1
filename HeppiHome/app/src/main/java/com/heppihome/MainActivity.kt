@@ -3,23 +3,31 @@ package com.heppihome
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.heppihome.data.web.FirestoreRepository
+import com.heppihome.data.sources.test.Task
 import com.heppihome.ui.theme.HeppiHomeTheme
+import com.heppihome.viewmodels.HomeMainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val mFirestore = FirestoreRepository().getFirestore()
-
+    val TAG = MainActivity::class.java.name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +38,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    
-                    Greeting("Matthias")
-                    TestFirestore(f = mFirestore)
+                   var vm : HomeMainViewModel = viewModel()
+                   MainTest(vm.tasks.collectAsState(), {vm.addTask()},{vm.toggleDone(it)})
                 }
             }
         }
@@ -40,18 +47,29 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TestFirestore(f : FirebaseFirestore) {
-    
-    Button(onClick = {
-        val testref = f.collection("test")
-        for (i in 0..10) {
-            val t = Test("I NEED SUM MF BEER")
-            testref.add(t)
+fun MainTest(tasks : State<List<Task>>, onAdded : () -> Unit, onChecked: (Task) -> Unit) {
+    Column() {
+        TopAppBar() {
+            Text(text = "Heppi Home", modifier = Modifier.padding(horizontal = 16.dp))
         }
-        }){
-        Text(text = "ADD BEER")
+        Greeting("Matthias")
+        TestFirestore(tasks, onAdded, onChecked)
     }
-    
+}
+
+@Composable
+fun TestFirestore(tasks : State<List<Task>>, onAdded : () -> Unit, onChecked: (Task) -> Unit) {
+    Column() {
+        for (t in tasks.value) {
+            Row() {
+                Checkbox(checked = t.done, onCheckedChange = {onChecked(t)})
+                Text(text= t.text)
+            }
+        }
+        Button(onClick = onAdded) {
+            Text(text = "Add Task")
+        }
+    }
 }
 
 @Composable
