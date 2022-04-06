@@ -1,10 +1,9 @@
 package com.heppihome.data.sources.test
 
 import androidx.compose.runtime.saveable.mapSaver
+import com.heppihome.data.models.Task
 import kotlin.random.Random
 
-
-data class Task(val text: String, val done : Boolean)
 
 val TaskSaver = run {
     val textKey = "Text"

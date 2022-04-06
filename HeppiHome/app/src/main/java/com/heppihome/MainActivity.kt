@@ -18,7 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.heppihome.data.sources.test.Task
+import com.heppihome.data.models.Task
+
 import com.heppihome.ui.theme.HeppiHomeTheme
 import com.heppihome.viewmodels.HomeMainViewModel
 import dagger.hilt.android.AndroidEntryPoint

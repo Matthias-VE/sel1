@@ -3,7 +3,7 @@ package com.heppihome.viewmodels
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.heppihome.data.HomeRepository
-import com.heppihome.data.sources.test.Task
+import com.heppihome.data.models.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

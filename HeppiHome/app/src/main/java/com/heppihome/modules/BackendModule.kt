@@ -1,5 +1,6 @@
 package com.heppihome.modules
 
+import com.google.firebase.firestore.FirebaseFirestore
 import com.heppihome.data.sources.test.Backend
 import dagger.Module
 import dagger.Provides
@@ -14,5 +15,11 @@ class BackendModule {
     @Provides
     fun provideBackend() : Backend {
         return Backend()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseFirestore() : FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
     }
 }
