@@ -4,15 +4,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.firebase.firestore.FirebaseFirestore
+import com.heppihome.data.web.FirestoreRepository
 import com.heppihome.ui.theme.HeppiHomeTheme
 
+
 class MainActivity : ComponentActivity() {
+
+    private val mFirestore = FirestoreRepository().getFirestore()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,11 +30,28 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    
+                    Greeting("Matthias")
+                    TestFirestore(f = mFirestore)
                 }
             }
         }
     }
+}
+
+@Composable
+fun TestFirestore(f : FirebaseFirestore) {
+    
+    Button(onClick = {
+        val testref = f.collection("test")
+        for (i in 0..10) {
+            val t = Test("I NEED SUM MF BEER")
+            testref.add(t)
+        }
+        }){
+        Text(text = "ADD BEER")
+    }
+    
 }
 
 @Composable

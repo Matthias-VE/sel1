@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "heppi-home",
+    "main": "heppi-home"
+  },
+  "targets": {}
+}
