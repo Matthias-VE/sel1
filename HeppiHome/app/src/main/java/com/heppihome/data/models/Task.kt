@@ -1,3 +1,9 @@
 package com.heppihome.data.models
 
-data class Task(val text: String, val done : Boolean)
+import com.google.firebase.Timestamp
+
+data class Task(val text: String = "default",
+                val done : Boolean = false,
+                val deadline : Timestamp = Timestamp.now(),
+                val users : List<User> = listOf(),
+                val id : String = "default")

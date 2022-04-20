@@ -8,20 +8,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.Timestamp
 import com.heppihome.data.models.Task
+import com.heppihome.data.models.User
 
 import com.heppihome.ui.theme.HeppiHomeTheme
-import com.heppihome.viewmodels.HomeMainViewModel
+import com.heppihome.viewmodels.TasksViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -39,16 +38,25 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                   var vm : HomeMainViewModel = viewModel()
-                   MainTest(vm.tasks.collectAsState().value, !vm.loadingPosted.collectAsState().value, {vm.addTaskTest()},{vm.toggleDoneTest(it)})
+                   val vm : TasksViewModel = viewModel()
+
+                   val tasks by vm.tasks.collectAsState()
+
+
+                   MainTest(tasks, !vm.loadingPosted.value, { vm.addTask(it) }) {
+                       vm.toggleTask(
+                           it
+                       )
+                   }
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun MainTest(tasks : List<Task>, addEnabled : Boolean, onAdded : () -> Unit, onChecked: (Task) -> Unit) {
+fun MainTest(tasks: List<Task>, addEnabled: Boolean, onAdded: (Task) -> Unit, onChecked: (Task) -> Unit) {
     Column() {
         TopAppBar() {
             Text(text = "Heppi Home", modifier = Modifier.padding(horizontal = 16.dp))
@@ -59,7 +67,7 @@ fun MainTest(tasks : List<Task>, addEnabled : Boolean, onAdded : () -> Unit, onC
 }
 
 @Composable
-fun TestFirestore(tasks : List<Task>, addEnabled: Boolean, onAdded : () -> Unit, onChecked: (Task) -> Unit) {
+fun TestFirestore(tasks : List<Task>, addEnabled: Boolean, onAdded : (Task) -> Unit, onChecked: (Task) -> Unit) {
     Column() {
         for (t in tasks) {
             Row() {
@@ -67,7 +75,7 @@ fun TestFirestore(tasks : List<Task>, addEnabled: Boolean, onAdded : () -> Unit,
                 Text(text= t.text)
             }
         }
-        Button(onClick = onAdded, enabled = addEnabled) {
+        Button(onClick = {onAdded(Task("yeetus", false, Timestamp.now(),listOf(User("test", "test@gmail.com"))))}, enabled = addEnabled) {
             Text(text = "Add Task")
         }
     }
