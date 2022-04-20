@@ -1,6 +1,5 @@
 package com.heppihome.data
 
-import android.util.Log
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObjects
 import com.heppihome.BuildConfig
@@ -8,9 +7,7 @@ import com.heppihome.data.models.Group
 import com.heppihome.data.models.ResultState
 import com.heppihome.data.models.Task
 import com.heppihome.data.models.User
-import com.heppihome.data.sources.web.FirestoreDAO
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -39,6 +36,7 @@ class HomeRepository @Inject constructor() {
         userDoc = db.collection(COLLECTION_USERS)
     }
 
+    // This adds a group
     fun addGroup(group : Group) : Flow<ResultState<DocumentReference>> =
         flow {
             emit(ResultState.loading())
@@ -51,10 +49,13 @@ class HomeRepository @Inject constructor() {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
 
+
+    // Register a listener to changes to tasks in a certain group
     fun registerTaskSnapshotListener(listener : (QuerySnapshot?, FirebaseFirestoreException?) -> Unit, group : Group) {
         listeners.add(groupDoc.document(group.id).collection(COLLECTION_TASKS).addSnapshotListener(listener))
     }
 
+    // Remove all listeners
     fun removeListeners() {
         for (l in listeners) {
             l.remove()
@@ -62,6 +63,7 @@ class HomeRepository @Inject constructor() {
         listeners.clear()
     }
 
+    // Get all tasks for a certain group
     fun getAllTasks(user : User, group : Group) : Flow<ResultState<List<Task>>> =
         flow<ResultState<List<Task>>> {
             //emit loading state while fetching the content
@@ -80,6 +82,7 @@ class HomeRepository @Inject constructor() {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
 
+    // This should get all tasks for all groups
     fun getAllTasks(user : User) : Flow<ResultState<List<Task>>> =
         // Does not work yet, because we need query index for the collection group
 
@@ -100,7 +103,7 @@ class HomeRepository @Inject constructor() {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
 
-
+    // This adds a task to a certain group
     fun addTask(task : Task, group: Group) : Flow<ResultState<DocumentReference>> =
         flow {
             //emit loading state while fetching the content
@@ -117,7 +120,7 @@ class HomeRepository @Inject constructor() {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
 
-
+    // This updates a task in a certain group's entry 'done' field. Changes true to false and false to true
     fun checkTask(task : Task, group : Group) : Flow<ResultState<DocumentReference>> =
         flow {
             emit(ResultState.loading())

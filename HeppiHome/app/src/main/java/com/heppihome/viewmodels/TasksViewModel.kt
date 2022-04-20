@@ -66,7 +66,6 @@ class TasksViewModel @Inject constructor(private val rep : HomeRepository) : Vie
     fun addTask(t : Task , g : Group = testGroup) {
         viewModelScope.launch {
             rep.addTask(t, g).collect { s ->
-                _loadingPosted.value = s is ResultState.Loading
             }
         }
     }
