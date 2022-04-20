@@ -1,3 +1,7 @@
+package com.heppihome.ui.navigation
+
+import BottomNavItem
+import NavigationGraph
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -36,7 +40,8 @@ fun BottomNavigation(navController: NavController) {
     val items = listOf(
         BottomNavItem.Tasks,
         BottomNavItem.Overview,
-        BottomNavItem.Settings)
+        BottomNavItem.Settings
+    )
 
     BottomNavigation(
         backgroundColor = Color.Blue,
