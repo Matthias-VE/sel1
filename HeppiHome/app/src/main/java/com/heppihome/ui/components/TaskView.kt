@@ -1,4 +1,4 @@
-package com.heppihome.ui.views
+package com.heppihome.ui.components
 
 import android.os.Bundle
 import android.os.PersistableBundle

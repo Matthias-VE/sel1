@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class TasksViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
+class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
 
     private val testUser : User = User("test", "test@gmail.com")
     private var testGroup : Group = Group("test", "test", listOf(testUser), "MMfMgNsL4ywptNugxRVi")

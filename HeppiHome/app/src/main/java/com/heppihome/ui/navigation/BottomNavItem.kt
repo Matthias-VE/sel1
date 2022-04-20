@@ -1,4 +1,4 @@
-
+package com.heppihome.ui.navigation
 sealed class BottomNavItem(var title: String, var icon:Int, var screen_route:String){
 
     object Tasks: BottomNavItem("Tasks", android.R.drawable.ic_menu_edit, "tasks")

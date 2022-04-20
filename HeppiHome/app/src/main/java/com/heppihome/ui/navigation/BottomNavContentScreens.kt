@@ -1,3 +1,5 @@
+package com.heppihome.ui.navigation
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

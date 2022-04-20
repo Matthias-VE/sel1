@@ -1,7 +1,5 @@
 package com.heppihome.ui.navigation
 
-import BottomNavItem
-import NavigationGraph
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -31,7 +29,7 @@ fun MainScreenView(){
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) }) {
-        NavigationGraph(navController = navController)
+        HomeNavGraph(navController = navController)
     }
 }
 
