@@ -1,6 +1,6 @@
 package com.heppihome.modules
 
-import com.heppihome.data.sources.test.Backend
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,9 +10,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class BackendModule {
+
     @Singleton
     @Provides
-    fun provideBackend() : Backend {
-        return Backend()
+    fun provideFirebaseFirestore() : FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
     }
 }
