@@ -1,9 +1,20 @@
-import NavigationGraph
-
+import android.os.Bundle
+import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
 class BottomNavActivity : AppCompatActivity(){
 
-    override fun onCreate(savedInstanceState: Budle?){
+    override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContent {
             MainScreenView()
@@ -14,7 +25,8 @@ class BottomNavActivity : AppCompatActivity(){
 @Composable
 fun MainScreenView(){
     val navController = rememberNavController()
-    Scaffold( navBar = { BottomNavigation(navController = navController) }) {
+    Scaffold(
+        bottomBar = { BottomNavigation(navController = navController) }) {
         NavigationGraph(navController = navController)
     }
 }
@@ -22,12 +34,12 @@ fun MainScreenView(){
 @Composable
 fun BottomNavigation(navController: NavController) {
     val items = listOf(
-        BottomNavItem.Overview,
         BottomNavItem.Tasks,
+        BottomNavItem.Overview,
         BottomNavItem.Settings)
 
     BottomNavigation(
-        backgroundColor = colorResource(id = R.color.green_200),
+        backgroundColor = Color.Blue,
         contentColor = Color.Black
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -35,14 +47,14 @@ fun BottomNavigation(navController: NavController) {
         items.forEach { item ->
             BottomNavigationItem(
                 icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
-                label = { Text(text = item.title, fontSize = 9.sp) },
+                label = { Text(text = item.title, fontSize = 14.sp) },
                 selectedContentColor = Color.White,
                 unselectedContentColor = Color.White,
                 alwaysShowLabel = true,
                 selected = currentRoute == item.screen_route,
                 onClick = {
                     navController.navigate(item.screen_route) {
-                        navController.graph.startDestinationRoute?.let {screen_route ->
+                        navController.graph.startDestinationRoute?.let {screen_route:String ->
                             popUpTo(screen_route) {saveState = true}
                         }
                         launchSingleTop = true
