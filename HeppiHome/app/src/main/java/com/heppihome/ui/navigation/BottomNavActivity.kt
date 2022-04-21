@@ -29,7 +29,7 @@ fun MainScreenView(){
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) }) {
-        NavigationGraph(navController = navController)
+        HomeNavGraph(navController = navController)
     }
 }
 
@@ -38,7 +38,8 @@ fun BottomNavigation(navController: NavController) {
     val items = listOf(
         BottomNavItem.Tasks,
         BottomNavItem.Overview,
-        BottomNavItem.Settings)
+        BottomNavItem.Settings
+    )
 
     BottomNavigation(
         backgroundColor = Color.Blue,
