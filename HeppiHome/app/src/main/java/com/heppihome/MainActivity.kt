@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Timestamp
 import com.heppihome.data.models.Task
 import com.heppihome.data.models.User
@@ -39,7 +40,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                   HomeNavGraph()
+                    val navController = rememberNavController()
+                    Scaffold(
+                        bottomBar = { com.heppihome.ui.navigation.BottomNavigation(navController = navController) }) {
+                        HomeNavGraph(navController = navController)
+                    }
                 }
             }
         }

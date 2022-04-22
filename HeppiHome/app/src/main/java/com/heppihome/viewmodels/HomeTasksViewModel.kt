@@ -27,12 +27,11 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
     private val testUser : User = User("test", "test@gmail.com")
     private var testGroup : Group = Group("test", "test", listOf(testUser), "MMfMgNsL4ywptNugxRVi")
 
-
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
-    private val _loadingPosted = MutableStateFlow(false)
 
+    val group = testGroup
     val tasks : StateFlow<List<Task>> = _tasks
-    val loadingPosted : StateFlow<Boolean> = _loadingPosted
+
 
     private fun taskListener(value : QuerySnapshot?, ex : FirebaseFirestoreException?) {
         if (ex != null) {
@@ -50,10 +49,20 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
         rep.registerTaskSnapshotListener(this::taskListener, testGroup)
     }
 
+    // TODO Store Group in local Room DataBase for persistence between navigation.
+    // This function will then retrieve the current active Group.
+    fun getGroup(id : String) : Group {
+        return testGroup
+    }
+
     fun onChangeGroup(group : Group) {
         rep.removeListeners()
         testGroup = group
         rep.registerTaskSnapshotListener(this::taskListener, testGroup)
+    }
+
+    fun onGoBack() {
+        rep.removeListeners()
     }
 
     fun toggleTask(t : Task) {

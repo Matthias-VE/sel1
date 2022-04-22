@@ -36,6 +36,11 @@ class HomeRepository @Inject constructor() {
         userDoc = db.collection(COLLECTION_USERS)
     }
 
+    // This gets all the groups
+    suspend fun getAllGroups() : List<Group> {
+        return groupDoc.get().await().toObjects(Group::class.java)
+    }
+
     // This adds a group
     fun addGroup(group : Group) : Flow<ResultState<DocumentReference>> =
         flow {
