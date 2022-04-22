@@ -2,6 +2,7 @@ package com.heppihome.data.test
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.google.firebase.Timestamp
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
@@ -24,9 +25,9 @@ private val viewmGroup : HomeGroupViewModel) {
     )
 
     private val testGroups = listOf(
-        Group("test groep", "dit is een groep dus", testUsers, "MMfMgNsL4ywptNugxRVi"),
-        Group("Tweede groep", "dit is ook een groep", listOf(testUsers[1], testUsers[0]), "q4jpvHZtcIAaigG4Uin8"),
-        Group("groepie groep", "alweer een groep, gekte", listOf(testUsers[2]), "0Ttr2ExZZqzjpMmBY4za")
+        Group("test groep", "dit is een groep dus", testUsers, "KXuXm9sRW43maz0Dbi2u"),
+        Group("Tweede groep", "dit is ook een groep", listOf(testUsers[1], testUsers[0]), "qADb3QuTcFwlYk1yQBOj"),
+        Group("groepie groep", "alweer een groep, gekte", listOf(testUsers[2]), "TyEA0R9Jb1DPhsKBMRE0")
     )
 
     private val testTasks = listOf(
@@ -41,12 +42,14 @@ private val viewmGroup : HomeGroupViewModel) {
     fun Populate() {
             if (viewmGroup.groups.collectAsState().value.isEmpty()) {
                 testGroups.forEach {
-                    viewmGroup. addGroup(it); testTasks.forEach { t ->
-                    viewmTask.addTask(
-                        t,
-                        it
-                    )
+                    viewmGroup.addGroupWithId(it)
                 }
+            }
+            if (viewmTask.tasks.collectAsState().value.isEmpty()) {
+                testGroups.forEach {
+                    testTasks.forEach { t ->
+                        viewmTask.addTask(t, it)
+                    }
                 }
             }
     }

@@ -24,9 +24,12 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
 
-    private val testUser : User = User("test", "test@gmail.com")
-    private var testGroup : Group = Group("test", "test", listOf(testUser), "MMfMgNsL4ywptNugxRVi")
-
+    private val testUsers = listOf(
+        User("Pieter-Jan", "pjiscool@gmail.com"),
+        User("Marieke", "EmeraldFire@gmail.com"),
+        User("Alfonso", "muisjeinhethuisje@gmail.com")
+    )
+    private var testGroup : Group = Group("test groep", "dit is een groep dus", testUsers, "KXuXm9sRW43maz0Dbi2u")
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
 
     val group = testGroup

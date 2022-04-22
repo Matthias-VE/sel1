@@ -17,7 +17,7 @@ import javax.inject.Singleton
 class HomeRepository @Inject constructor() {
 
     private lateinit var db : FirebaseFirestore;
-    private val useEmulators : Boolean = BuildConfig.DEBUG
+    private val useEmulators : Boolean = false
     private val COLLECTION_TASKS = "tasks"
     private val COLLECTION_GROUPS = "groups"
     private val COLLECTION_USERS = "users"
@@ -41,7 +41,18 @@ class HomeRepository @Inject constructor() {
         return groupDoc.get().await().toObjects(Group::class.java)
     }
 
-    // This adds a group
+    // This adds a group with an id set already
+    fun addGroupWithId(group : Group) : Flow<ResultState<DocumentReference>> =
+        flow {
+            emit(ResultState.loading())
+            val groupref = groupDoc.document(group.id)
+            groupref.set(group).await()
+            emit(ResultState.success(groupref))
+        }.catch {
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+
+    // This adds a group with no id set yet
     fun addGroup(group : Group) : Flow<ResultState<DocumentReference>> =
         flow {
             emit(ResultState.loading())

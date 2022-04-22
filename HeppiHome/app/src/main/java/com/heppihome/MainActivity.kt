@@ -44,10 +44,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val viewmTask : HomeTasksViewModel = hiltViewModel()
-                    val viewmGroup : HomeGroupViewModel = hiltViewModel()
-                    val p = PopulateDB(viewmTask, viewmGroup)
-                    p.Populate()
+                    //Population of database with dummy data.
+                    // val viewmTask : HomeTasksViewModel = hiltViewModel()
+                    // val viewmGroup : HomeGroupViewModel = hiltViewModel()
+                    // val p = PopulateDB(viewmTask, viewmGroup)
+                    // p.Populate()
 
                     val navController = rememberNavController()
                     Scaffold(

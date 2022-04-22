@@ -28,4 +28,10 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
             rep.addGroup(g).collect { }
         }
     }
+
+    fun addGroupWithId(g : Group) {
+        viewModelScope.launch {
+            rep.addGroupWithId(g).collect {}
+        }
+    }
 }
