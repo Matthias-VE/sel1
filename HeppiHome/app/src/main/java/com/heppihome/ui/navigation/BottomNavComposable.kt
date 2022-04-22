@@ -14,18 +14,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
-class BottomNavActivity : AppCompatActivity(){
-
-    override fun onCreate(savedInstanceState: Bundle?){
-        super.onCreate(savedInstanceState)
-        setContent {
-            MainScreenView()
-        }
-    }
-}
-
 @Composable
-fun MainScreenView(){
+private fun MainScreenView(){
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) }) {

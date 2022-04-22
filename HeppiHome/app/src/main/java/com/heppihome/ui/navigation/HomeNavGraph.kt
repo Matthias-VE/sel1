@@ -7,6 +7,9 @@ import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.heppihome.ui.routes.HomeGroupRoute
+import com.heppihome.ui.routes.HomeOverViewRoute
+import com.heppihome.ui.routes.HomeSettingsRoute
+import com.heppihome.ui.routes.HomeTasksRoute
 
 @Composable
 fun HomeNavGraph(
@@ -16,19 +19,27 @@ fun HomeNavGraph(
 ){
     NavHost(navController = navController, startDestination = startDestination) {
         composable(HomeAppDestinations.GROUP_ROUTE) {
-            HomeGroupRoute(vM = hiltViewModel())
+            HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {
+                navController.navigate(HomeAppDestinations.TASKS_ROUTE + "/${it.id}")
+            })
         }
 
         composable(BottomNavItem.Overview.screen_route) {
-            OverviewScreen()
+            HomeOverViewRoute()
         }
 
-        composable(BottomNavItem.Tasks.screen_route) {
-            TasksScreen()
+        composable(route = BottomNavItem.Tasks.screen_route) {
+            var id = ""
+            it.arguments?.getString("groupId")?.let { it1 ->
+                id = it1
+            }
+            HomeTasksRoute(vM = hiltViewModel(), onBackPressed = {
+                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
+            }, groupId = id)
         }
 
         composable(BottomNavItem.Settings.screen_route){
-            SettingsScreen()
+            HomeSettingsRoute()
         }
     }
 }
