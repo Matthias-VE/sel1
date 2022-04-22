@@ -7,6 +7,7 @@ import com.heppihome.data.models.Group
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +20,12 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
     fun refreshGroups() {
         viewModelScope.launch {
             _groups.value = rep.getAllGroups()
+        }
+    }
+
+    fun addGroup(g : Group) {
+        viewModelScope.launch {
+            rep.addGroup(g).collect { }
         }
     }
 }
