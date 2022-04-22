@@ -14,10 +14,8 @@ import com.heppihome.data.models.ResultState
 import com.heppihome.data.models.Task
 import com.heppihome.data.models.User
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
@@ -69,5 +67,4 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
             }
         }
     }
-
 }

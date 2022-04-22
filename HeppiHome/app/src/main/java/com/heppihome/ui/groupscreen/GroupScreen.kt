@@ -22,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.heppihome.ui.navigation.BottomNavActivity
+import com.heppihome.ui.navigation.MainScreenView
 
 /*
 class for graphical part of group selection scree
@@ -84,7 +86,10 @@ fun Groups() {
 
 @Composable
 fun Groupdetail(name: String, description: String) {
-    Column(modifier = Modifier.fillMaxWidth().border(BorderStroke(2.dp, Color.Gray)).padding(20.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .border(BorderStroke(2.dp, Color.Gray))
+        .padding(20.dp)) {
         Text(text = "$name", fontSize = 30.sp)
         Text(text = "$description", fontSize = 20.sp, color = Color.Gray)
     }
