@@ -125,7 +125,8 @@ fun DropdownIcon(expanded: Boolean, toggle: () -> Unit) {
             Icons.Default.MoreVert, contentDescription = "Options", modifier = Modifier
                 .size(40.dp)
         )
+        DropDown(expanded = expanded, toggle = toggle)
     }
 
-    DropDown(expanded = expanded, toggle = toggle)
+
 }
