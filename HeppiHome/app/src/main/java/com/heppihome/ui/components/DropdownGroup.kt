@@ -3,15 +3,14 @@ package com.heppihome.ui.components
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 
-
-var expanded = true
 
 @Preview
 @Composable
 fun DropDown() {
+    var expanded by remember { mutableStateOf(false) }
     
     DropdownMenu(expanded = true, onDismissRequest = { expanded = false }) {
         DropdownMenuItem(onClick = { println("New Group") }) {
