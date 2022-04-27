@@ -23,7 +23,6 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
     fun expandGroupMenu() {
         viewModelScope.launch {
             _expanded.value = !_expanded.value
-            println("waarom word ik hele tijd uitgevoerd")
         }
     }
 

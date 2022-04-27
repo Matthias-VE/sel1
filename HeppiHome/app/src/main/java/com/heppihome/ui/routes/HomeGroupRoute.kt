@@ -83,6 +83,7 @@ fun Groups(groups : List<Group>, onGroupClicked: (Group) -> Unit) {
             Groupdetail(group, onGroupClicked)
         }
     }
+
 }
 
 @Composable
@@ -127,6 +128,4 @@ fun DropdownIcon(expanded: Boolean, toggle: () -> Unit) {
         )
         DropDown(expanded = expanded, toggle = toggle)
     }
-
-
 }
