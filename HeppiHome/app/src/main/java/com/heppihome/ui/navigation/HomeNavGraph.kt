@@ -24,11 +24,15 @@ fun HomeNavGraph(
                 navController.navigate(HomeAppDestinations.TASKS_ROUTE + "/${it.id}")
             }, onNewGroupClicked = {
                 navController.navigate(HomeAppDestinations.GROUP_ADD)
-            })
+            }
+            )
         }
 
         composable(HomeAppDestinations.GROUP_ADD) {
-            NewGroup(vM = hiltViewModel())
+            NewGroup(vM = hiltViewModel(),
+            onGroupCancel = {
+                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
+            })
         }
 
         composable(BottomNavItem.Overview.screen_route) {
