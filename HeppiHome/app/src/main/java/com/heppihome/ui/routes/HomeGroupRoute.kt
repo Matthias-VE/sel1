@@ -20,7 +20,8 @@ import com.heppihome.viewmodels.HomeGroupViewModel
 @Composable
 fun HomeGroupRoute(
     vM : HomeGroupViewModel,
-    onGroupClicked : (Group) -> Unit
+    onGroupClicked : (Group) -> Unit,
+    onNewGroupClicked : () -> Unit
 ) {
     vM.refreshGroups()
     val groups by vM.groups.collectAsState()
@@ -30,7 +31,8 @@ fun HomeGroupRoute(
         groups,
         onGroupClicked,
         expanded,
-        { vM.expandGroupMenu() }
+        { vM.expandGroupMenu() },
+        onNewGroupClicked
     )
 }
 
@@ -39,17 +41,18 @@ fun HomeGroupScreen(
     groups: List<Group>,
     onGroupClicked: (Group) -> Unit,
     expanded: Boolean,
-    toggle: () -> Unit
+    toggle: () -> Unit,
+    onNewGroupClicked : () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Header(expanded, toggle)
+        Header(expanded, toggle, onNewGroupClicked)
         Alltasks()
         Groups(groups, onGroupClicked)
     }
 }
 
 @Composable
-fun Header(expanded: Boolean, toggle: () -> Unit) {
+fun Header(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit) {
     
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
         Row(modifier = Modifier
@@ -61,7 +64,7 @@ fun Header(expanded: Boolean, toggle: () -> Unit) {
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp), horizontalArrangement = Arrangement.End) {
-                DropdownIcon(expanded = expanded, toggle = toggle)
+                DropdownIcon(expanded = expanded, toggle = toggle, onNewGroupClicked)
             }
         }
     }
@@ -102,10 +105,10 @@ fun Groupdetail(g : Group, onGroupClicked: (Group) -> Unit) {
 }
 
 @Composable
-fun DropDown(expanded: Boolean, toggle: () -> Unit) {
+fun DropDown(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit) {
 
     DropdownMenu(expanded = expanded, onDismissRequest = toggle) {
-        DropdownMenuItem(onClick = { println("New Group") }) {
+        DropdownMenuItem(onClick = onNewGroupClicked) {
             Text("New Group")
         }
         DropdownMenuItem(onClick = { println("Join Group") }) {
@@ -119,13 +122,13 @@ fun DropDown(expanded: Boolean, toggle: () -> Unit) {
 }
 
 @Composable
-fun DropdownIcon(expanded: Boolean, toggle: () -> Unit) {
+fun DropdownIcon(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit) {
 
     IconButton(onClick = toggle) {
         Icon(
             Icons.Default.MoreVert, contentDescription = "Options", modifier = Modifier
                 .size(40.dp)
         )
-        DropDown(expanded = expanded, toggle = toggle)
+        DropDown(expanded = expanded, toggle = toggle, onNewGroupClicked)
     }
 }
