@@ -1,12 +1,13 @@
 package com.heppihome.data
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObjects
 import com.heppihome.BuildConfig
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.ResultState
 import com.heppihome.data.models.Task
-import com.heppihome.data.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
@@ -27,13 +28,24 @@ class HomeRepository @Inject constructor() {
     private lateinit var groupDoc : CollectionReference
     private lateinit var userDoc : CollectionReference
 
+    private lateinit var firebaseAuth : FirebaseAuth;
+
     init {
         db = FirebaseFirestore.getInstance()
+        firebaseAuth = FirebaseAuth.getInstance()
         if (useEmulators) {
             db.useEmulator("10.0.2.2", 8080)
         }
         groupDoc = db.collection(COLLECTION_GROUPS)
         userDoc = db.collection(COLLECTION_USERS)
+    }
+
+    fun isAnonymousUser() : Boolean {
+        return (firebaseAuth.currentUser == null || firebaseAuth.currentUser!!.isAnonymous)
+    }
+
+    fun getUser() : FirebaseUser? {
+        return firebaseAuth.currentUser
     }
 
     // This gets all the groups
@@ -80,7 +92,7 @@ class HomeRepository @Inject constructor() {
     }
 
     // Get all tasks for a certain group
-    fun getAllTasks(user : User, group : Group) : Flow<ResultState<List<Task>>> =
+    fun getAllTasks(user : FirebaseUser, group : Group) : Flow<ResultState<List<Task>>> =
         flow<ResultState<List<Task>>> {
             //emit loading state while fetching the content
             emit(ResultState.loading())
@@ -99,14 +111,14 @@ class HomeRepository @Inject constructor() {
         }.flowOn(Dispatchers.IO)
 
     // This should get all tasks for all groups
-    fun getAllTasks(user : User) : Flow<ResultState<List<Task>>> =
+    fun getAllTasks(user : FirebaseUser) : Flow<ResultState<List<Task>>> =
         // Does not work yet, because we need query index for the collection group
 
         flow<ResultState<List<Task>>> {
             //emit loading state while fetching the content
             emit(ResultState.loading())
 
-            val taskDoc = db.collectionGroup(COLLECTION_TASKS).whereArrayContains("users", user.email)
+            val taskDoc = db.collectionGroup(COLLECTION_TASKS).whereArrayContains("users", user.email!!)
 
             val snapshot = taskDoc.get().await()
             val tasks = snapshot.toObjects(Task::class.java)
