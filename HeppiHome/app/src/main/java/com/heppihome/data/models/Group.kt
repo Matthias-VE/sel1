@@ -4,5 +4,5 @@ import com.google.firebase.auth.FirebaseUser
 
 data class Group(val name : String = "default",
                  val description : String = "default",
-                 val users : List<FirebaseUser> = listOf(),
+                 val users : List<String> = listOf(),
                  val id: String = "default")

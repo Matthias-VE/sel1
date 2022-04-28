@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     Scaffold(
                         bottomBar = { com.heppihome.ui.navigation.BottomNavigation(navController = navController) }) {
-                        HomeNavGraph(navController = navController)
+                        HomeNavGraph(navController = navController, vM = hiltViewModel())
                     }
                 }
             }
