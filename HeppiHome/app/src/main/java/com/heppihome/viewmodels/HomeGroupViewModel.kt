@@ -17,6 +17,15 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
     private val _groups : MutableStateFlow<List<Group>> = MutableStateFlow(emptyList())
     val groups : StateFlow<List<Group>> = _groups
 
+    private var _expanded : MutableStateFlow<Boolean> = MutableStateFlow(false)
+    var expanded : StateFlow<Boolean> = _expanded
+
+    fun expandGroupMenu() {
+        viewModelScope.launch {
+            _expanded.value = !_expanded.value
+        }
+    }
+
     fun refreshGroups() {
         viewModelScope.launch {
             _groups.value = rep.getAllGroups()

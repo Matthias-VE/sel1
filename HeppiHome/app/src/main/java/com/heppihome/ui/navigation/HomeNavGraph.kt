@@ -6,7 +6,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+
+import com.heppihome.ui.components.NewGroup
+
 import com.heppihome.data.models.Group
+
 import com.heppihome.ui.routes.HomeGroupRoute
 import com.heppihome.ui.routes.HomeOverViewRoute
 import com.heppihome.ui.routes.HomeSettingsRoute
@@ -20,8 +24,18 @@ fun HomeNavGraph(
     var selectedGroup : Group? = null
     NavHost(navController = navController, startDestination = startDestination) {
         composable(HomeAppDestinations.GROUP_ROUTE) {
-            HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {selectedGroup = it;
-                navController.navigate(HomeAppDestinations.TASKS_ROUTE)
+            HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {
+                navController.navigate(HomeAppDestinations.TASKS_ROUTE + "/${it.id}")
+            }, onNewGroupClicked = {
+                navController.navigate(HomeAppDestinations.GROUP_ADD)
+            }
+            )
+        }
+
+        composable(HomeAppDestinations.GROUP_ADD) {
+            NewGroup(vM = hiltViewModel(),
+            onGroupCancel = {
+                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             })
         }
 
