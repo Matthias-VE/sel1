@@ -3,14 +3,10 @@ package com.heppihome.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.ktx.toObjects
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
-import com.heppihome.data.models.ResultState
 import com.heppihome.data.models.Task
 import com.heppihome.data.models.User
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,9 +26,8 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
     private var testGroup : Group = Group("test groep", "dit is een groep dus", testUsers, "KXuXm9sRW43maz0Dbi2u")
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
 
-    val group = testGroup
+    val group = {testGroup}
     val tasks : StateFlow<List<Task>> = _tasks
-
 
     private fun taskListener(value : QuerySnapshot?, ex : FirebaseFirestoreException?) {
         if (ex != null) {
