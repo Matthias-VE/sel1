@@ -16,10 +16,11 @@ import com.heppihome.viewmodels.EditGroupViewModel
 
 @Composable
 fun EditGroup(
-    vM : EditGroupViewModel,
-    onGroupCancel : () -> Unit,
-    g : String
+    vM: EditGroupViewModel,
+    onGroupCancel: () -> Unit,
+    g: Group
 ) {
+    vM.setGroup(g)
     val temp by vM.groupName.collectAsState()
     val temp2 by vM.description.collectAsState()
 
@@ -29,7 +30,7 @@ fun EditGroup(
         Header()
         Column(modifier = Modifier
             .padding(10.dp)) {
-            InputField(name = "Name Of Group", description = temp.text) { x -> vM.setGroup(x) }
+            InputField(name = "Name Of Group", description = temp.text) { x -> vM.setName(x) }
             InputField(name = "Description", description = temp2.text) { x -> vM.setDescription(x) }
             Button(onClick = { println("submitted") },
                 modifier = Modifier.padding(10.dp)) {

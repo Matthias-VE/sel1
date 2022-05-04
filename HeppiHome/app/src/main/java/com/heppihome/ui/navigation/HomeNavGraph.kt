@@ -7,21 +7,11 @@ import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 
-import com.google.firebase.auth.FirebaseUser
-import com.heppihome.data.models.Constants
-
 import com.heppihome.ui.components.NewGroup
 
-import com.heppihome.data.models.Group
-import com.heppihome.data.models.User
 import com.heppihome.ui.components.EditGroup
 import com.heppihome.ui.routes.*
 import com.heppihome.viewmodels.HomeMainViewModel
-
-import com.heppihome.ui.routes.HomeGroupRoute
-import com.heppihome.ui.routes.HomeOverViewRoute
-import com.heppihome.ui.routes.HomeSettingsRoute
-import com.heppihome.ui.routes.HomeTasksRoute
 
 @Composable
 fun HomeNavGraph(
@@ -33,24 +23,22 @@ fun HomeNavGraph(
 
     NavHost(navController = navController, startDestination = startDestination) {
 
-        composable(HomeAppDestinations.GROUP_ROUTE) {
-            HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {
-                navController.navigate(HomeAppDestinations.TASKS_ROUTE + "/${it.id}")
-            }, onNewGroupClicked = {
-                navController.navigate(HomeAppDestinations.GROUP_ADD)
-            }, onEditGroupClicked = {
-                navController.navigate(HomeAppDestinations.GROUP_EDIT + "/${it.id}")
-
+        composable(HomeAppDestinations.LOGIN_ROUTE) {
+            HomeLoginRoute(vM = hiltViewModel(),
+                onIsLoggedIn = {
+                    vM.setUser(it)
+                }) {
+                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             }
-            )
         }
-
+        
         composable(HomeAppDestinations.GROUP_ROUTE) {
             HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {vM.selectedGroup = it;
                 navController.navigate(HomeAppDestinations.TASKS_ROUTE) },
                 onNewGroupClicked = {
                     navController.navigate(HomeAppDestinations.GROUP_ADD)
                 }, onEditGroupClicked = {
+                    vM.toEditGroup = it;
                     navController.navigate(HomeAppDestinations.GROUP_EDIT)
                 }
             )
@@ -63,15 +51,12 @@ fun HomeNavGraph(
             })
         }
 
-        composable(HomeAppDestinations.GROUP_EDIT+"/{groupId}") {
-            var id = ""
-            it.arguments?.getString("groupId")?.let { it1 ->
-                id = it1
-            }
+        composable(HomeAppDestinations.GROUP_EDIT) {
+
             EditGroup(vM = hiltViewModel(),
                 onGroupCancel = {
                     navController.navigate(HomeAppDestinations.GROUP_ROUTE)
-                }, g=id)
+                }, g = vM.toEditGroup)
         }
 
         composable(BottomNavItem.Overview.screen_route) {
