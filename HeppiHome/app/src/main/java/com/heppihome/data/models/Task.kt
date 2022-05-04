@@ -2,6 +2,8 @@ package com.heppihome.data.models
 
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
+import java.time.LocalDate
+import java.util.*
 
 data class Task(val text: String = "default",
                 val done : Boolean = false,

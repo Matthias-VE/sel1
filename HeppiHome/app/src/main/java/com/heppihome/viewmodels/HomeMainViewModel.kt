@@ -19,14 +19,4 @@ class HomeMainViewModel @Inject constructor (private val rep : HomeRepository) :
     )
 
     var toEditGroup : Group = Group()
-
-    var user : User = User()
-
-    fun setUser(fu : FirebaseUser) {
-
-        user = User(
-            email = fu.email!!,
-            id = fu.uid
-        )
-    }
 }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
+import com.heppihome.data.models.User
 import com.heppihome.ui.components.Tasks
 import com.heppihome.viewmodels.HomeTasksViewModel
 
@@ -16,18 +17,18 @@ fun HomeTasksRoute(
     onBackPressed : () -> Unit,
     group : Group?
 ){
+
     group?.let {
         vM.onChangeGroup(it)
     }
     val tasks by vM.tasks.collectAsState()
-    val list = listOf(tasks, emptyList<Task>(), emptyList<Task>(), emptyList<Task>(), emptyList<Task>())
-    HomeTasksScreen(allTasks = list, {vM.toggleTask(it)}, vM.group(), {vM.onGoBack(); onBackPressed()})
+    HomeTasksScreen(allTasks = tasks, {vM.toggleTask(it)}, vM.group(), {vM.onGoBack(); onBackPressed()})
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeTasksScreen(
-    allTasks : List<List<Task>>,
+    allTasks : List<Task>,
     onChecked : (Task) -> Unit,
     group : Group,
     onBackPressed: () -> Unit

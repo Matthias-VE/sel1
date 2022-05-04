@@ -12,6 +12,7 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseUser
 import com.heppihome.R
 import com.heppihome.data.HomeRepository
+import com.heppihome.data.models.User
 import com.heppihome.ui.authentication.AuthResultCode
 import com.heppihome.ui.authentication.FirebaseAuthManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +36,6 @@ class HomeLoginViewModel @Inject constructor(private val rep : HomeRepository) :
     val user = _user.asStateFlow()
 
     private val _hasNavigated = MutableStateFlow(false)
-    val hasNavigated = _hasNavigated
 
     init {
         viewModelScope.launch {
@@ -44,8 +44,13 @@ class HomeLoginViewModel @Inject constructor(private val rep : HomeRepository) :
         }
     }
 
-    fun doNavigate() {
-        _hasNavigated.value = true
+    fun setUser() {
+        val fu = user.value!!
+        var name = "default"
+        var email = "default"
+        fu.displayName?.let { name = it }
+        fu.email?.let { email = it }
+        rep.user = User(name, email, fu.uid)
     }
 
     override fun buildLoginIntent(): Intent {

@@ -29,12 +29,10 @@ import com.heppihome.data.models.Task
 //Task View
 @ExperimentalMaterialApi
 @Composable
-fun Tasks(allTasks : List<List<Task>>, onChecked: (Task) -> Unit, group : Group, onBackPressed : () -> Unit) {
+fun Tasks(allTasks : List<Task>, onChecked: (Task) -> Unit, group : Group, onBackPressed : () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Topbar(group.name, onBackPressed)
-        for (i in 1..5) {
-            Day(i, allTasks[i-1], onChecked = onChecked)
-        }
+        Day(allTasks, onChecked)
     }
 }
 
@@ -64,8 +62,8 @@ fun Topbar(g : Group, onBackPressed: () -> Unit){
 
 @ExperimentalMaterialApi
 @Composable
-fun Day(day: Int, tasks : List<Task>, onChecked : (Task) -> Unit){
-    var expended by remember { mutableStateOf(false)}
+fun Day(tasks : List<Task>, onChecked : (Task) -> Unit){
+    var expended by remember { mutableStateOf(true)}
     val rotation by animateFloatAsState(targetValue = if(expended) 180f else 0f)
 
     Card(
@@ -90,7 +88,7 @@ fun Day(day: Int, tasks : List<Task>, onChecked : (Task) -> Unit){
             Row{
                 Text(
                     modifier = Modifier.weight(6f),
-                    text = "Day $day",
+                    text = "Today",
                     fontSize = MaterialTheme.typography.h6.fontSize,
                     fontWeight =  FontWeight.Bold
                 )

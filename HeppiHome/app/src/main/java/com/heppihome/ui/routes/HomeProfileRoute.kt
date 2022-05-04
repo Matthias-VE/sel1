@@ -21,14 +21,13 @@ import com.heppihome.viewmodels.users.HomeProfileViewModel
 
 @Composable
 fun HomeProfileRoute(
-    user : User,
     context : Context,
     onBackPressed : () -> Unit,
     onLogout : () -> Unit
 ) {
     val vM : HomeProfileViewModel = hiltViewModel()
 
-    HomeProfileScreen(user = user, onBackPressed) { vM.logout(context, onLogout)}
+    HomeProfileScreen(user = vM.getUser(), onBackPressed) { vM.logout(context, onLogout)}
 }
 
 @Composable

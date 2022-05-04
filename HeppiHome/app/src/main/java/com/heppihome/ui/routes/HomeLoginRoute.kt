@@ -13,14 +13,11 @@ import com.heppihome.viewmodels.users.HomeLoginViewModel
 @Composable
 fun HomeLoginRoute(
     vM : HomeLoginViewModel,
-    onIsLoggedIn : (FirebaseUser) -> Unit,
     onIsLoggedInAndNavigateOnce : () -> Unit
 
 ) {
     val isLoggedIn by vM.isLoggedIn.collectAsState()
     val authResultCode by vM.authResultCode.collectAsState()
-    val user by vM.user.collectAsState()
-    val navigatedOnResult by vM.hasNavigated.collectAsState()
 
     val loginLauncher = rememberLauncherForActivityResult(
         vM.buildLoginActivityResult()
@@ -38,7 +35,7 @@ fun HomeLoginRoute(
     } else {
         LaunchedEffect(Unit) {
             Log.i("Login Route", "The onIsLoggedIn is called")
-            onIsLoggedIn(user!!)
+            vM.setUser()
             onIsLoggedInAndNavigateOnce()
         }
     }

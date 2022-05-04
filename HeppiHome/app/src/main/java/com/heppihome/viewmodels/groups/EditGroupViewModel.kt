@@ -1,4 +1,4 @@
-package com.heppihome.viewmodels
+package com.heppihome.viewmodels.groups
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel

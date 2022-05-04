@@ -1,4 +1,4 @@
-package com.heppihome.viewmodels
+package com.heppihome.viewmodels.groups
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -12,7 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.heppihome.data.models.Group
-import com.heppihome.viewmodels.EditGroupViewModel
+import com.heppihome.viewmodels.groups.EditGroupViewModel
 
 @Composable
 fun EditGroup(

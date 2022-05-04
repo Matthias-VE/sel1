@@ -8,6 +8,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
+import com.heppihome.data.models.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -23,6 +24,9 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
     val group = {testGroup}
     val tasks : StateFlow<List<Task>> = _tasks
 
+    init {
+        rep.registerTaskSnapshotListener(this::taskListener, testGroup)
+    }
     private fun taskListener(value : QuerySnapshot?, ex : FirebaseFirestoreException?) {
         if (ex != null) {
             Log.w("HomeMainViewModel", "Listen failed.", ex)
@@ -35,15 +39,10 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
         _tasks.value = newList
     }
 
-    init {
-        rep.registerTaskSnapshotListener(this::taskListener, testGroup)
-    }
-
-
     fun onChangeGroup(group : Group) {
         rep.removeListeners()
         testGroup = group
-        rep.registerTaskSnapshotListener(this::taskListener, testGroup)
+        rep.registerTodayTasksListenerForUserAndGroup(this::taskListener, testGroup)
     }
 
     fun onGoBack() {

@@ -27,9 +27,7 @@ fun HomeNavGraph(
 
         composable(HomeAppDestinations.LOGIN_ROUTE) {
             HomeLoginRoute(vM = hiltViewModel(),
-                onIsLoggedIn = {
-                    vM.setUser(it)
-                }) {
+                ) {
                 navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             }
         }
@@ -79,7 +77,7 @@ fun HomeNavGraph(
         }
 
         composable(HomeAppDestinations.PROFILE_ROUTE) {
-            HomeProfileRoute(vM.user,
+            HomeProfileRoute(
                 context,
                 {navController.navigate(BottomNavItem.Settings.screen_route)},
                 {navController.navigate(HomeAppDestinations.LOGIN_ROUTE)}

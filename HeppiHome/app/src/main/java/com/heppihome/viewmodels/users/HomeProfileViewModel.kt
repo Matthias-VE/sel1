@@ -22,6 +22,8 @@ class HomeProfileViewModel @Inject constructor(private val rep : HomeRepository)
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
+    fun getUser() = rep.user
+
     fun logout(c : Context, onLogout : () -> Unit) {
         _isLoading.value = true
         AuthUI.getInstance().signOut(c).addOnCompleteListener {
