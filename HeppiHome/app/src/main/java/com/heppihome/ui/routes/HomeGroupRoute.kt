@@ -45,7 +45,8 @@ import kotlin.math.roundToInt
 fun HomeGroupRoute(
     vM : HomeGroupViewModel,
     onGroupClicked : (Group) -> Unit,
-    onNewGroupClicked : () -> Unit
+    onNewGroupClicked : () -> Unit,
+    onEditGroupClicked : (Group) -> Unit
 ) {
     vM.refreshGroups()
     val groups by vM.groups.collectAsState()
@@ -56,7 +57,9 @@ fun HomeGroupRoute(
         onGroupClicked,
         expanded,
         { vM.expandGroupMenu() },
-        onNewGroupClicked
+        onNewGroupClicked,
+        vM,
+        onEditGroupClicked
     )
 }
 
@@ -66,12 +69,14 @@ fun HomeGroupScreen(
     onGroupClicked: (Group) -> Unit,
     expanded: Boolean,
     toggle: () -> Unit,
-    onNewGroupClicked : () -> Unit
+    onNewGroupClicked : () -> Unit,
+    vM : HomeGroupViewModel,
+    onEditGroupClicked : (Group) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Header(expanded, toggle, onNewGroupClicked)
         Alltasks()
-        Groups(groups, onGroupClicked)
+        Groups(groups, onGroupClicked, vM, onEditGroupClicked)
     }
 }
 
@@ -104,10 +109,10 @@ fun Alltasks() {
 }
 
 @Composable
-fun Groups(groups : List<Group>, onGroupClicked: (Group) -> Unit) {
+fun Groups(groups : List<Group>, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel, onEditGroupClicked : (Group) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(groups) { group ->
-            SideView(group, onGroupClicked)
+            SideView(group, onGroupClicked, vM, onEditGroupClicked)
         }
     }
 
@@ -159,13 +164,8 @@ fun DropdownIcon(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () ->
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SideView(g : Group, onGroupClicked: (Group) -> Unit) {
+fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel, onEditGroupClicked: (Group) -> Unit) {
 
-    var bgColor by remember {
-        mutableStateOf(Purple200)
-
-
-    }
     val squareSize = 150.dp
     val swipeAbleState = rememberSwipeableState(initialValue = 0f)
     val sizePx = with(LocalDensity.current) { squareSize.toPx() }
@@ -174,118 +174,103 @@ fun SideView(g : Group, onGroupClicked: (Group) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
+            .padding(15.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(15.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(15.dp))
-                    .background(Color.LightGray)
-                    .swipeable(
-                        state = swipeAbleState,
-                        anchors = anchors,
-                        thresholds = { _, _ ->
-                            FractionalThreshold(0.3f)
-                        },
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(15.dp))
+                .background(Color.LightGray)
+                .swipeable(
+                    state = swipeAbleState,
+                    anchors = anchors,
+                    thresholds = { _, _ ->
+                        FractionalThreshold(0.3f) },
                         orientation = Orientation.Horizontal
-                    )
+                )
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
+                IconButton(
+                    onClick = {onEditGroupClicked(g)},
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray)
                 ) {
-                    IconButton(
-                        onClick = {
-                            println("edit")
-                        },
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape)
-                            .background(Color.LightGray)
-                    ) {
-                        Icon(
-                            Icons.Filled.Edit,
-                            contentDescription = "Edit",
-                            tint = Color.Green
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    IconButton(
-                        onClick = {
-                            println("remove")
-                        },
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape)
-                            .background(Color.LightGray)
-                    ) {
-                        Icon(
-                            Icons.Filled.Delete,
-                            contentDescription = "Delete",
-                            tint = Color.Red
-                        )
-                    }
+                    Icon(
+                        Icons.Filled.Edit,
+                        contentDescription = "Edit",
+                        tint = Color.Green
+                    )
                 }
 
-                Box(
-                    modifier = Modifier
-                        .offset {
-                            IntOffset(
-                                swipeAbleState.offset.value.roundToInt(), 0
-                            )
-                        }
-                        .clip(RoundedCornerShape(15.dp))
-                        .fillMaxWidth()
-                        .height(150.dp)
-                        .fillMaxHeight()
-                        .clickable { onGroupClicked(g) }
-                        .background(MaterialTheme.colors.secondary)
-                        .align(Alignment.CenterStart)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(10.dp),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                Spacer(modifier = Modifier.height(10.dp))
 
+                IconButton(
+                    onClick = {
+                        println("remove") },
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray)
+                ) {
+                    Icon(
+                        Icons.Filled.Delete,
+                        contentDescription = "Delete",
+                        tint = Color.Red
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .offset {
+                        IntOffset(
+                            swipeAbleState.offset.value.roundToInt(), 0
+                        )
+                    }
+                    .clip(RoundedCornerShape(15.dp))
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .fillMaxHeight()
+                    .clickable { onGroupClicked(g) }
+                    .background(MaterialTheme.colors.secondary)
+                    .align(Alignment.CenterStart)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(10.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                        Column {
+                            Text(
+                                text = g.name,
+                                color = Color.White,
+                                fontSize = 25.sp,
+                                fontWeight = FontWeight.Bold
+                            )
 
                             Spacer(modifier = Modifier.padding(10.dp))
 
-                            Column {
-                                Text(
-                                    text = g.name,
-                                    color = Color.White,
-                                    fontSize = 25.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-
-                                Spacer(modifier = Modifier.padding(10.dp))
-
-                                Text(
-                                    text = g.description,
-                                    color = Color.White,
-                                    fontSize = 18.sp
-                                )
-                            }
+                            Text(
+                                text = g.description,
+                                color = Color.White,
+                                fontSize = 18.sp
+                            )
                         }
                     }
                 }
             }
         }
     }
-
 }

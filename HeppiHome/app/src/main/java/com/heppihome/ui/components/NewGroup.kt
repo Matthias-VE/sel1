@@ -4,18 +4,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.heppihome.ui.routes.DropdownIcon
 import com.heppihome.viewmodels.AddGroupViewModel
 
 @Composable
@@ -30,8 +24,8 @@ fun NewGroup(
         Header(onGroupCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
-            InputField(name = "Name Of Group", description = temp.text, vM, {x -> vM.setGroup(x)})
-            InputField(name = "Description", description = temp2.text, vM, {x -> vM.setDescription(x)})
+            InputField(name = "Name Of Group", description = temp.text) { x -> vM.setGroup(x) }
+            InputField(name = "Description", description = temp2.text) { x -> vM.setDescription(x) }
             Button(onClick = { vM.addGroups() },
                 modifier = Modifier.padding(10.dp)) {
                 Text("Add")
@@ -63,7 +57,7 @@ fun Header(onGroupCancel: () -> Unit) {
 }
 
 @Composable
-fun InputField(name : String, description : String, vM: AddGroupViewModel, edit : (String) -> Unit) {
+fun InputField(name: String, description: String, edit: (String) -> Unit) {
 
     Column(modifier = Modifier.padding(10.dp).fillMaxWidth()) {
         Text(name, color = Color.Gray)

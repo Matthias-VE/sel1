@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+
 import com.google.firebase.auth.FirebaseUser
 import com.heppihome.data.models.Constants
 
@@ -30,11 +31,15 @@ fun HomeNavGraph(
 
 
     NavHost(navController = navController, startDestination = startDestination) {
-        composable(HomeAppDestinations.LOGIN_ROUTE) {
-            HomeLoginRoute(vM = hiltViewModel(), onIsLoggedIn = {u ->
-                vM.setUser(u)
-            }, onIsLoggedInAndNavigateOnce = {
-                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
+
+        composable(HomeAppDestinations.GROUP_ROUTE) {
+            HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {
+                navController.navigate(HomeAppDestinations.TASKS_ROUTE + "/${it.id}")
+            }, onNewGroupClicked = {
+                navController.navigate(HomeAppDestinations.GROUP_ADD)
+            }, onEditGroupClicked = {
+                navController.navigate(HomeAppDestinations.GROUP_EDIT + "/${it.id}")
+
             }
             )
         }
@@ -53,6 +58,17 @@ fun HomeNavGraph(
             onGroupCancel = {
                 navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             })
+        }
+
+        composable(HomeAppDestinations.GROUP_EDIT+"/{groupId}") {
+            var id = ""
+            it.arguments?.getString("groupId")?.let { it1 ->
+                id = it1
+            }
+            EditGroup(vM = hiltViewModel(),
+                onGroupCancel = {
+                    navController.navigate(HomeAppDestinations.GROUP_ROUTE)
+                }, g=id)
         }
 
         composable(BottomNavItem.Overview.screen_route) {
