@@ -8,10 +8,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseUser
 import com.heppihome.data.models.Constants
+
+import com.heppihome.ui.components.NewGroup
+
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.User
 import com.heppihome.ui.routes.*
 import com.heppihome.viewmodels.HomeMainViewModel
+
+import com.heppihome.ui.routes.HomeGroupRoute
+import com.heppihome.ui.routes.HomeOverViewRoute
+import com.heppihome.ui.routes.HomeSettingsRoute
+import com.heppihome.ui.routes.HomeTasksRoute
 
 @Composable
 fun HomeNavGraph(
@@ -33,7 +41,17 @@ fun HomeNavGraph(
 
         composable(HomeAppDestinations.GROUP_ROUTE) {
             HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {vM.selectedGroup = it;
-                navController.navigate(HomeAppDestinations.TASKS_ROUTE)
+                navController.navigate(HomeAppDestinations.TASKS_ROUTE) },
+                onNewGroupClicked = {
+                    navController.navigate(HomeAppDestinations.GROUP_ADD)
+                }
+            )
+        }
+
+        composable(HomeAppDestinations.GROUP_ADD) {
+            NewGroup(vM = hiltViewModel(),
+            onGroupCancel = {
+                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             })
         }
 
