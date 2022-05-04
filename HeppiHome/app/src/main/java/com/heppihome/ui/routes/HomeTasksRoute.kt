@@ -14,13 +14,14 @@ import com.heppihome.viewmodels.HomeTasksViewModel
 fun HomeTasksRoute(
     vM : HomeTasksViewModel,
     onBackPressed : () -> Unit,
-    groupId : String
+    group : Group?
 ){
-    val g = vM.getGroup(groupId)
-    vM.onChangeGroup(g)
+    group?.let {
+        vM.onChangeGroup(it)
+    }
     val tasks by vM.tasks.collectAsState()
     val list = listOf(tasks, emptyList<Task>(), emptyList<Task>(), emptyList<Task>(), emptyList<Task>())
-    HomeTasksScreen(allTasks = list, {vM.toggleTask(it)}, vM.group, {vM.onGoBack(); onBackPressed()})
+    HomeTasksScreen(allTasks = list, {vM.toggleTask(it)}, vM.group(), {vM.onGoBack(); onBackPressed()})
 }
 
 @OptIn(ExperimentalMaterialApi::class)
