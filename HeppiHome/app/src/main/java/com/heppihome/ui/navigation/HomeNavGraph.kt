@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.heppihome.ui.components.EditGroup
 import com.heppihome.ui.components.NewGroup
 import com.heppihome.ui.routes.HomeGroupRoute
 import com.heppihome.ui.routes.HomeOverViewRoute
@@ -24,6 +25,8 @@ fun HomeNavGraph(
                 navController.navigate(HomeAppDestinations.TASKS_ROUTE + "/${it.id}")
             }, onNewGroupClicked = {
                 navController.navigate(HomeAppDestinations.GROUP_ADD)
+            }, onEditGroupClicked = {
+                navController.navigate(HomeAppDestinations.GROUP_EDIT + "/${it.id}")
             }
             )
         }
@@ -33,6 +36,17 @@ fun HomeNavGraph(
             onGroupCancel = {
                 navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             })
+        }
+
+        composable(HomeAppDestinations.GROUP_EDIT+"/{groupId}") {
+            var id = ""
+            it.arguments?.getString("groupId")?.let { it1 ->
+                id = it1
+            }
+            EditGroup(vM = hiltViewModel(),
+                onGroupCancel = {
+                    navController.navigate(HomeAppDestinations.GROUP_ROUTE)
+                }, g=id)
         }
 
         composable(BottomNavItem.Overview.screen_route) {
