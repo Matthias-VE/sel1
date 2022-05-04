@@ -16,17 +16,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-private fun MainScreenView(){
-    val navController = rememberNavController()
-    Scaffold(
-        bottomBar = { BottomNavigation(navController = navController) }) {
-        HomeNavGraph(navController = navController
-            , vM = hiltViewModel()
-        )
-    }
-}
-
-@Composable
 fun BottomNavigation(navController: NavController) {
     val items = listOf(
         BottomNavItem.Tasks,
@@ -60,10 +49,4 @@ fun BottomNavigation(navController: NavController) {
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BottomNavigationPreview(){
-    MainScreenView()
 }

@@ -1,6 +1,8 @@
 package com.heppihome.modules
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.heppihome.data.FirebaseDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +17,11 @@ class BackendModule {
     @Provides
     fun provideFirebaseFirestore() : FirebaseFirestore {
         return FirebaseFirestore.getInstance()
+    }
+
+    @Singleton
+    @Provides
+    fun providesFirebaseDao() : FirebaseDao {
+        return FirebaseDao()
     }
 }

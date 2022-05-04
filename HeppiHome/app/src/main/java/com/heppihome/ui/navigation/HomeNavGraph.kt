@@ -1,5 +1,6 @@
 package com.heppihome.ui.navigation
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,7 +18,8 @@ import com.heppihome.viewmodels.HomeMainViewModel
 fun HomeNavGraph(
     navController: NavHostController = rememberNavController(),
     startDestination : String = HomeAppDestinations.LOGIN_ROUTE,
-    vM : HomeMainViewModel
+    vM : HomeMainViewModel,
+    context : Context
 ){
 
 
@@ -71,11 +73,17 @@ fun HomeNavGraph(
         }
 
         composable(BottomNavItem.Settings.screen_route){
-            HomeSettingsRoute()
+            HomeSettingsRoute( onProfileClicked = {
+                navController.navigate(HomeAppDestinations.PROFILE_ROUTE)
+            })
         }
 
         composable(HomeAppDestinations.PROFILE_ROUTE) {
-            HomeProfileRoute()
+            HomeProfileRoute(vM.user,
+                context,
+                {navController.navigate(BottomNavItem.Settings.screen_route)},
+                {navController.navigate(HomeAppDestinations.LOGIN_ROUTE)}
+            )
         }
     }
 }

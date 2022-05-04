@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         bottomBar = { com.heppihome.ui.navigation.BottomNavigation(navController = navController) }) {
                         HomeNavGraph(navController = navController
-                            , vM = hiltViewModel()
+                            , vM = hiltViewModel(), context = this
                         )
                     }
                 }

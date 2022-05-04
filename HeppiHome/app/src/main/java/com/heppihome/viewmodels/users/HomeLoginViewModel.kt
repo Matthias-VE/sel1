@@ -1,4 +1,4 @@
-package com.heppihome.viewmodels
+package com.heppihome.viewmodels.users
 
 import android.app.Activity
 import android.content.Intent
@@ -10,8 +10,6 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.ktx.Firebase
-import com.heppihome.MainActivity
 import com.heppihome.R
 import com.heppihome.data.HomeRepository
 import com.heppihome.ui.authentication.AuthResultCode
