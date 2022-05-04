@@ -9,6 +9,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -29,10 +30,15 @@ import com.heppihome.data.models.Task
 //Task View
 @ExperimentalMaterialApi
 @Composable
-fun Tasks(allTasks : List<Task>, onChecked: (Task) -> Unit, group : Group, onBackPressed : () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>, onChecked: (Task) -> Unit, group : Group, onBackPressed : () -> Unit) {
+    Column {
         Topbar(group.name, onBackPressed)
-        Day(allTasks, onChecked)
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            items(1) {
+                Day("today", tasksToday, onChecked)
+                Day("tomorrow", tasksTomorrow, onChecked)
+            }
+        }
     }
 }
 
@@ -62,7 +68,7 @@ fun Topbar(g : Group, onBackPressed: () -> Unit){
 
 @ExperimentalMaterialApi
 @Composable
-fun Day(tasks : List<Task>, onChecked : (Task) -> Unit){
+fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit){
     var expended by remember { mutableStateOf(true)}
     val rotation by animateFloatAsState(targetValue = if(expended) 180f else 0f)
 
@@ -88,7 +94,7 @@ fun Day(tasks : List<Task>, onChecked : (Task) -> Unit){
             Row{
                 Text(
                     modifier = Modifier.weight(6f),
-                    text = "Today",
+                    text = day,
                     fontSize = MaterialTheme.typography.h6.fontSize,
                     fontWeight =  FontWeight.Bold
                 )

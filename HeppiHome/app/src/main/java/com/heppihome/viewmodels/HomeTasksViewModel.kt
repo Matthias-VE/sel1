@@ -19,15 +19,20 @@ import javax.inject.Inject
 class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
 
     private var testGroup : Group = Group("test groep", "dit is een groep dus", listOf(), "KXuXm9sRW43maz0Dbi2u")
-    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
+
+    private val _tasksTod = MutableStateFlow<List<Task>>(emptyList())
+    private val _tasksTom = MutableStateFlow<List<Task>>(emptyList())
 
     val group = {testGroup}
-    val tasks : StateFlow<List<Task>> = _tasks
+    val tasksToday : StateFlow<List<Task>> = _tasksTod
+
+    val tasksTomorrow : StateFlow<List<Task>> = _tasksTom
 
     init {
-        rep.registerTaskSnapshotListener(this::taskListener, testGroup)
+        rep.registerTaskSnapshotListener(this::taskListenerToday, testGroup)
+        rep.registerTaskSnapshotListener(this::taskListenerTomorrow, testGroup)
     }
-    private fun taskListener(value : QuerySnapshot?, ex : FirebaseFirestoreException?) {
+    private fun taskListenerToday(value : QuerySnapshot?, ex : FirebaseFirestoreException?) {
         if (ex != null) {
             Log.w("HomeMainViewModel", "Listen failed.", ex)
             return
@@ -36,13 +41,26 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
             return
         }
         val newList = value.toObjects(Task::class.java)
-        _tasks.value = newList
+        _tasksTod.value = newList
+    }
+
+    private fun taskListenerTomorrow(value : QuerySnapshot?, ex : FirebaseFirestoreException?) {
+        if (ex != null) {
+            Log.w("HomeMainViewModel", "Listen failed.", ex)
+            return
+        }
+        if (value == null) {
+            return
+        }
+        val newList = value.toObjects(Task::class.java)
+        _tasksTom.value = newList
     }
 
     fun onChangeGroup(group : Group) {
         rep.removeListeners()
         testGroup = group
-        rep.registerTodayTasksListenerForUserAndGroup(this::taskListener, testGroup)
+        rep.registerTodayTasksListenerForUserAndGroup(this::taskListenerToday, testGroup)
+        rep.registerTomorrowTasksListenerForUserAndGroup(this::taskListenerTomorrow, testGroup)
     }
 
     fun onGoBack() {

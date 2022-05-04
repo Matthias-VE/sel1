@@ -1,5 +1,6 @@
 package com.heppihome.data
 
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
@@ -12,6 +13,7 @@ import com.heppihome.data.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -49,7 +51,27 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
 
     fun registerTodayTasksListenerForUserAndGroup(listener: (QuerySnapshot?, FirebaseFirestoreException?) -> Unit,
                                                   group : Group) {
-        fdao.registerListenerForRecentTasks(listener, group, user)
+        val cal = GregorianCalendar()
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        val today = Timestamp(cal.time)
+        cal.add(Calendar.DAY_OF_YEAR, 1)
+        val tomorrow = Timestamp(cal.time)
+        fdao.registerListenerForRecentTasks(listener, group, user, today, tomorrow)
+    }
+
+    fun registerTomorrowTasksListenerForUserAndGroup(listener: (QuerySnapshot?, FirebaseFirestoreException?) -> Unit,
+                                                     group : Group) {
+        val cal = GregorianCalendar()
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.add(Calendar.DAY_OF_YEAR, 1)
+        val tomorrow = Timestamp(cal.time)
+        cal.add(Calendar.DAY_OF_YEAR, 1)
+        val overmorrow = Timestamp(cal.time)
+        fdao.registerListenerForRecentTasks(listener, group, user, tomorrow, overmorrow)
     }
 
     // Remove all listeners

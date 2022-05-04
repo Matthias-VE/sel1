@@ -21,17 +21,19 @@ fun HomeTasksRoute(
     group?.let {
         vM.onChangeGroup(it)
     }
-    val tasks by vM.tasks.collectAsState()
-    HomeTasksScreen(allTasks = tasks, {vM.toggleTask(it)}, vM.group(), {vM.onGoBack(); onBackPressed()})
+    val tasksToday by vM.tasksToday.collectAsState()
+    val tasksTomorrow by vM.tasksTomorrow.collectAsState()
+    HomeTasksScreen(tasksToday, tasksTomorrow, {vM.toggleTask(it)}, vM.group(), {vM.onGoBack(); onBackPressed()})
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeTasksScreen(
-    allTasks : List<Task>,
+    today : List<Task>,
+    tomorrow : List<Task>,
     onChecked : (Task) -> Unit,
     group : Group,
     onBackPressed: () -> Unit
     ) {
-    Tasks(allTasks = allTasks, onChecked = onChecked, group = group, onBackPressed)
+    Tasks(today, tomorrow, onChecked = onChecked, group = group, onBackPressed)
 }

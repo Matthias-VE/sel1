@@ -34,12 +34,12 @@ private val viewmGroup : HomeGroupViewModel
                     viewmGroup.addGroupWithId(it)
                 }
             }
-            if (viewmTask.tasks.collectAsState().value.isEmpty()) {
+
                 testGroups.forEach {
                     testTasks.forEach { t ->
                         viewmTask.addTask(t, it)
                     }
                 }
-            }
+
     }
 }
