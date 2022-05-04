@@ -6,4 +6,5 @@ object HomeAppDestinations {
     const val LOGIN_ROUTE = "login"
     const val GROUP_ADD = "addgroup"
     const val PROFILE_ROUTE = "profile"
+    const val GROUP_EDIT = "editgroup"
 }

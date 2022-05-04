@@ -4,29 +4,35 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.heppihome.viewmodels.AddGroupViewModel
+import com.heppihome.data.models.Group
+import com.heppihome.viewmodels.EditGroupViewModel
 
 @Composable
-fun NewGroup(
-    vM : AddGroupViewModel,
-    onGroupCancel : () -> Unit
+fun EditGroup(
+    vM: EditGroupViewModel,
+    onGroupCancel: () -> Unit,
+    g: Group
 ) {
+    vM.setGroup(g)
     val temp by vM.groupName.collectAsState()
     val temp2 by vM.description.collectAsState()
 
+
+
     Column() {
-        Header(onGroupCancel)
+        Header()
         Column(modifier = Modifier
             .padding(10.dp)) {
-            InputField(name = "Name Of Group", description = temp.text) { x -> vM.setGroup(x) }
+            InputField(name = "Name Of Group", description = temp.text) { x -> vM.setName(x) }
             InputField(name = "Description", description = temp2.text) { x -> vM.setDescription(x) }
-            Button(onClick = { vM.addGroups() },
+            Button(onClick = { println("submitted") },
                 modifier = Modifier.padding(10.dp)) {
                 Text("Add")
             }
@@ -36,12 +42,12 @@ fun NewGroup(
 }
 
 @Composable
-fun Header(onGroupCancel: () -> Unit) {
+fun Header() {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
         Row() {
             Row(modifier = Modifier
                 .padding(10.dp), horizontalArrangement = Arrangement.Start) {
-                IconButton(onClick = onGroupCancel) {
+                IconButton(onClick = { println("staph") }) {
                     Icon(
                         Icons.Default.Close, contentDescription = "Cancel", modifier = Modifier
                             .size(40.dp)
@@ -49,20 +55,9 @@ fun Header(onGroupCancel: () -> Unit) {
                 }
             }
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
-                Text("New Group", fontSize = 30.sp, textAlign = TextAlign.Center)
+                Text("Edit Group", fontSize = 30.sp, textAlign = TextAlign.Center)
             }
 
         }
-    }
-}
-
-@Composable
-fun InputField(name: String, description: String, edit: (String) -> Unit) {
-
-    Column(modifier = Modifier.padding(10.dp).fillMaxWidth()) {
-        Text(name, color = Color.Gray)
-        OutlinedTextField(value = description, modifier = Modifier.fillMaxWidth(), onValueChange = { newText ->
-            edit(newText)
-        })
     }
 }

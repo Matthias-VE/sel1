@@ -51,6 +51,7 @@ class MainActivity : ComponentActivity() {
                     p.Populate()
 
                     val navController = rememberNavController()
+
                     Scaffold(
                         bottomBar = { com.heppihome.ui.navigation.BottomNavigation(navController = navController) }) {
                         HomeNavGraph(navController = navController
