@@ -15,7 +15,7 @@ import com.heppihome.ui.navigation.HomeNavGraph
 
 import com.heppihome.ui.theme.HeppiHomeTheme
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
-import com.heppihome.viewmodels.HomeTasksViewModel
+import com.heppihome.viewmodels.tasks.HomeTasksViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 

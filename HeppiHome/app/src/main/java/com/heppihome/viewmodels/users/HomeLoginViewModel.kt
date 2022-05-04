@@ -43,13 +43,16 @@ class HomeLoginViewModel @Inject constructor(private val rep : HomeRepository) :
         }
     }
 
-    fun setUser() {
-        val fu = user.value!!
+    fun fuToUser(fu : FirebaseUser) : User {
         var name = "default"
         var email = "default"
         fu.displayName?.let { name = it }
         fu.email?.let { email = it }
-        rep.user = User(name, email, fu.uid)
+        return User(name, email, fu.uid)
+    }
+
+    fun setUser() {
+        rep.user = fuToUser(user.value!!)
     }
 
     override fun buildLoginIntent(): Intent {
@@ -73,6 +76,7 @@ class HomeLoginViewModel @Inject constructor(private val rep : HomeRepository) :
 
             viewModelScope.launch {
                 _user.value = rep.getUser()
+                rep.saveUser(fuToUser(_user.value!!))
             }
 
             _isLoggedIn.value = true

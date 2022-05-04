@@ -1,5 +1,6 @@
 package com.heppihome.data
 
+import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -33,6 +34,28 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     // This gets all the groups
     suspend fun getAllGroups() : List<Group> {
         return fdao.getAllGroups()
+    }
+
+    suspend fun getAllUsersInGroup(l : List<String>) : List<User> {
+        val list = mutableListOf<User>()
+        for (id in l) {
+            list.add(getUserFromId(id))
+        }
+        return list
+    }
+
+    suspend fun getUserFromId(id : String) : User {
+        val u = fdao.getUserForId(id)
+        return if (u == null) {
+            Log.i("HomeRepo", "User does not exist")
+            User()
+        } else {
+            u
+        }
+    }
+
+    suspend fun saveUser(u : User) {
+        fdao.addUser(u)
     }
 
     // This adds a group with an id set already

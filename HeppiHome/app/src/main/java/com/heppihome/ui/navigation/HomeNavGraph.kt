@@ -1,7 +1,6 @@
 package com.heppihome.ui.navigation
 
 import android.content.Context
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,6 +12,8 @@ import com.heppihome.ui.components.NewGroup
 
 import com.heppihome.ui.components.EditGroup
 import com.heppihome.ui.routes.*
+import com.heppihome.ui.routes.tasks.AddTaskRoute
+import com.heppihome.ui.routes.tasks.HomeTasksRoute
 import com.heppihome.viewmodels.HomeMainViewModel
 
 @Composable
@@ -68,7 +69,15 @@ fun HomeNavGraph(
 
             HomeTasksRoute(vM = hiltViewModel(), onBackPressed = {
                 navController.navigate(HomeAppDestinations.GROUP_ROUTE)
-            }, group = vM.selectedGroup)
+            },
+                onAddTask = {navController.navigate(HomeAppDestinations.TASK_ADD)},
+                group = vM.selectedGroup)
+        }
+
+        composable(HomeAppDestinations.TASK_ADD) {
+            AddTaskRoute(vM = hiltViewModel(), vM.selectedGroup, onCancelled = {
+                navController.navigate(BottomNavItem.Tasks.screen_route)
+            })
         }
 
         composable(BottomNavItem.Settings.screen_route){

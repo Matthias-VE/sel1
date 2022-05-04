@@ -7,4 +7,5 @@ object HomeAppDestinations {
     const val GROUP_ADD = "addgroup"
     const val PROFILE_ROUTE = "profile"
     const val GROUP_EDIT = "editgroup"
+    const val TASK_ADD = "addtask"
 }

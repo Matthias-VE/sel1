@@ -6,11 +6,11 @@ import com.google.firebase.Timestamp
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
-import com.heppihome.viewmodels.HomeTasksViewModel
+import com.heppihome.viewmodels.tasks.HomeTasksViewModel
 import java.util.*
 
 class PopulateDB constructor(private val viewmTask : HomeTasksViewModel,
-private val viewmGroup : HomeGroupViewModel
+                             private val viewmGroup : HomeGroupViewModel
 ) {
 
     private val testGroups = listOf(
@@ -33,13 +33,12 @@ private val viewmGroup : HomeGroupViewModel
                 testGroups.forEach {
                     viewmGroup.addGroupWithId(it)
                 }
-            }
-
                 testGroups.forEach {
                     testTasks.forEach { t ->
                         viewmTask.addTask(t, it)
                     }
                 }
+            }
 
     }
 }

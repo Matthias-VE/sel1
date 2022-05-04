@@ -21,7 +21,7 @@ fun NewGroup(
     val temp2 by vM.description.collectAsState()
 
     Column() {
-        Header(onGroupCancel)
+        Header("New Group", onGroupCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
             InputField(name = "Name Of Group", description = temp.text) { x -> vM.setGroup(x) }
@@ -36,7 +36,7 @@ fun NewGroup(
 }
 
 @Composable
-fun Header(onGroupCancel: () -> Unit) {
+fun Header(title : String, onGroupCancel: () -> Unit) {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
         Row() {
             Row(modifier = Modifier
@@ -49,7 +49,7 @@ fun Header(onGroupCancel: () -> Unit) {
                 }
             }
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
-                Text("New Group", fontSize = 30.sp, textAlign = TextAlign.Center)
+                Text(title, fontSize = 30.sp, textAlign = TextAlign.Center)
             }
 
         }

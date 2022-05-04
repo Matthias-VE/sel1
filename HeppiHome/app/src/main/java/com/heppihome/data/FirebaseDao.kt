@@ -73,6 +73,19 @@ class FirebaseDao {
         return groupDoc.get().await().toObjects(Group::class.java)
     }
 
+    suspend fun getUsersForIds(ids : List<String>) : List<User>{
+        return userDoc.whereIn("id", ids).get().await().toObjects(User::class.java)
+    }
+
+    suspend fun getUserForId(id : String) : User? {
+        return userDoc.document(id).get().await().toObject(User::class.java)
+    }
+
+    suspend fun addUser(u : User) {
+        val userRef = userDoc.document(u.id)
+        userRef.set(u).await()
+    }
+
     // This adds a group with an id set already
     fun addGroupWithId(group : Group) : Flow<ResultState<DocumentReference>> =
         flow {

@@ -1,19 +1,21 @@
-package com.heppihome.ui.routes
+package com.heppihome.ui.routes.tasks
 
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
-import com.heppihome.data.models.User
 import com.heppihome.ui.components.Tasks
-import com.heppihome.viewmodels.HomeTasksViewModel
+import com.heppihome.viewmodels.tasks.HomeTasksViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeTasksRoute(
     vM : HomeTasksViewModel,
+    onAddTask : () -> Unit,
     onBackPressed : () -> Unit,
     group : Group?
 ){
@@ -23,7 +25,7 @@ fun HomeTasksRoute(
     }
     val tasksToday by vM.tasksToday.collectAsState()
     val tasksTomorrow by vM.tasksTomorrow.collectAsState()
-    HomeTasksScreen(tasksToday, tasksTomorrow, {vM.toggleTask(it)}, vM.group(), {vM.onGoBack(); onBackPressed()})
+    HomeTasksScreen(tasksToday, tasksTomorrow, onAddTask , {vM.toggleTask(it)}, vM.group(), {vM.onGoBack(); onBackPressed()})
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -31,9 +33,16 @@ fun HomeTasksRoute(
 fun HomeTasksScreen(
     today : List<Task>,
     tomorrow : List<Task>,
+    onAddTask: () -> Unit,
     onChecked : (Task) -> Unit,
     group : Group,
     onBackPressed: () -> Unit
     ) {
-    Tasks(today, tomorrow, onChecked = onChecked, group = group, onBackPressed)
+    Scaffold(floatingActionButton = {
+        FloatingActionButton(onClick =  onAddTask ) {
+            Icon(Icons.Default.Add, "add task button")
+        }
+    }, floatingActionButtonPosition = FabPosition.End) {
+        Tasks(today, tomorrow, onChecked = onChecked, group = group, onBackPressed)
+    }
 }
