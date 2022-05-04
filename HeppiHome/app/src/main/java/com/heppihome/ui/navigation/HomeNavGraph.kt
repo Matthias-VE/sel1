@@ -6,6 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseUser
+import com.heppihome.data.models.Constants
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.User
 import com.heppihome.ui.routes.*
@@ -23,6 +25,7 @@ fun HomeNavGraph(
         composable(HomeAppDestinations.LOGIN_ROUTE) {
             HomeLoginRoute(vM = hiltViewModel(), onIsLoggedIn = {u ->
                 vM.setUser(u)
+            }, onIsLoggedInAndNavigateOnce = {
                 navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             }
             )

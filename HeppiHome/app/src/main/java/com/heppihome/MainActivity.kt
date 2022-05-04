@@ -45,15 +45,17 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     //Population of database with dummy data.
-                    // val viewmTask : HomeTasksViewModel = hiltViewModel()
-                    // val viewmGroup : HomeGroupViewModel = hiltViewModel()
-                    // val p = PopulateDB(viewmTask, viewmGroup)
-                    // p.Populate()
+                    val viewmTask : HomeTasksViewModel = hiltViewModel()
+                    val viewmGroup : HomeGroupViewModel = hiltViewModel()
+                    val p = PopulateDB(viewmTask, viewmGroup)
+                    p.Populate()
 
                     val navController = rememberNavController()
                     Scaffold(
                         bottomBar = { com.heppihome.ui.navigation.BottomNavigation(navController = navController) }) {
-                        HomeNavGraph(navController = navController, vM = hiltViewModel())
+                        HomeNavGraph(navController = navController
+                            , vM = hiltViewModel()
+                        )
                     }
                 }
             }

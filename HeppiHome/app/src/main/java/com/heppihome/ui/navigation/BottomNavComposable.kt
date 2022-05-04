@@ -20,7 +20,9 @@ private fun MainScreenView(){
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) }) {
-        HomeNavGraph(navController = navController, vM = hiltViewModel())
+        HomeNavGraph(navController = navController
+            , vM = hiltViewModel()
+        )
     }
 }
 

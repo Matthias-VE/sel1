@@ -26,14 +26,29 @@ import javax.inject.Inject
 class HomeLoginViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel(), FirebaseAuthManager {
     private val TAG = this::class.java.name
 
-    private val _isLoggedIn = MutableStateFlow(!rep.isAnonymousUser())
+    private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn = _isLoggedIn.asStateFlow()
 
     private val _authResultCode = MutableStateFlow(AuthResultCode.NOT_APPLICABLE)
     val authResultCode = _authResultCode.asStateFlow()
 
-    private val _user = MutableStateFlow<FirebaseUser?>(null)
+    private val _user = MutableStateFlow<FirebaseUser?>(null
+    )
     val user = _user.asStateFlow()
+
+    private val _hasNavigated = MutableStateFlow(false)
+    val hasNavigated = _hasNavigated
+
+    init {
+        viewModelScope.launch {
+            _isLoggedIn.value = !rep.isAnonymousUser()
+            _user.value = rep.getUser()
+        }
+    }
+
+    fun doNavigate() {
+        _hasNavigated.value = true
+    }
 
     override fun buildLoginIntent(): Intent {
         return AuthUI.getInstance().createSignInIntentBuilder()
@@ -53,7 +68,10 @@ class HomeLoginViewModel @Inject constructor(private val rep : HomeRepository) :
 
         val response : IdpResponse? = result.idpResponse
         if (result.resultCode == Activity.RESULT_OK) {
-            _user.value = rep.getUser()
+
+            viewModelScope.launch {
+                _user.value = rep.getUser()
+            }
 
             _isLoggedIn.value = true
             _authResultCode.value = AuthResultCode.OK

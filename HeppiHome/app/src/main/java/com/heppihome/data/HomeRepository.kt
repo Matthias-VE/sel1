@@ -40,11 +40,11 @@ class HomeRepository @Inject constructor() {
         userDoc = db.collection(COLLECTION_USERS)
     }
 
-    fun isAnonymousUser() : Boolean {
+    suspend fun isAnonymousUser() : Boolean {
         return (firebaseAuth.currentUser == null || firebaseAuth.currentUser!!.isAnonymous)
     }
 
-    fun getUser() : FirebaseUser? {
+    suspend fun getUser() : FirebaseUser? {
         return firebaseAuth.currentUser
     }
 
