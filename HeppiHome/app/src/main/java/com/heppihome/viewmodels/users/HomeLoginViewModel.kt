@@ -35,7 +35,6 @@ class HomeLoginViewModel @Inject constructor(private val rep : HomeRepository) :
     )
     val user = _user.asStateFlow()
 
-    private val _hasNavigated = MutableStateFlow(false)
 
     init {
         viewModelScope.launch {

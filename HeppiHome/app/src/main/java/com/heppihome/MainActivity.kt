@@ -3,7 +3,9 @@ package com.heppihome
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,12 +40,15 @@ class MainActivity : ComponentActivity() {
                     p.Populate()
 
                     val navController = rememberNavController()
+                    val context = this
 
                     Scaffold(
                         bottomBar = { com.heppihome.ui.navigation.BottomNavigation(navController = navController) }) {
-                        HomeNavGraph(navController = navController
-                            , vM = hiltViewModel(), context = this
-                        )
+                        Box(modifier = Modifier.padding(it)) {
+                            HomeNavGraph(
+                                navController = navController, vM = hiltViewModel(), context = context
+                            )
+                        }
                     }
                 }
             }

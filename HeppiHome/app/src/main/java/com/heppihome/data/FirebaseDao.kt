@@ -21,6 +21,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.zone.ZoneOffsetTransitionRule
 import java.util.*
 import javax.inject.Singleton
 
@@ -48,12 +51,18 @@ class FirebaseDao {
         group : Group,
         user : User
     ) {
-        val today = LocalDate.now().atStartOfDay()
-        val tomorrow = today.plusDays(1)
+        val cal = GregorianCalendar()
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        val today = Timestamp(cal.time)
+        cal.add(Calendar.DAY_OF_YEAR, 1)
+        val tomorrow = Timestamp(cal.time)
+
         listeners.add(groupDoc.document(group.id).collection(COLLECTION_TASKS)
             .whereArrayContains(COLLECTION_USERS, user.id)
-            //.whereGreaterThan("deadline", today)
-            //.whereLessThan("deadline", tomorrow)
+            .whereGreaterThan("deadline", today)
+            .whereLessThan("deadline", tomorrow)
             .addSnapshotListener(listener))
     }
 
