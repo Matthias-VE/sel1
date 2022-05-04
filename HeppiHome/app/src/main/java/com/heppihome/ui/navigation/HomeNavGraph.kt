@@ -69,5 +69,9 @@ fun HomeNavGraph(
         composable(BottomNavItem.Settings.screen_route){
             HomeSettingsRoute()
         }
+
+        composable(HomeAppDestinations.PROFILE_ROUTE) {
+            HomeProfileRoute()
+        }
     }
 }

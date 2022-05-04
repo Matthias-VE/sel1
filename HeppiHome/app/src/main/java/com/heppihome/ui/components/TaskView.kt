@@ -31,7 +31,7 @@ import com.heppihome.data.models.Task
 @Composable
 fun Tasks(allTasks : List<List<Task>>, onChecked: (Task) -> Unit, group : Group, onBackPressed : () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Topbar(group, onBackPressed)
+        Topbar(group.name, onBackPressed)
         for (i in 1..5) {
             Day(i, allTasks[i-1], onChecked = onChecked)
         }
