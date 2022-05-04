@@ -14,6 +14,7 @@ import com.heppihome.ui.components.NewGroup
 
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.User
+import com.heppihome.ui.components.EditGroup
 import com.heppihome.ui.routes.*
 import com.heppihome.viewmodels.HomeMainViewModel
 
@@ -49,6 +50,8 @@ fun HomeNavGraph(
                 navController.navigate(HomeAppDestinations.TASKS_ROUTE) },
                 onNewGroupClicked = {
                     navController.navigate(HomeAppDestinations.GROUP_ADD)
+                }, onEditGroupClicked = {
+                    navController.navigate(HomeAppDestinations.GROUP_EDIT)
                 }
             )
         }
