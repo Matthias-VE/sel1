@@ -9,4 +9,6 @@ object HomeAppDestinations {
     const val GROUP_EDIT = "editgroup"
     const val TASK_ADD = "addtask"
     const val INVITE_ROUTE = "invite"
+    const val ALLINV_ROUTE = "allinvites"
+    const val INVITE_DETAIL = "invitedetail"
 }

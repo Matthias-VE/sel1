@@ -1,4 +1,4 @@
-package com.heppihome.ui.routes
+package com.heppihome.ui.routes.groups
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
