@@ -4,21 +4,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.heppihome.R
 import com.heppihome.ui.routes.DropdownIcon
-import com.heppihome.viewmodels.AddGroupViewModel
+import com.heppihome.viewmodels.groups.AddGroupViewModel
 
 @Composable
 fun NewGroup(
@@ -29,7 +25,7 @@ fun NewGroup(
     val temp2 by vM.description.collectAsState()
 
     Column() {
-        Header(onGroupCancel)
+        Header("New Group", onGroupCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
             InputField(name = stringResource(R.string.GroupName), description = temp.text, vM, { x -> vM.setGroup(x)})
@@ -44,7 +40,7 @@ fun NewGroup(
 }
 
 @Composable
-fun Header(onGroupCancel: () -> Unit) {
+fun Header(title : String, onGroupCancel: () -> Unit) {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
         Row() {
             Row(modifier = Modifier
@@ -57,7 +53,7 @@ fun Header(onGroupCancel: () -> Unit) {
                 }
             }
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
-                Text(stringResource(R.string.NewGroup), fontSize = 30.sp, textAlign = TextAlign.Center)
+                Text(title, fontSize = 30.sp, textAlign = TextAlign.Center)
             }
 
         }
@@ -65,7 +61,7 @@ fun Header(onGroupCancel: () -> Unit) {
 }
 
 @Composable
-fun InputField(name : String, description : String, vM: AddGroupViewModel, edit : (String) -> Unit) {
+fun InputField(name: String, description: String, edit: (String) -> Unit) {
 
     Column(modifier = Modifier.padding(10.dp).fillMaxWidth()) {
         Text(name, color = Color.Gray)

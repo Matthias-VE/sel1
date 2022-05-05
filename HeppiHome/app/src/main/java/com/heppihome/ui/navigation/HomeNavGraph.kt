@@ -1,5 +1,6 @@
 package com.heppihome.ui.navigation
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -9,26 +10,39 @@ import androidx.navigation.compose.rememberNavController
 
 import com.heppihome.ui.components.NewGroup
 
-import com.heppihome.data.models.Group
-
-import com.heppihome.ui.routes.HomeGroupRoute
-import com.heppihome.ui.routes.HomeOverViewRoute
-import com.heppihome.ui.routes.HomeSettingsRoute
-import com.heppihome.ui.routes.HomeTasksRoute
+import com.heppihome.ui.components.EditGroup
+import com.heppihome.ui.routes.*
+import com.heppihome.ui.routes.tasks.AddTaskRoute
+import com.heppihome.ui.routes.tasks.HomeTasksRoute
+import com.heppihome.viewmodels.HomeMainViewModel
 
 @Composable
 fun HomeNavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination : String = HomeAppDestinations.GROUP_ROUTE,
+    startDestination : String = HomeAppDestinations.LOGIN_ROUTE,
+    vM : HomeMainViewModel,
+    context : Context
 ){
-    var selectedGroup : Group? = null
+
+
     NavHost(navController = navController, startDestination = startDestination) {
-        composable(HomeAppDestinations.GROUP_ROUTE) {
-            HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {
-                navController.navigate(HomeAppDestinations.TASKS_ROUTE + "/${it.id}")
-            }, onNewGroupClicked = {
-                navController.navigate(HomeAppDestinations.GROUP_ADD)
+
+        composable(HomeAppDestinations.LOGIN_ROUTE) {
+            HomeLoginRoute(vM = hiltViewModel(),
+                ) {
+                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             }
+        }
+        
+        composable(HomeAppDestinations.GROUP_ROUTE) {
+            HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {vM.selectedGroup = it;
+                navController.navigate(HomeAppDestinations.TASKS_ROUTE) },
+                onNewGroupClicked = {
+                    navController.navigate(HomeAppDestinations.GROUP_ADD)
+                }, onEditGroupClicked = {
+                    vM.toEditGroup = it;
+                    navController.navigate(HomeAppDestinations.GROUP_EDIT)
+                }
             )
         }
 
@@ -37,6 +51,21 @@ fun HomeNavGraph(
             onGroupCancel = {
                 navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             })
+        }
+        composable(HomeAppDestinations.INVITE_ROUTE) {
+            HomeInvitePersonRoute(hiltViewModel(), {
+                navController.navigate(BottomNavItem.Tasks.screen_route)
+            },
+                vM.selectedGroup
+            )
+        }
+
+        composable(HomeAppDestinations.GROUP_EDIT) {
+
+            EditGroup(vM = hiltViewModel(),
+                onGroupCancel = {
+                    navController.navigate(HomeAppDestinations.GROUP_ROUTE)
+                }, g = vM.toEditGroup)
         }
 
         composable(BottomNavItem.Overview.screen_route) {
@@ -47,11 +76,30 @@ fun HomeNavGraph(
 
             HomeTasksRoute(vM = hiltViewModel(), onBackPressed = {
                 navController.navigate(HomeAppDestinations.GROUP_ROUTE)
-            }, group = selectedGroup)
+            },
+                onAddTask = {navController.navigate(HomeAppDestinations.TASK_ADD)},
+                onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)},
+                group = vM.selectedGroup)
+        }
+
+        composable(HomeAppDestinations.TASK_ADD) {
+            AddTaskRoute(vM = hiltViewModel(), vM.selectedGroup, onCancelled = {
+                navController.navigate(BottomNavItem.Tasks.screen_route)
+            })
         }
 
         composable(BottomNavItem.Settings.screen_route){
-            HomeSettingsRoute()
+            HomeSettingsRoute( onProfileClicked = {
+                navController.navigate(HomeAppDestinations.PROFILE_ROUTE)
+            })
+        }
+
+        composable(HomeAppDestinations.PROFILE_ROUTE) {
+            HomeProfileRoute(
+                context,
+                {navController.navigate(BottomNavItem.Settings.screen_route)},
+                {navController.navigate(HomeAppDestinations.LOGIN_ROUTE)}
+            )
         }
     }
 }

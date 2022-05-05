@@ -6,12 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
@@ -23,22 +21,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.heppihome.R
+import com.heppihome.data.models.User
 import com.heppihome.viewmodels.HomeSettingsViewModel
 
 @Composable
-fun HomeSettingsRoute() {
+fun HomeSettingsRoute(
+    onProfileClicked : () -> Unit
+) {
 
     val vM : HomeSettingsViewModel = hiltViewModel()
-
-    HomeSettingsScreen()
+    HomeSettingsScreen(onProfileClicked)
 }
 
-@Preview(showBackground = true)
 @Composable
-fun HomeSettingsScreen() {
+fun HomeSettingsScreen(onProfileClicked: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         SettingsHeader()
-        AllSettings()
+        AllSettings(onProfileClicked = onProfileClicked)
     }
 }
 
@@ -56,17 +55,21 @@ fun SettingsHeader() {
 }
 
 @Composable
-fun AllSettings() {
+fun AllSettings(onProfileClicked: () -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(1) { index ->
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
-            ) {
-                Icon(Icons.Default.AccountCircle, contentDescription = "Profile", modifier = Modifier.size(40.dp))
-                Text(text = stringResource(R.string.Profile), modifier = Modifier.padding(4.dp), fontSize = 25.sp)
-            }
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp).clickable(onClick = onProfileClicked)
+                ) {
+                    Icon(
+                        Icons.Default.AccountCircle,
+                        contentDescription = "Profile",
+                        modifier = Modifier.size(40.dp)
+                    )
+                    Text(text = stringResource(R.string.Profile), modifier = Modifier.padding(4.dp), fontSize = 25.sp)
+                }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -9,6 +9,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -29,33 +30,22 @@ import com.heppihome.data.models.Task
 //Task View
 @ExperimentalMaterialApi
 @Composable
-fun Tasks(allTasks : List<List<Task>>, onChecked: (Task) -> Unit, group : Group, onBackPressed : () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Topbar(group, onBackPressed)
-        for (i in 1..5) {
-            Day(i, allTasks[i-1], onChecked = onChecked)
-        }
-    }
-}
+fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
+          expandMenu : Boolean, toggleMenu : () -> Unit,
+          onChecked: (Task) -> Unit, group : Group,
+          onBackPressed : () -> Unit,
+          onInvitePerson : () -> Unit
+) {
 
-@Composable
-fun Topbar(g : Group, onBackPressed: () -> Unit){
-    Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
-        Row(modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()) {
-            Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Start) {
-                IconButton(onClick = { onBackPressed()}) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Return", modifier = Modifier.size(40.dp))
-                }
-            }
-            Row(modifier = Modifier.padding(10.dp)) {
-                Text(g.name, fontSize = 30.sp)
-            }
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp), horizontalArrangement = Arrangement.End) {
-                Icon(Icons.Default.MoreVert, contentDescription = "Options", modifier = Modifier.size(40.dp))
+    Column {
+        Topbar(group.name,expandMenu, toggleMenu,
+            onInvitePerson = onInvitePerson,
+            onBackPressed = onBackPressed
+        )
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            items(1) {
+                Day("today", tasksToday, onChecked)
+                Day("tomorrow", tasksTomorrow, onChecked)
             }
         }
     }
@@ -64,8 +54,8 @@ fun Topbar(g : Group, onBackPressed: () -> Unit){
 
 @ExperimentalMaterialApi
 @Composable
-fun Day(day: Int, tasks : List<Task>, onChecked : (Task) -> Unit){
-    var expended by remember { mutableStateOf(false)}
+fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit){
+    var expended by remember { mutableStateOf(true)}
     val rotation by animateFloatAsState(targetValue = if(expended) 180f else 0f)
 
     Card(
@@ -90,7 +80,7 @@ fun Day(day: Int, tasks : List<Task>, onChecked : (Task) -> Unit){
             Row{
                 Text(
                     modifier = Modifier.weight(6f),
-                    text = "Day $day",
+                    text = day,
                     fontSize = MaterialTheme.typography.h6.fontSize,
                     fontWeight =  FontWeight.Bold
                 )

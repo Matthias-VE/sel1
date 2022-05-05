@@ -10,18 +10,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-
-@Composable
-private fun MainScreenView(){
-    val navController = rememberNavController()
-    Scaffold(
-        bottomBar = { BottomNavigation(navController = navController) }) {
-        HomeNavGraph(navController = navController)
-    }
-}
 
 @Composable
 fun BottomNavigation(navController: NavController) {
@@ -57,10 +49,4 @@ fun BottomNavigation(navController: NavController) {
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BottomNavigationPreview(){
-    MainScreenView()
 }

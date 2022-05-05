@@ -1,4 +1,4 @@
-package com.heppihome.viewmodels
+package com.heppihome.viewmodels.groups
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,6 +41,12 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
     fun addGroupWithId(g : Group) {
         viewModelScope.launch {
             rep.addGroupWithId(g).collect {}
+        }
+    }
+
+    fun deleteGroup(g: Group) {
+        viewModelScope.launch {
+            //fill in removegroup
         }
     }
 }

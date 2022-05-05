@@ -34,7 +34,7 @@ fun cal(){
                         date = "$day - ${month + 1} - $year"
                     }
                 })
-                Text(text = "zie taken op $date")
+                Text(text = "view tasks on $date")
             }
         }
     )

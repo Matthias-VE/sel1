@@ -1,4 +1,4 @@
-package com.heppihome.viewmodels
+package com.heppihome.viewmodels.groups
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -33,7 +33,7 @@ class AddGroupViewModel @Inject constructor(private val rep : HomeRepository) : 
 
     fun addGroups() {
         viewModelScope.launch {
-            val toAdd = Group(_groupName.value.text, _description.value.text, emptyList())
+            val toAdd = Group(_groupName.value.text, _description.value.text, listOf(rep.user.id))
             //println(_groupName.value.text)
             rep.addGroup(toAdd).collect()
             setGroup("")
