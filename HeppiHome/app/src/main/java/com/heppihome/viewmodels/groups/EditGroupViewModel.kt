@@ -21,11 +21,6 @@ class EditGroupViewModel @Inject constructor(private val rep : HomeRepository) :
 
     private var group : Group = Group();
 
-    fun setGroup(newGroup : Group) {
-        group = newGroup
-        setName(group.name)
-        setDescription(group.description)
-    }
 
     fun setName(newName : String) {
         _groupName.value = TextFieldValue(newName)
@@ -36,7 +31,9 @@ class EditGroupViewModel @Inject constructor(private val rep : HomeRepository) :
     }
 
     fun updateGroup(g : Group) {
-        viewModelScope.launch {  }
+        viewModelScope.launch {
+
+        }
     }
 
 
