@@ -19,7 +19,7 @@ import javax.inject.Inject
 class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     : ViewModel() {
 
-    private val _name = MutableStateFlow<String>("default")
+    private val _name = MutableStateFlow<String>("")
     private val _users = MutableStateFlow<List<String>>(listOf(rep.user.id))
     private val _deadline = MutableStateFlow<Timestamp>(Timestamp.now())
     private val _usersInGroup = MutableStateFlow<List<User>>(listOf(rep.user))
@@ -60,4 +60,18 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         }
     }
 
+    //private val _deadline = MutableStateFlow<Timestamp>(Timestamp.now())
+    private val _mHours = MutableStateFlow<String>("")
+    private val _date = MutableStateFlow<String>("")
+    //val isLoggedIn = _isLoggedIn.asStateFlow()
+    val date = _date.asStateFlow()
+    val hours = _mHours.asStateFlow()
+
+    fun updateHours(s : String) {
+        _mHours.value = s
+    }
+
+    fun updateDate(s : String) {
+        _date.value = s
+    }
 }
