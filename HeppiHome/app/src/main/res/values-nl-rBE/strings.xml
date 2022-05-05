@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HeppiHome</string>
+    <string name="Calendar">Kalender</string>
+    <string name="NewGroup">Groep aanmaken</string>
+    <string name="JoinGroup">Groep toetreden</string>
+    <string name="LeaveGroup">Groep verlaten</string>
+    <string name="GroupName">Groepsnaam</string>
+    <string name="Description">Beschrijving</string>
+    <string name="Add">Voeg toe</string>
+    <string name="Cancel">Annuleren</string>
+    <string name="Groups">Groepen</string>
+    <string name="AllTasks">Alle taken</string>
+    <string name="Settings">Instellingen</string>
+    <string name="Profile">Profiel</string>
+    <string name="Notifications">Meldingen</string>
+    <string name="Language">Taal</string>
+    <string name="Help">Hulp</string>
+    <string name="Theme">Thema</string>
+</resources>

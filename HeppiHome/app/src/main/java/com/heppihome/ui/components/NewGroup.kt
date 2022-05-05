@@ -10,11 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.heppihome.R
 import com.heppihome.ui.routes.DropdownIcon
 import com.heppihome.viewmodels.AddGroupViewModel
 
@@ -30,11 +32,11 @@ fun NewGroup(
         Header(onGroupCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
-            InputField(name = "Name Of Group", description = temp.text, vM, {x -> vM.setGroup(x)})
-            InputField(name = "Description", description = temp2.text, vM, {x -> vM.setDescription(x)})
+            InputField(name = stringResource(R.string.GroupName), description = temp.text, vM, { x -> vM.setGroup(x)})
+            InputField(name = stringResource(R.string.Description), description = temp2.text, vM, { x -> vM.setDescription(x)})
             Button(onClick = { vM.addGroups() },
                 modifier = Modifier.padding(10.dp)) {
-                Text("Add")
+                Text(stringResource(R.string.Add))
             }
         }
     }
@@ -49,13 +51,13 @@ fun Header(onGroupCancel: () -> Unit) {
                 .padding(10.dp), horizontalArrangement = Arrangement.Start) {
                 IconButton(onClick = onGroupCancel) {
                     Icon(
-                        Icons.Default.Close, contentDescription = "Cancel", modifier = Modifier
+                        Icons.Default.Close, contentDescription = stringResource(R.string.Cancel), modifier = Modifier
                             .size(40.dp)
                     )
                 }
             }
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
-                Text("New Group", fontSize = 30.sp, textAlign = TextAlign.Center)
+                Text(stringResource(R.string.NewGroup), fontSize = 30.sp, textAlign = TextAlign.Center)
             }
 
         }

@@ -17,10 +17,12 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.heppihome.R
 import com.heppihome.viewmodels.HomeSettingsViewModel
 
 @Composable
@@ -47,7 +49,7 @@ fun SettingsHeader() {
             .padding(10.dp)
             .fillMaxWidth()) {
             Row(modifier = Modifier.padding(10.dp)) {
-                Text("Settings", fontSize = 30.sp)
+                Text(stringResource(R.string.Settings), fontSize = 30.sp)
             }
         }
     }
@@ -63,39 +65,39 @@ fun AllSettings() {
                     .padding(20.dp)
             ) {
                 Icon(Icons.Default.AccountCircle, contentDescription = "Profile", modifier = Modifier.size(40.dp))
-                Text(text = "Profile", modifier = Modifier.padding(4.dp), fontSize = 25.sp)
+                Text(text = stringResource(R.string.Profile), modifier = Modifier.padding(4.dp), fontSize = 25.sp)
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Icon(Icons.Default.Notifications, contentDescription = "Profile", modifier = Modifier.size(40.dp))
-                Text(text = "Notifications", modifier = Modifier.padding(4.dp), fontSize = 25.sp)
+                Icon(Icons.Default.Notifications, contentDescription = "Notifications", modifier = Modifier.size(40.dp))
+                Text(text = stringResource(R.string.Notifications), modifier = Modifier.padding(4.dp), fontSize = 25.sp)
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Icon(Icons.Default.Notifications, contentDescription = "Profile", modifier = Modifier.size(40.dp))
-                Text(text = "Language", modifier = Modifier.padding(4.dp), fontSize = 25.sp)
+                Icon(Icons.Default.Notifications, contentDescription = "Language", modifier = Modifier.size(40.dp))
+                Text(text = stringResource(R.string.Language), modifier = Modifier.padding(4.dp), fontSize = 25.sp)
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Icon(Icons.Default.Phone, contentDescription = "Profile", modifier = Modifier.size(40.dp))
-                Text(text = "Help", modifier = Modifier.padding(4.dp), fontSize = 25.sp)
+                Icon(Icons.Default.Phone, contentDescription = "Help", modifier = Modifier.size(40.dp))
+                Text(text = stringResource(R.string.Help), modifier = Modifier.padding(4.dp), fontSize = 25.sp)
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Icon(Icons.Default.Phone, contentDescription = "Profile", modifier = Modifier.size(40.dp))
-                Text(text = "Theme", modifier = Modifier.padding(4.dp), fontSize = 25.sp)
+                Icon(Icons.Default.Phone, contentDescription = "Theme", modifier = Modifier.size(40.dp))
+                Text(text = stringResource(R.string.Theme), modifier = Modifier.padding(4.dp), fontSize = 25.sp)
             }
         }
     }
