@@ -30,36 +30,22 @@ import com.heppihome.data.models.Task
 //Task View
 @ExperimentalMaterialApi
 @Composable
-fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>, onChecked: (Task) -> Unit, group : Group, onBackPressed : () -> Unit) {
+fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
+          expandMenu : Boolean, toggleMenu : () -> Unit,
+          onChecked: (Task) -> Unit, group : Group,
+          onBackPressed : () -> Unit,
+          onInvitePerson : () -> Unit
+) {
+
     Column {
-        Topbar(group.name, onBackPressed)
+        Topbar(group.name,expandMenu, toggleMenu,
+            onInvitePerson = onInvitePerson,
+            onBackPressed = onBackPressed
+        )
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {
                 Day("today", tasksToday, onChecked)
                 Day("tomorrow", tasksTomorrow, onChecked)
-            }
-        }
-    }
-}
-
-@Composable
-fun Topbar(g : Group, onBackPressed: () -> Unit){
-    Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
-        Row(modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()) {
-            Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Start) {
-                IconButton(onClick = { onBackPressed()}) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Return", modifier = Modifier.size(40.dp))
-                }
-            }
-            Row(modifier = Modifier.padding(10.dp)) {
-                Text(g.name, fontSize = 30.sp)
-            }
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp), horizontalArrangement = Arrangement.End) {
-                Icon(Icons.Default.MoreVert, contentDescription = "Options", modifier = Modifier.size(40.dp))
             }
         }
     }

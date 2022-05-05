@@ -5,4 +5,5 @@ object Constants {
     val COLLECTION_TASKS = "tasks"
     val COLLECTION_GROUPS = "groups"
     val COLLECTION_USERS = "users"
+    val COLLECTION_INVITES = "invites"
 }

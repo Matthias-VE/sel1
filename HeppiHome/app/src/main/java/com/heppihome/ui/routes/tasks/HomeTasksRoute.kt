@@ -17,6 +17,7 @@ fun HomeTasksRoute(
     vM : HomeTasksViewModel,
     onAddTask : () -> Unit,
     onBackPressed : () -> Unit,
+    onInvitePerson: () -> Unit,
     group : Group?
 ){
 
@@ -25,7 +26,13 @@ fun HomeTasksRoute(
     }
     val tasksToday by vM.tasksToday.collectAsState()
     val tasksTomorrow by vM.tasksTomorrow.collectAsState()
-    HomeTasksScreen(tasksToday, tasksTomorrow, onAddTask , {vM.toggleTask(it)}, vM.group(), {vM.onGoBack(); onBackPressed()})
+    val expanded by vM.expanded.collectAsState()
+
+    HomeTasksScreen(tasksToday, tasksTomorrow,expanded,vM::toggleDropdownMenu, onAddTask ,
+        {vM.toggleTask(it)}, vM.group(),
+        {vM.onGoBack(); onBackPressed()},
+        onInvitePerson
+    )
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -33,16 +40,20 @@ fun HomeTasksRoute(
 fun HomeTasksScreen(
     today : List<Task>,
     tomorrow : List<Task>,
+    expanded : Boolean,
+    toggleDropDown : () -> Unit,
     onAddTask: () -> Unit,
     onChecked : (Task) -> Unit,
     group : Group,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onInvitePerson : () -> Unit
     ) {
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick =  onAddTask ) {
             Icon(Icons.Default.Add, "add task button")
         }
     }, floatingActionButtonPosition = FabPosition.End) {
-        Tasks(today, tomorrow, onChecked = onChecked, group = group, onBackPressed)
+        Tasks(today, tomorrow,expanded, toggleDropDown, onChecked = onChecked,
+            group = group, onBackPressed, onInvitePerson)
     }
 }

@@ -6,13 +6,11 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.type.Date
+import com.heppihome.data.models.*
 import com.heppihome.data.models.Constants.COLLECTION_GROUPS
+import com.heppihome.data.models.Constants.COLLECTION_INVITES
 import com.heppihome.data.models.Constants.COLLECTION_TASKS
 import com.heppihome.data.models.Constants.COLLECTION_USERS
-import com.heppihome.data.models.Group
-import com.heppihome.data.models.ResultState
-import com.heppihome.data.models.Task
-import com.heppihome.data.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -84,6 +82,16 @@ class FirebaseDao {
     suspend fun addUser(u : User) {
         val userRef = userDoc.document(u.id)
         userRef.set(u).await()
+    }
+
+    suspend fun addInviteToPerson(email : String, g : Group) : Boolean {
+        val userRef = userDoc.whereEqualTo("email", email).get().await()
+        if (userRef.isEmpty) return false
+        val users = userRef.toObjects(User::class.java)
+        users.forEach {
+            userDoc.document(it.id).collection(COLLECTION_INVITES).add(Invite(g.id)).await()
+        }
+        return true
     }
 
     // This adds a group with an id set already

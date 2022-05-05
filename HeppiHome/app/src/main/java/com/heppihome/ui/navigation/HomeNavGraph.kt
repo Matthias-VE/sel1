@@ -52,6 +52,13 @@ fun HomeNavGraph(
                 navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             })
         }
+        composable(HomeAppDestinations.INVITE_ROUTE) {
+            HomeInvitePersonRoute(hiltViewModel(), {
+                navController.navigate(BottomNavItem.Tasks.screen_route)
+            },
+                vM.selectedGroup
+            )
+        }
 
         composable(HomeAppDestinations.GROUP_EDIT) {
 
@@ -71,6 +78,7 @@ fun HomeNavGraph(
                 navController.navigate(HomeAppDestinations.GROUP_ROUTE)
             },
                 onAddTask = {navController.navigate(HomeAppDestinations.TASK_ADD)},
+                onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)},
                 group = vM.selectedGroup)
         }
 

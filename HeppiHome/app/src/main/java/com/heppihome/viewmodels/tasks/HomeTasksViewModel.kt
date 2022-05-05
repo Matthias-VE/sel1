@@ -27,6 +27,9 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     val tasksTomorrow : StateFlow<List<Task>> = _tasksTom
 
+    private var _expanded : MutableStateFlow<Boolean> = MutableStateFlow(false)
+    var expanded : StateFlow<Boolean> = _expanded
+
     init {
         rep.registerTaskSnapshotListener(this::taskListenerToday, testGroup)
         rep.registerTaskSnapshotListener(this::taskListenerTomorrow, testGroup)
@@ -64,6 +67,10 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     fun onGoBack() {
         rep.removeListeners()
+    }
+
+    fun toggleDropdownMenu() {
+        _expanded.value = !_expanded.value
     }
 
     fun toggleTask(t : Task) {

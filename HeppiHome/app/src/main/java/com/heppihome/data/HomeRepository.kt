@@ -58,6 +58,10 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
         fdao.addUser(u)
     }
 
+    suspend fun sendInviteTo(email : String, g : Group) : Boolean {
+        return fdao.addInviteToPerson(email, g)
+    }
+
     // This adds a group with an id set already
     fun addGroupWithId(group : Group) : Flow<ResultState<DocumentReference>> =
         fdao.addGroupWithId(group)
