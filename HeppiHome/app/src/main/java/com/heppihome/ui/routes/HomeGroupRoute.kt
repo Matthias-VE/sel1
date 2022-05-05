@@ -17,11 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
 import kotlin.math.roundToInt
@@ -74,7 +76,7 @@ fun Header(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit)
             .padding(10.dp)
             .fillMaxWidth()) {
             Row(modifier = Modifier.padding(10.dp)) {
-                Text("Groups", fontSize = 30.sp)
+                Text(stringResource(R.string.Groups), fontSize = 30.sp)
             }
             Row(modifier = Modifier
                 .fillMaxWidth()
@@ -89,7 +91,7 @@ fun Header(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit)
 fun Alltasks() {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.secondary) {
         Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
-            Text("All tasks", fontSize = 30.sp)
+            Text(stringResource(R.string.AllTasks), fontSize = 30.sp)
         }
     }
 }
@@ -124,13 +126,13 @@ fun DropDown(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Uni
 
     DropdownMenu(expanded = expanded, onDismissRequest = toggle) {
         DropdownMenuItem(onClick = onNewGroupClicked) {
-            Text("New Group")
+            Text(stringResource(R.string.NewGroup))
         }
         DropdownMenuItem(onClick = { println("Join Group") }) {
-            Text("Join Group")
+            Text(stringResource(R.string.JoinGroup))
         }
         DropdownMenuItem(onClick = { println("Leave Group") }) {
-            Text("Leave Group")
+            Text(stringResource(R.string.LeaveGroup))
         }
     }
 
