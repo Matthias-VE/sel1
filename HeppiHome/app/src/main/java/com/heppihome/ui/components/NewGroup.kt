@@ -13,7 +13,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.heppihome.R
-import com.heppihome.ui.routes.DropdownIcon
 import com.heppihome.viewmodels.groups.AddGroupViewModel
 
 @Composable
@@ -28,8 +27,8 @@ fun NewGroup(
         Header("New Group", onGroupCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
-            InputField(name = stringResource(R.string.GroupName), description = temp.text, vM, { x -> vM.setGroup(x)})
-            InputField(name = stringResource(R.string.Description), description = temp2.text, vM, { x -> vM.setDescription(x)})
+            InputField(name = stringResource(R.string.GroupName), description = temp.text, { x -> vM.setGroup(x)})
+            InputField(name = stringResource(R.string.Description), description = temp2.text, { x -> vM.setDescription(x)})
             Button(onClick = { vM.addGroups() },
                 modifier = Modifier.padding(10.dp)) {
                 Text(stringResource(R.string.Add))
