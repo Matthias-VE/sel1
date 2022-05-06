@@ -121,7 +121,7 @@ fun CalendarView(vM: AddTaskViewModel) {
     val mDatePickerDialog = DatePickerDialog(
         mContext,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            vM.updateDate("$mDayOfMonth-${mMonth+1}-$mYear")
+            vM.updateDate(mDayOfMonth, mMonth, mYear)
         }, mYear, mMonth, mDay
     )
 
@@ -134,7 +134,7 @@ fun CalendarView(vM: AddTaskViewModel) {
     val mTimePickerDialog = TimePickerDialog(
         mContext,
         {_, mHour : Int, mMinute: Int ->
-            vM.updateHours("$mHour:$mMinute:00")
+            vM.updateHours(mHour, mMinute)
         }, mHour, mMinute, false
     )
 

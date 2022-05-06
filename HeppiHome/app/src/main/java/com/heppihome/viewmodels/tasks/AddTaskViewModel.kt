@@ -13,7 +13,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.time.Year
+import java.util.*
 import javax.inject.Inject
+import kotlin.math.min
 
 @HiltViewModel
 class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
@@ -22,6 +25,7 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     private val _name = MutableStateFlow<String>("")
     private val _users = MutableStateFlow<List<String>>(listOf(rep.user.id))
     private val _deadline = MutableStateFlow<Timestamp>(Timestamp.now())
+    private var _deadlineDate = MutableStateFlow<Date>(Date())
     private val _usersInGroup = MutableStateFlow<List<User>>(listOf(rep.user))
 
     fun usersInGroup(g : Group) {
@@ -35,6 +39,7 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     val users = _users.asStateFlow()
     val deadline = _deadline.asStateFlow()
     val usersInGroup = _usersInGroup.asStateFlow()
+    val deadlineDate = _deadlineDate.asStateFlow()
 
     fun updateName(s : String) {
         _name.value = s
@@ -67,11 +72,32 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     val date = _date.asStateFlow()
     val hours = _mHours.asStateFlow()
 
-    fun updateHours(s : String) {
-        _mHours.value = s
+    fun updateHours(hour : Int, minutes : Int) {
+        //_mHours.value = s
+        if (hour < 10 && minutes < 10) {
+            _mHours.value = "0$hour:0$minutes:00"
+        } else if (hour < 10) {
+            _mHours.value = "0$hour:$minutes:00"
+        } else if (minutes < 10) {
+            _mHours.value = "$hour:0$minutes:00"
+        } else {
+            _mHours.value = "0$hour:0$minutes:00"
+        }
+        
     }
 
-    fun updateDate(s : String) {
-        _date.value = s
+    fun updateDate(day : Int, month : Int, year: Int) {
+        //_date.value = s
+
+        if (day < 10 && month < 10) {
+            _date.value = "$year-0$month-0$day"
+        } else if (day < 10) {
+            _date.value = "$year-$month-0$day"
+        } else if (month < 10) {
+            _date.value = "$year-0$month-$day"
+        } else {
+            _date.value = "$year-$month-$day"
+        }
+
     }
 }
