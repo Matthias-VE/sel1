@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.Year
+import java.util.*
 import javax.inject.Inject
 import kotlin.math.min
 
@@ -24,6 +25,7 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     private val _name = MutableStateFlow<String>("")
     private val _users = MutableStateFlow<List<String>>(listOf(rep.user.id))
     private val _deadline = MutableStateFlow<Timestamp>(Timestamp.now())
+    private var _deadlineDate = MutableStateFlow<Date>(Date())
     private val _usersInGroup = MutableStateFlow<List<User>>(listOf(rep.user))
 
     fun usersInGroup(g : Group) {
@@ -37,6 +39,7 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     val users = _users.asStateFlow()
     val deadline = _deadline.asStateFlow()
     val usersInGroup = _usersInGroup.asStateFlow()
+    val deadlineDate = _deadlineDate.asStateFlow()
 
     fun updateName(s : String) {
         _name.value = s
@@ -80,9 +83,10 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         } else {
             _mHours.value = "0$hour:0$minutes:00"
         }
+        
     }
 
-    fun updateDate(s : String, day : Int, month : Int, year: Int) {
+    fun updateDate(day : Int, month : Int, year: Int) {
         //_date.value = s
 
         if (day < 10 && month < 10) {
@@ -94,5 +98,6 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         } else {
             _date.value = "$year-$month-$day"
         }
+
     }
 }
