@@ -41,31 +41,36 @@ fun AddTaskRoute(
     val name by vM.name.collectAsState()
     val users by vM.users.collectAsState()
     val usersInGroup by vM.usersInGroup.collectAsState()
-    val deadline by vM.deadline.collectAsState()
+    val date by vM.date.collectAsState()
+    val hours by vM.hours.collectAsState()
 
     AddTaskScreen(
         name,
-        deadline,
+        vM.calendar,
         users,
         usersInGroup,
         vM::checkUser,
         onCancelled,
         {vM.updateName(it)},
         {vM.addTask(group); onCancelled()},
-        vM
+        hours, date,
+        vM::updateDate,
+        vM::updateHours
     )
 }
 @Composable
 fun AddTaskScreen(
     name : String,
-    deadline : Timestamp,
+    cal : Calendar,
     users: List<String>,
     usersInGroup : List<User>,
     onCheckUser: (User, Boolean) -> Unit,
     onCancelled : () -> Unit,
     onNameChanged : (String) -> Unit,
     onSaveTask : () -> Unit,
-    vM : AddTaskViewModel = hiltViewModel()
+    hours: String, date : String,
+    updateDatepicker: (Int, Int, Int) -> Unit,
+    updateTimePicker: (Int, Int) -> Unit
 ) {
     Column() {
         Header("Add Task", onCancelled)
@@ -75,7 +80,9 @@ fun AddTaskScreen(
                 InputField(name = "Task", description = name, onNameChanged)
                 UserSelection(users = usersInGroup, users, onCheckUser = onCheckUser)
                 Log.i("AddTaskRoute", "users size: " + users.size)
-                CalendarView(vM)
+                CalendarView(cal,
+                   hours, date,
+                    updateDatepicker, updateTimePicker)
                 Button(onClick = onSaveTask , enabled = users.isNotEmpty(), modifier = Modifier.padding(10.dp)) {
                     Text("Add")
                 }
@@ -106,36 +113,34 @@ fun UserSelection(users : List<User>, selected : List<String>, onCheckUser : (Us
 }
 
 @Composable
-fun CalendarView(vM: AddTaskViewModel) {
+fun CalendarView(cal : Calendar, hours : String, date : String,
+                 updateDatepicker : (Int, Int, Int) -> Unit,
+                 updateTimePicker: (Int, Int) -> Unit) {
 
     val mContext = LocalContext.current
 
-    val mCalendar = Calendar.getInstance()
 
-    val mYear = mCalendar.get(Calendar.YEAR)
-    val mMonth = mCalendar.get(Calendar.MONTH)
-    val mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+    val mYear = cal.get(Calendar.YEAR)
+    val mMonth = cal.get(Calendar.MONTH)
+    val mDay = cal.get(Calendar.DAY_OF_MONTH)
 
-    mCalendar.time = Date()
 
     val mDatePickerDialog = DatePickerDialog(
         mContext,
-        { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            vM.updateDate(mDayOfMonth, mMonth, mYear)
+        { _: DatePicker, fYear: Int, fMonth: Int, fDayOfMonth: Int ->
+            updateDatepicker(fDayOfMonth, fMonth, fYear)
         }, mYear, mMonth, mDay
     )
 
     val mHour = 0
     val mMinute = 0
 
-    val hours by vM.hours.collectAsState()
-    val date by vM.date.collectAsState()
 
     val mTimePickerDialog = TimePickerDialog(
         mContext,
-        {_, mHour : Int, mMinute: Int ->
-            vM.updateHours(mHour, mMinute)
-        }, mHour, mMinute, false
+        {_, fHour : Int, fMinute: Int ->
+            updateTimePicker(fHour, fMinute)
+        }, mHour, mMinute, true
     )
 
     Column(modifier = Modifier

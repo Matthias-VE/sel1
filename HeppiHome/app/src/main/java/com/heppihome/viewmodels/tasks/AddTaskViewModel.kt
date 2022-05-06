@@ -22,11 +22,30 @@ import kotlin.math.min
 class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     : ViewModel() {
 
+    val calendar = GregorianCalendar()
+
     private val _name = MutableStateFlow<String>("")
     private val _users = MutableStateFlow<List<String>>(listOf(rep.user.id))
-    private val _deadline = MutableStateFlow<Timestamp>(Timestamp.now())
-    private var _deadlineDate = MutableStateFlow<Date>(Date())
     private val _usersInGroup = MutableStateFlow<List<User>>(listOf(rep.user))
+    private val _hours = MutableStateFlow<String>(
+        formatHours(
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE)
+        )
+    )
+    private val _date = MutableStateFlow<String>(
+        formatDate(
+            calendar.get(Calendar.DAY_OF_MONTH),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.YEAR)
+        )
+    )
+
+    val name = _name.asStateFlow()
+    val users = _users.asStateFlow()
+    val usersInGroup = _usersInGroup.asStateFlow()
+    val hours = _hours.asStateFlow()
+    val date = _date.asStateFlow()
 
     fun usersInGroup(g : Group) {
         viewModelScope.launch {
@@ -34,12 +53,6 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         }
 
     }
-
-    val name = _name.asStateFlow()
-    val users = _users.asStateFlow()
-    val deadline = _deadline.asStateFlow()
-    val usersInGroup = _usersInGroup.asStateFlow()
-    val deadlineDate = _deadlineDate.asStateFlow()
 
     fun updateName(s : String) {
         _name.value = s
@@ -50,54 +63,56 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         else removeUserFromList(u)
     }
 
-    fun addUserToList(u : User) {
+    private fun addUserToList(u : User) {
         _users.value = _users.value + u.id
     }
 
-    fun removeUserFromList(u : User) {
+    private fun removeUserFromList(u : User) {
         _users.value = _users.value.minus(u.id)
     }
 
     fun addTask(g : Group) {
-        val task = Task(_name.value, false, _deadline.value, _users.value)
+        val task = Task(_name.value, false, Timestamp(calendar.time), _users.value)
         viewModelScope.launch {
             rep.addTask(task, g).collect {  }
         }
     }
 
-    //private val _deadline = MutableStateFlow<Timestamp>(Timestamp.now())
-    private val _mHours = MutableStateFlow<String>("")
-    private val _date = MutableStateFlow<String>("")
-    //val isLoggedIn = _isLoggedIn.asStateFlow()
-    val date = _date.asStateFlow()
-    val hours = _mHours.asStateFlow()
+    private fun formatHours(hour: Int, minutes: Int) : String {
+        return if (hour < 10 && minutes < 10) {
+            "0$hour:0$minutes"
+        } else if (hour < 10) {
+            "0$hour:$minutes"
+        } else if (minutes < 10) {
+            "$hour:0$minutes"
+        } else {
+            "$hour:$minutes"
+        }
+    }
+
+    private fun formatDate(day : Int, month : Int, year : Int) : String {
+        val acMonth = month + 1
+        return if (day < 10 && acMonth < 10) {
+            "$year-0$acMonth-0$day"
+        } else if (day < 10) {
+            "$year-$acMonth-0$day"
+        } else if (month < 10) {
+            "$year-0$acMonth-$day"
+        } else {
+            "$year-$acMonth-$day"
+        }
+    }
 
     fun updateHours(hour : Int, minutes : Int) {
-        //_mHours.value = s
-        if (hour < 10 && minutes < 10) {
-            _mHours.value = "0$hour:0$minutes:00"
-        } else if (hour < 10) {
-            _mHours.value = "0$hour:$minutes:00"
-        } else if (minutes < 10) {
-            _mHours.value = "$hour:0$minutes:00"
-        } else {
-            _mHours.value = "0$hour:0$minutes:00"
-        }
-        
+        _hours.value = formatHours(hour, minutes)
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minutes)
     }
 
     fun updateDate(day : Int, month : Int, year: Int) {
-        //_date.value = s
-
-        if (day < 10 && month < 10) {
-            _date.value = "$year-0$month-0$day"
-        } else if (day < 10) {
-            _date.value = "$year-$month-0$day"
-        } else if (month < 10) {
-            _date.value = "$year-0$month-$day"
-        } else {
-            _date.value = "$year-$month-$day"
-        }
-
+        _date.value = formatDate(day, month, year)
+        calendar.set(Calendar.DAY_OF_MONTH, day)
+        calendar.set(Calendar.MONTH, month)
+        calendar.set(Calendar.YEAR, year)
     }
 }
