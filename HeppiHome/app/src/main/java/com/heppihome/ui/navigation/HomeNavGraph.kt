@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.heppihome.ui.components.Calendar
 
 import com.heppihome.ui.components.NewGroup
 
@@ -92,7 +93,7 @@ fun HomeNavGraph(
         }
 
         composable(BottomNavItem.Overview.screen_route) {
-            HomeOverViewRoute()
+            Calendar()
         }
 
         composable(route = BottomNavItem.Tasks.screen_route) {

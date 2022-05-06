@@ -47,6 +47,7 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
     fun deleteGroup(g: Group) {
         viewModelScope.launch {
             //fill in removegroup
+
         }
     }
 }
