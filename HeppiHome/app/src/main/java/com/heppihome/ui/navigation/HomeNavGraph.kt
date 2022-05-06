@@ -79,7 +79,7 @@ fun HomeNavGraph(
             DetailInviteRoute(
                 vM = hiltViewModel(),
                 invite = vM.selectedInvite,
-                {navController.navigate(HomeAppDestinations.ALLINV_ROUTE)}
+                {navController.navigate(HomeAppDestinations.GROUP_ROUTE)}
             )
         }
 
