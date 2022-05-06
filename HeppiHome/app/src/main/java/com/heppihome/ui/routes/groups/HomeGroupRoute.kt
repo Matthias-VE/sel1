@@ -1,4 +1,4 @@
-package com.heppihome.ui.routes
+package com.heppihome.ui.routes.groups
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
@@ -34,7 +34,8 @@ fun HomeGroupRoute(
     vM : HomeGroupViewModel,
     onGroupClicked : (Group) -> Unit,
     onNewGroupClicked : () -> Unit,
-    onEditGroupClicked : (Group) -> Unit
+    onEditGroupClicked : (Group) -> Unit,
+    onInvitesClicked: () -> Unit
 ) {
     vM.refreshGroups()
     val groups by vM.groups.collectAsState()
@@ -47,7 +48,8 @@ fun HomeGroupRoute(
         { vM.expandGroupMenu() },
         onNewGroupClicked,
         vM,
-        onEditGroupClicked
+        onEditGroupClicked,
+        onInvitesClicked
     )
 }
 
@@ -59,11 +61,12 @@ fun HomeGroupScreen(
     toggle: () -> Unit,
     onNewGroupClicked : () -> Unit,
     vM : HomeGroupViewModel,
-    onEditGroupClicked : (Group) -> Unit
+    onEditGroupClicked : (Group) -> Unit,
+    onInvitesClicked : () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Header(expanded, toggle, onNewGroupClicked)
-        Alltasks()
+        Alltasks(onInvitesClicked)
         Groups(groups, onGroupClicked, vM, onEditGroupClicked)
     }
 }
@@ -88,10 +91,19 @@ fun Header(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit)
 }
 
 @Composable
-fun Alltasks() {
+fun Alltasks(onClickInvites : () -> Unit) {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.secondary) {
-        Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
-            Text(stringResource(R.string.AllTasks), fontSize = 30.sp)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(
+                modifier = Modifier.padding(10.dp).clickable { onClickInvites() },
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text("Invites", fontSize = 30.sp)
+            }
+            Spacer(Modifier.padding(5.dp))
+            Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
+                Text("All tasks", fontSize = 30.sp)
+            }
         }
     }
 }

@@ -66,9 +66,10 @@ class FirebaseDao {
         return firebaseAuth.currentUser
     }
 
-    // This gets all the groups
-    suspend fun getAllGroups() : List<Group> {
-        return groupDoc.get().await().toObjects(Group::class.java)
+    // This gets all the groups for a user
+    suspend fun getAllGroups(user : User) : List<Group> {
+        return groupDoc.whereArrayContains(COLLECTION_USERS, user.id).
+        get().await().toObjects(Group::class.java)
     }
 
     suspend fun getUsersForIds(ids : List<String>) : List<User>{
@@ -84,14 +85,31 @@ class FirebaseDao {
         userRef.set(u).await()
     }
 
-    suspend fun addInviteToPerson(email : String, g : Group) : Boolean {
-        val userRef = userDoc.whereEqualTo("email", email).get().await()
+    suspend fun getAllInvites(user : User) : List<Invite>{
+        return userDoc.document(user.id).collection(COLLECTION_INVITES)
+            .get().await().toObjects(Invite::class.java)
+    }
+
+    suspend fun addInviteToPerson(emailTo : String,emailFrom : String, g : Group) : Boolean {
+        val userRef = userDoc.whereEqualTo("email", emailTo).get().await()
         if (userRef.isEmpty) return false
         val users = userRef.toObjects(User::class.java)
-        users.forEach {
-            userDoc.document(it.id).collection(COLLECTION_INVITES).add(Invite(g.id)).await()
-        }
+
+        // email is unique per user so list should always have at most 1 element.
+
+        val inviteRef = userDoc.document(users[0].id).collection(COLLECTION_INVITES).document()
+        inviteRef.set(Invite(g.id, emailFrom, inviteRef.id))
+
         return true
+    }
+
+    suspend fun addPersonToGroupId(u : User, groupId : String) {
+        groupDoc.document(groupId).update(COLLECTION_USERS, FieldValue.arrayUnion(u.id)).await()
+    }
+
+    suspend fun removeInviteFromPerson(user: User, invite: Invite) {
+        userDoc.document(user.id).collection(COLLECTION_INVITES)
+            .document(invite.inviteId).delete().await()
     }
 
     // This adds a group with an id set already
