@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
+import com.heppihome.data.models.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -32,13 +33,20 @@ class AddGroupViewModel @Inject constructor(private val rep : HomeRepository) : 
     }
 
     fun addGroups() {
-        viewModelScope.launch {
-            val toAdd = Group(_groupName.value.text, _description.value.text, listOf(rep.user.id))
+        val toAdd = Group(_groupName.value.text, _description.value.text, listOf(rep.user.id))
             //println(_groupName.value.text)
-            rep.addGroup(toAdd).collect()
+
+
+        viewModelScope.launch {
+            rep.addGroup(toAdd).collect {
+                when(it) {
+                    is ResultState.Success -> "dan wete dat kleir is" // Do something when succes
+                    is ResultState.Loading -> "Tis nog aant laden wete wel" // Do something while loading
+                    is ResultState.Failed -> "Ai das hier nie just gelopen" // Do something when failed
+                }
+            }
             setGroup("")
             setDescription("")
-
         }
     }
 
