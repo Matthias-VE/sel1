@@ -18,11 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.Timestamp
+import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
 import com.heppihome.data.models.User
@@ -72,12 +74,12 @@ fun AddTaskScreen(
         Column(
             modifier = Modifier.padding(10.dp)
         ) {
-                InputField(name = "Task", description = name, onNameChanged)
+                InputField(name = stringResource(R.string.Task), description = name, onNameChanged)
                 UserSelection(users = usersInGroup, users, onCheckUser = onCheckUser)
                 Log.i("AddTaskRoute", "users size: " + users.size)
                 CalendarView(vM)
                 Button(onClick = onSaveTask , enabled = users.isNotEmpty(), modifier = Modifier.padding(10.dp)) {
-                    Text("Add")
+                    Text(stringResource(R.string.Add))
                 }
 
         }
@@ -90,7 +92,7 @@ fun UserSelection(users : List<User>, selected : List<String>, onCheckUser : (Us
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(10.dp)) {
-        Text("This task is for:", fontSize = MaterialTheme.typography.body1.fontSize)
+        Text(stringResource(R.string.TaskForPerson), fontSize = MaterialTheme.typography.body1.fontSize)
         for (user in users) {
             var checked by remember { mutableStateOf(user.id in selected)}
             Row {
@@ -145,18 +147,18 @@ fun CalendarView(vM: AddTaskViewModel) {
         Button(onClick = {
             mDatePickerDialog.show()
         }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary) ) {
-            Text(text = "Open Date Picker", color = Color.White)
+            Text(text = stringResource(R.string.OpenDatePicker), color = Color.White)
         }
 
-        Text(text = "Selected Date: $date", textAlign = TextAlign.Center)
+        Text(text = stringResource(R.string.SelectedDate) + date, textAlign = TextAlign.Center)
 
         Button(onClick = {
             mTimePickerDialog.show()
         }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary) ) {
-            Text(text = "Open Time Picker", color = Color.White)
+            Text(text = stringResource(R.string.OpenTimePicker), color = Color.White)
         }
 
-        Text(text = "Selected Time: $hours", textAlign = TextAlign.Center)
+        Text(text = stringResource(R.string.SelectedTime) + hours, textAlign = TextAlign.Center)
     }
 
 }

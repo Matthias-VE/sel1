@@ -21,11 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Invite
 import com.heppihome.ui.components.Topbar
@@ -56,9 +58,9 @@ fun HomeInvitesScreen(invites : List<Invite>, onInviteClicked: (Invite) -> Unit,
                       onBackPressed: () -> Unit
                       ) {
     Column() {
-        Topbar(title = "Your invites", expanded = false, toggle = {}, onBackPressed = onBackPressed, {})
+        Topbar(title = stringResource(R.string.YourInvites), expanded = false, toggle = {}, onBackPressed = onBackPressed, {})
         if (invites.isEmpty()) {
-            Text("You have not been invited to any groups")
+            Text(stringResource(R.string.NoInvites))
         } else {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(invites) { i ->
@@ -163,7 +165,7 @@ fun SideView(i : Invite, onInviteClicked: (Invite) -> Unit, onDeclineInviteClick
                         Spacer(modifier = Modifier.padding(10.dp))
                         Column {
                             Text(
-                                text = "Invite from: " + i.fromEmail,
+                                text = stringResource(R.string.InviteFrom) + i.fromEmail,
                                 color = Color.White,
                                 fontSize = 25.sp,
                                 fontWeight = FontWeight.Bold
