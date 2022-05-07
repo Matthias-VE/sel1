@@ -10,8 +10,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.heppihome.R
 import com.heppihome.data.models.Invite
 import com.heppihome.ui.components.Topbar
 import com.heppihome.viewmodels.groups.InvitesViewModel
@@ -35,22 +37,22 @@ fun DetailInviteScreen(
     onBackPressed : () -> Unit
 ) {
     Column {
-        Topbar("Invite", false, {}, onBackPressed, {})
+        Topbar(stringResource(R.string.Invite), false, {}, onBackPressed, {})
         Box(modifier = Modifier.fillMaxSize()) {
             Column(Modifier.align(Alignment.TopCenter)) {
                 Text(
-                    "You got invited to a group by " + invite.fromEmail,
+                    stringResource(R.string.GotInvite) + invite.fromEmail,
                     style = MaterialTheme.typography.h6
                 )
-                Text("Accept or Decline this invite.")
+                Text(stringResource(R.string.AcceptOrDeclineInvite))
             }
             Row(Modifier.align(Alignment.Center)) {
                     Button(onClick = {onAcceptInvite(invite)}) {
-                        Text("Accept")
+                        Text(stringResource(R.string.Accept))
                     }
                     Spacer(modifier = Modifier.padding(20.dp))
                     Button(onClick = {onDeclineInvite(invite)}) {
-                        Text("Decline")
+                        Text(stringResource(R.string.Decline))
                     }
             }
 

@@ -82,7 +82,7 @@ class HomeLoginViewModel @Inject constructor(private val rep : HomeRepository) :
             _isLoggedIn.value = true
             _authResultCode.value = AuthResultCode.OK
 
-            Log.d(TAG, "login succesful")
+            Log.d(TAG, "login successful")
             return
         }
 

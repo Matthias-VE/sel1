@@ -7,8 +7,10 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.heppihome.R
 import com.heppihome.data.models.Group
 
 @Composable
@@ -45,7 +47,7 @@ fun Topbar(title : String, expanded: Boolean, toggle: () -> Unit, onBackPressed:
 fun DropDownMenuTasks(expanded : Boolean, toggle : () -> Unit, onInvitePerson : () -> Unit) {
     DropdownMenu(expanded = expanded, onDismissRequest = toggle) {
         DropdownMenuItem(onClick = onInvitePerson) {
-            Text("Invite someone for this group")
+            Text(stringResource(R.string.InviteToGroup))
         }
 
     }

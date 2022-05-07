@@ -16,4 +16,26 @@
     <string name="Language">Language</string>
     <string name="Help">Help</string>
     <string name="Theme">Theme</string>
+    <string name="Edit">Edit</string>
+    <string name="EditGroup">Edit Group</string>
+    <string name="InviteToGroup">Invite someone for this group</string>
+    <string name="Invite">Invite</string>
+    <string name="GotInvite">\"You got invited to a group by \"</string>
+    <string name="AcceptOrDeclineInvite">Accept or Decline this invite.</string>
+    <string name="Accept">Accept</string>
+    <string name="Decline">Decline</string>
+    <string name="Invites">Invites</string>
+    <string name="Email">email</string>
+    <string name="InvitePerson">Invite this person</string>
+    <string name="YourInvites">Your invites</string>
+    <string name="NoInvites">You have not been invited to any groups</string>
+    <string name="InviteFrom">\"Invite from: \"</string>
+    <string name="Task">Task</string>
+    <string name="TaskForPerson">This task is for:</string>
+    <string name="OpenDatePicker">Open Date Picker</string>
+    <string name="OpenTimePicker">Open Time Picker</string>
+    <string name="SelectedDate">\"Selected Date: \"</string>
+    <string name="SelectedTime">\"Selected Time: \"</string>
+    <string name="LogOut">Log out</string>
+    <string name="Loading">Loading</string>
 </resources>
