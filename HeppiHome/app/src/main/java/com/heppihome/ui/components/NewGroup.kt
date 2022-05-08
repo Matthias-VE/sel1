@@ -28,7 +28,7 @@ fun NewGroup(
     val context = LocalContext.current
 
     Column() {
-        Header("New Group", onGroupCancel)
+        Header(stringResource(R.string.NewGroup), onGroupCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
             InputField(name = stringResource(R.string.GroupName), description = temp.text, { x -> vM.setGroup(x)})

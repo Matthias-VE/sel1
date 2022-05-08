@@ -98,11 +98,11 @@ fun Alltasks(onClickInvites : () -> Unit) {
                 modifier = Modifier.padding(10.dp).clickable { onClickInvites() },
                 horizontalArrangement = Arrangement.Center
             ) {
-                Text("Invites", fontSize = 30.sp)
+                Text(stringResource(R.string.Invites), fontSize = 30.sp)
             }
             Spacer(Modifier.padding(5.dp))
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
-                Text("All tasks", fontSize = 30.sp)
+                Text(stringResource(R.string.AllTasks), fontSize = 30.sp)
             }
         }
     }

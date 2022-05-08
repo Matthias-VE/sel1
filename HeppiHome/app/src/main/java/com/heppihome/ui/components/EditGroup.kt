@@ -9,9 +9,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.viewmodels.groups.EditGroupViewModel
 
@@ -34,14 +36,14 @@ fun EditGroup(
         EditGroupHeader(onGroupCancel = onGroupCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
-            InputField(name = "Name Of Group", description = groupName.text) { x -> vM.setName(x) }
-            InputField(name = "Description", description = description.text) { x -> vM.setDescription(x) }
+            InputField(name = stringResource(R.string.GroupName), description = groupName.text) { x -> vM.setName(x) }
+            InputField(name = stringResource(R.string.Description), description = description.text) { x -> vM.setDescription(x) }
             Button(onClick = {
                 println(groupName.text)
                 println(description.text)
             },
                 modifier = Modifier.padding(10.dp)) {
-                Text("Edit")
+                Text(stringResource(R.string.Edit))
             }
         }
     }
@@ -55,13 +57,13 @@ fun EditGroupHeader(onGroupCancel: () -> Unit) {
                 .padding(10.dp), horizontalArrangement = Arrangement.Start) {
                 IconButton(onClick = onGroupCancel) {
                     Icon(
-                        Icons.Default.Close, contentDescription = "Cancel", modifier = Modifier
+                        Icons.Default.Close, contentDescription = stringResource(R.string.Cancel), modifier = Modifier
                             .size(40.dp)
                     )
                 }
             }
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
-                Text("Edit Group", fontSize = 30.sp, textAlign = TextAlign.Center)
+                Text(stringResource(R.string.EditGroup), fontSize = 30.sp, textAlign = TextAlign.Center)
             }
 
         }
