@@ -1,5 +1,6 @@
 package com.heppihome.ui.components
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -7,6 +8,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -23,13 +25,19 @@ fun NewGroup(
     val temp by vM.groupName.collectAsState()
     val temp2 by vM.description.collectAsState()
 
+    val context = LocalContext.current
+
     Column() {
         Header(stringResource(R.string.NewGroup), onGroupCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
-            InputField(name = stringResource(R.string.GroupName), description = temp.text) { x -> vM.setGroup(x)}
-            InputField(name = stringResource(R.string.Description), description = temp2.text) { x -> vM.setDescription(x)}
-            Button(onClick = { vM.addGroups() },
+            InputField(name = stringResource(R.string.GroupName), description = temp.text, { x -> vM.setGroup(x)})
+            InputField(name = stringResource(R.string.Description), description = temp2.text, { x -> vM.setDescription(x)})
+            Button(onClick = {
+                    vM.addGroups()
+                    Toast.makeText(context, "Group added succesfully", Toast.LENGTH_LONG).show()
+                    onGroupCancel()
+                },
                 modifier = Modifier.padding(10.dp)) {
                 Text(stringResource(R.string.Add))
             }

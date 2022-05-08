@@ -17,7 +17,7 @@ import com.heppihome.R
 
 @Preview
 @Composable
-fun cal(){
+fun Calendar(){
     var date by remember {
         mutableStateOf("")
     }
