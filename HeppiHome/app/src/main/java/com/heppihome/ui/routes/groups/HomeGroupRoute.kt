@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.heppihome.R
 import com.heppihome.data.models.Group
+import com.heppihome.ui.components.ConfirmDialog
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
 import kotlin.math.roundToInt
 
@@ -45,10 +46,11 @@ fun HomeGroupRoute(
         groups,
         onGroupClicked,
         expanded,
-        { vM.expandGroupMenu() },
+        vM::expandGroupMenu,
         onNewGroupClicked,
         vM,
         onEditGroupClicked,
+        vM::leaveGroup,
         onInvitesClicked
     )
 }
@@ -62,12 +64,13 @@ fun HomeGroupScreen(
     onNewGroupClicked : () -> Unit,
     vM : HomeGroupViewModel,
     onEditGroupClicked : (Group) -> Unit,
+    onLeaveGroupClicked: (Group) -> Unit,
     onInvitesClicked : () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Header(expanded, toggle, onNewGroupClicked)
         Alltasks(onInvitesClicked)
-        Groups(groups, onGroupClicked, vM, onEditGroupClicked)
+        Groups(groups, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked)
     }
 }
 
@@ -95,7 +98,9 @@ fun Alltasks(onClickInvites : () -> Unit) {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.secondary) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Row(
-                modifier = Modifier.padding(10.dp).clickable { onClickInvites() },
+                modifier = Modifier
+                    .padding(10.dp)
+                    .clickable { onClickInvites() },
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(stringResource(R.string.Invites), fontSize = 30.sp)
@@ -109,10 +114,13 @@ fun Alltasks(onClickInvites : () -> Unit) {
 }
 
 @Composable
-fun Groups(groups : List<Group>, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel, onEditGroupClicked : (Group) -> Unit) {
+fun Groups(groups : List<Group>, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel,
+           onEditGroupClicked : (Group) -> Unit,
+           onLeaveGroupClicked : (Group) -> Unit
+) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(groups) { group ->
-            SideView(group, onGroupClicked, vM, onEditGroupClicked)
+            SideView(group, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked)
         }
     }
 
@@ -164,12 +172,26 @@ fun DropdownIcon(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () ->
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel, onEditGroupClicked: (Group) -> Unit) {
+fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel,
+             onEditGroupClicked: (Group) -> Unit,
+             onLeaveGroupClicked : (Group) -> Unit
+) {
 
     val squareSize = 150.dp
     val swipeAbleState = rememberSwipeableState(initialValue = 0f)
+    var showDeleteConfirm by remember { mutableStateOf(false) }
     val sizePx = with(LocalDensity.current) { squareSize.toPx() }
     val anchors = mapOf(0f to 0f, sizePx to 1f)
+
+    if (showDeleteConfirm) {
+        ConfirmDialog(content = "Do you want to leave this group?",
+            onDismiss = { showDeleteConfirm = false},
+            onConfirm = {
+                showDeleteConfirm = false
+                onLeaveGroupClicked(g)
+            }
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -188,8 +210,9 @@ fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel
                     state = swipeAbleState,
                     anchors = anchors,
                     thresholds = { _, _ ->
-                        FractionalThreshold(0.3f) },
-                        orientation = Orientation.Horizontal
+                        FractionalThreshold(0.3f)
+                    },
+                    orientation = Orientation.Horizontal
                 )
         ) {
             Column(
@@ -213,7 +236,7 @@ fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel
 
                 IconButton(
                     onClick = {
-                        println("remove") },
+                        showDeleteConfirm = true },
                     modifier = Modifier
                         .size(50.dp)
                         .clip(CircleShape)

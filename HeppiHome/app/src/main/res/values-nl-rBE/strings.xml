@@ -39,4 +39,6 @@
     <string name="SelectedTime">Geselecteerde tijd: </string>
     <string name="LogOut">Uitloggen</string>
     <string name="Loading">Laden</string>
+    <string name="FeedbackGroupEdited">Groep is bewerkt</string>
+    <string name="FeedbackGroupDeleted">Groep is verwijderd</string>
 </resources>

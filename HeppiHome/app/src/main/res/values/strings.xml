@@ -38,4 +38,6 @@
     <string name="SelectedTime">Selected Time: </string>
     <string name="LogOut">Log out</string>
     <string name="Loading">Loading</string>
+    <string name="FeedbackGroupEdited">Group has been edited</string>
+    <string name="FeedbackGroupDeleted">Group has been deleted</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.heppihome.data
 
+import androidx.compose.ui.res.stringResource
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -17,12 +18,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.zone.ZoneOffsetTransitionRule
-import java.util.*
+import com.heppihome.R
 import javax.inject.Singleton
 
 @Singleton
@@ -107,6 +103,14 @@ class FirebaseDao {
         groupDoc.document(groupId).update(COLLECTION_USERS, FieldValue.arrayUnion(u.id)).await()
     }
 
+    fun removePersonFromGroupId( u : User, groupId: String) = flow {
+        emit(ResultState.loading())
+        groupDoc.document(groupId).update(COLLECTION_USERS, FieldValue.arrayRemove(u.id)).await()
+        emit(ResultState.success("Successfully left group"))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
     suspend fun removeInviteFromPerson(user: User, invite: Invite) {
         userDoc.document(user.id).collection(COLLECTION_INVITES)
             .document(invite.inviteId).delete().await()
@@ -135,6 +139,28 @@ class FirebaseDao {
         }.catch {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
+
+
+    fun deleteGroup(group : Group) : Flow<ResultState<String>> =
+        flow {
+            emit(ResultState.loading())
+
+            val groupRef = groupDoc.document(group.id)
+            groupRef.delete().await()
+            emit(ResultState.success("Group deleted successfully"))
+        }.catch {
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+
+    fun editGroup(group : Group, newName : String, newDesc : String) : Flow<ResultState<String>> {
+        return flow {
+            emit(ResultState.loading())
+            groupDoc.document(group.id).update("name", newName, "description", newDesc).await()
+            emit(ResultState.success("Group edited successfully"))
+        }.catch{
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+    }
 
 
     // Register a listener to changes to tasks in a certain group
@@ -217,5 +243,6 @@ class FirebaseDao {
         }.catch {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
+
 
 }

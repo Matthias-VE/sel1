@@ -80,6 +80,21 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     fun addGroup(group : Group) : Flow<ResultState<DocumentReference>> =
         fdao.addGroup(group)
 
+    fun editGroup(group : Group, newName : String, newDesc : String) : Flow<ResultState<String>> {
+        var nameCheck = newName.trim()
+        var descCheck = newDesc.trim()
+        if (nameCheck.isEmpty() && descCheck.isEmpty()) {
+            return flow {emit(ResultState.failed("name and desc are empty"))}
+        }
+        if (nameCheck.isEmpty()) nameCheck = group.name
+        if (descCheck.isEmpty()) descCheck = group.description
+        return fdao.editGroup(group, nameCheck, descCheck)
+    }
+    // Delete group from existence
+    fun deleteGroup(group : Group) : Flow<ResultState<String>> = fdao.deleteGroup(group)
+
+    // Remove current user from group
+    fun leaveGroup(group : Group) : Flow<ResultState<String>> = fdao.removePersonFromGroupId(user, group.id)
 
     // Register a listener to changes to tasks in a certain group
     fun registerTaskSnapshotListener(listener : (QuerySnapshot?, FirebaseFirestoreException?) -> Unit, group : Group) {
