@@ -85,7 +85,6 @@ fun HomeNavGraph(
         }
 
         composable(HomeAppDestinations.GROUP_EDIT) {
-
             EditGroup(vM = hiltViewModel(),
                 onGroupCancel = {
                     navController.navigate(HomeAppDestinations.GROUP_ROUTE)
