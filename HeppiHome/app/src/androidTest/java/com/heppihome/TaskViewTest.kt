@@ -1,9 +1,8 @@
 package com.heppihome
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
 import com.heppihome.ui.components.Tasks
@@ -37,9 +36,8 @@ class TaskViewTest {
                     onInvitePerson = test2)
             }
         }
-        composeTestRule.onNodeWithText("test_tommorow").assertExists("task niet zichtbaar")
-        composeTestRule.onNodeWithText("test_today").performClick()
-        composeTestRule.waitForIdle()
+        composeTestRule.onAllNodesWithContentDescription("DropDown Arrow").assertCountEquals(2)
+        composeTestRule.onAllNodesWithContentDescription("DropDown Arrow").onFirst().performClick()
         verify(test1, atLeastOnce())
     }
 }
