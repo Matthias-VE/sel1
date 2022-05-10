@@ -8,6 +8,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
+import java.text.SimpleDateFormat
 
 
 //Task View
@@ -34,7 +36,8 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
           expandMenu : Boolean, toggleMenu : () -> Unit,
           onChecked: (Task) -> Unit, group : Group,
           onBackPressed : () -> Unit,
-          onInvitePerson : () -> Unit
+          onInvitePerson : () -> Unit,
+          format : SimpleDateFormat
 ) {
 
     Column {
@@ -44,8 +47,8 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
         )
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {
-                Day("today", tasksToday, onChecked)
-                Day("tomorrow", tasksTomorrow, onChecked)
+                Day("today", tasksToday, onChecked, format)
+                Day("tomorrow", tasksTomorrow, onChecked, format)
             }
         }
     }
@@ -54,7 +57,7 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
 
 @ExperimentalMaterialApi
 @Composable
-fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit){
+fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit, format : SimpleDateFormat){
     var expended by remember { mutableStateOf(true)}
     val rotation by animateFloatAsState(targetValue = if(expended) 180f else 0f)
 
@@ -68,16 +71,16 @@ fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit){
                 )
             ),
         shape = MaterialTheme.shapes.medium,
-        onClick = {
-            expended = !expended
-        }
+
     ){
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
         ){
-            Row{
+            Row(modifier = Modifier.clickable {
+                expended = !expended
+            }){
                 Text(
                     modifier = Modifier.weight(6f),
                     text = day,
@@ -111,10 +114,8 @@ fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit){
                                 .fillMaxWidth()
                                 .padding(10.dp), horizontalArrangement = Arrangement.End
                         ) {
-                            Icon(
-                                Icons.Default.MoreVert,
-                                contentDescription = "Options",
-                                modifier = Modifier.size(20.dp)
+                            Text(
+                                text = format.format(task.deadline.toDate())
                             )
                         }
                     }
