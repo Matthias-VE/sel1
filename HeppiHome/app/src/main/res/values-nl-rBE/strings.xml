@@ -32,6 +32,7 @@
     <string name="NoInvites">Je hebt momenteel geen openstaande uitnodingen</string>
     <string name="InviteFrom">Uitnodiging van: </string>
     <string name="Task">Task</string>
+    <string name="AddTask">Voeg een Taak toe</string>
     <string name="TaskForPerson">Deze taak is voor:</string>
     <string name="OpenDatePicker">Datumkiezer openen</string>
     <string name="OpenTimePicker">Tijdkiezer openen</string>

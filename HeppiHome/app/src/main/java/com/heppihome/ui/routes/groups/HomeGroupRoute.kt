@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.sp
 import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.ui.components.ConfirmDialog
+import com.heppihome.ui.components.TopbarWithOptions
+import com.heppihome.ui.components.TopbarWithOptionsNoBackArrow
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
 import kotlin.math.roundToInt
 
@@ -68,43 +70,28 @@ fun HomeGroupScreen(
     onInvitesClicked : () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Header(expanded, toggle, onNewGroupClicked)
-        Alltasks(onInvitesClicked)
+        TopbarWithOptionsNoBackArrow(
+            title = stringResource(id = R.string.Groups),
+            expanded = expanded,
+            toggle = toggle,
+            itemStrings = listOf(
+                stringResource(R.string.NewGroup),
+                stringResource(R.string.Invites)
+            ),
+            itemOnClicks = listOf(
+                onNewGroupClicked,
+                onInvitesClicked
+            )
+        )
+        Alltasks()
         Groups(groups, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked)
     }
 }
 
 @Composable
-fun Header(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit) {
-    
-    Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
-        Row(modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()) {
-            Row(modifier = Modifier.padding(10.dp)) {
-                Text(stringResource(R.string.Groups), fontSize = 30.sp)
-            }
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp), horizontalArrangement = Arrangement.End) {
-                DropdownIcon(expanded = expanded, toggle = toggle, onNewGroupClicked)
-            }
-        }
-    }
-}
-
-@Composable
-fun Alltasks(onClickInvites : () -> Unit) {
+fun Alltasks() {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.secondary) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .clickable { onClickInvites() },
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(stringResource(R.string.Invites), fontSize = 30.sp)
-            }
             Spacer(Modifier.padding(5.dp))
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
                 Text(stringResource(R.string.AllTasks), fontSize = 30.sp)
@@ -142,31 +129,34 @@ fun Groupdetail(g : Group, onGroupClicked: (Group) -> Unit) {
 }
 
 @Composable
-fun DropDown(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit) {
+fun DropDown(expanded: Boolean, toggle: () -> Unit,
+             onNewGroupClicked: () -> Unit,
+             onInvitesClicked: () -> Unit
+) {
 
     DropdownMenu(expanded = expanded, onDismissRequest = toggle) {
         DropdownMenuItem(onClick = onNewGroupClicked) {
             Text(stringResource(R.string.NewGroup))
         }
-        DropdownMenuItem(onClick = { println("Join Group") }) {
-            Text(stringResource(R.string.JoinGroup))
-        }
-        DropdownMenuItem(onClick = { println("Leave Group") }) {
-            Text(stringResource(R.string.LeaveGroup))
+        DropdownMenuItem(onClick = onInvitesClicked) {
+            Text(stringResource(R.string.Invites))
         }
     }
 
 }
 
 @Composable
-fun DropdownIcon(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit) {
+fun DropdownIcon(expanded: Boolean, toggle: () -> Unit,
+                 onNewGroupClicked: () -> Unit,
+                 onInvitesClicked: () -> Unit
+) {
 
     IconButton(onClick = toggle) {
         Icon(
             Icons.Default.MoreVert, contentDescription = "Options", modifier = Modifier
                 .size(40.dp)
         )
-        DropDown(expanded = expanded, toggle = toggle, onNewGroupClicked)
+        DropDown(expanded = expanded, toggle = toggle, onNewGroupClicked, onInvitesClicked)
     }
 }
 

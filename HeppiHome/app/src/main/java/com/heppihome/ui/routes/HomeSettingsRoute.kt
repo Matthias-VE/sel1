@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.heppihome.R
 import com.heppihome.data.models.User
+import com.heppihome.ui.components.TopbarNoBackArrow
 import com.heppihome.viewmodels.HomeSettingsViewModel
 
 @Composable
@@ -36,23 +37,11 @@ fun HomeSettingsRoute(
 @Composable
 fun HomeSettingsScreen(onProfileClicked: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        SettingsHeader()
+        TopbarNoBackArrow(stringResource(R.string.Settings))
         AllSettings(onProfileClicked = onProfileClicked)
     }
 }
 
-@Composable
-fun SettingsHeader() {
-    Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
-        Row(modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()) {
-            Row(modifier = Modifier.padding(10.dp)) {
-                Text(stringResource(R.string.Settings), fontSize = 30.sp)
-            }
-        }
-    }
-}
 
 @Composable
 fun AllSettings(onProfileClicked: () -> Unit) {
@@ -61,7 +50,8 @@ fun AllSettings(onProfileClicked: () -> Unit) {
             Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(20.dp).clickable(onClick = onProfileClicked)
+                        .padding(20.dp)
+                        .clickable(onClick = onProfileClicked)
                 ) {
                     Icon(
                         Icons.Default.AccountCircle,

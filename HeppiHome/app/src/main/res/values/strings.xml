@@ -31,6 +31,7 @@
     <string name="NoInvites">You have not been invited to any groups</string>
     <string name="InviteFrom">Invite from: </string>
     <string name="Task">Task</string>
+    <string name="AddTask">Add Task</string>
     <string name="TaskForPerson">This task is for:</string>
     <string name="OpenDatePicker">Open Date Picker</string>
     <string name="OpenTimePicker">Open Time Picker</string>

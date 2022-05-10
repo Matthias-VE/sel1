@@ -30,6 +30,7 @@ import com.heppihome.data.models.Task
 import com.heppihome.data.models.User
 import com.heppihome.ui.components.Header
 import com.heppihome.ui.components.InputField
+import com.heppihome.ui.components.Topbar
 import com.heppihome.viewmodels.tasks.AddTaskViewModel
 import java.util.*
 
@@ -75,7 +76,7 @@ fun AddTaskScreen(
     updateTimePicker: (Int, Int) -> Unit
 ) {
     Column() {
-        Header("Add Task", onCancelled)
+        Topbar(stringResource(id = R.string.AddTask), onCancelled)
         Column(
             modifier = Modifier.padding(10.dp)
         ) {

@@ -20,10 +20,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
 import java.text.SimpleDateFormat
@@ -41,9 +43,10 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
 ) {
 
     Column {
-        Topbar(group.name,expandMenu, toggleMenu,
-            onInvitePerson = onInvitePerson,
-            onBackPressed = onBackPressed
+        TopbarWithOptions(group.name,expandMenu, toggleMenu,
+            onBackPressed = onBackPressed,
+            listOf(stringResource(R.string.Invite)),
+            listOf(onInvitePerson)
         )
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {

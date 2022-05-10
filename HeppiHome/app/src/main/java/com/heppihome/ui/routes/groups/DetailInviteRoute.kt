@@ -37,7 +37,7 @@ fun DetailInviteScreen(
     onBackPressed : () -> Unit
 ) {
     Column {
-        Topbar(stringResource(R.string.Invite), false, {}, onBackPressed, {})
+        Topbar(stringResource(R.string.Invite), onBackPressed)
         Box(modifier = Modifier.fillMaxSize()) {
             Column(Modifier.align(Alignment.TopCenter)) {
                 Text(
