@@ -3,6 +3,7 @@ package com.heppihome.viewmodels.tasks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
+import com.heppihome.Util.DateUtil
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
@@ -28,13 +29,13 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     private val _users = MutableStateFlow<List<String>>(listOf(rep.user.id))
     private val _usersInGroup = MutableStateFlow<List<User>>(listOf(rep.user))
     private val _hours = MutableStateFlow<String>(
-        formatHours(
+        DateUtil.formatHours(
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE)
         )
     )
     private val _date = MutableStateFlow<String>(
-        formatDate(
+        DateUtil.formatDate(
             calendar.get(Calendar.DAY_OF_MONTH),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.YEAR)
@@ -78,39 +79,14 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         }
     }
 
-    private fun formatHours(hour: Int, minutes: Int) : String {
-        return if (hour < 10 && minutes < 10) {
-            "0$hour:0$minutes"
-        } else if (hour < 10) {
-            "0$hour:$minutes"
-        } else if (minutes < 10) {
-            "$hour:0$minutes"
-        } else {
-            "$hour:$minutes"
-        }
-    }
-
-    private fun formatDate(day : Int, month : Int, year : Int) : String {
-        val acMonth = month + 1
-        return if (day < 10 && acMonth < 10) {
-            "$year-0$acMonth-0$day"
-        } else if (day < 10) {
-            "$year-$acMonth-0$day"
-        } else if (month < 10) {
-            "$year-0$acMonth-$day"
-        } else {
-            "$year-$acMonth-$day"
-        }
-    }
-
     fun updateHours(hour : Int, minutes : Int) {
-        _hours.value = formatHours(hour, minutes)
+        _hours.value = DateUtil.formatHours(hour, minutes)
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, minutes)
     }
 
     fun updateDate(day : Int, month : Int, year: Int) {
-        _date.value = formatDate(day, month, year)
+        _date.value = DateUtil.formatDate(day, month, year)
         calendar.set(Calendar.DAY_OF_MONTH, day)
         calendar.set(Calendar.MONTH, month)
         calendar.set(Calendar.YEAR, year)

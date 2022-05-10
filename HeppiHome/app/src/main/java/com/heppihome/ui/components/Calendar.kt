@@ -16,12 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import com.heppihome.R
 
-@Preview
+
 @Composable
-fun Calendar(){
-    var date by remember {
-        mutableStateOf("")
-    }
+fun Calendar(date: String, onDateChange : (CalendarView, Int, Int, Int) -> Unit){
     Scaffold(
         topBar = { TopbarNoBackArrow(title = stringResource(R.string.Calendar)) },
         content = {
@@ -33,9 +30,7 @@ fun Calendar(){
                 AndroidView(
                     factory = { CalendarView(it)},
                     update = {
-                        it.setOnDateChangeListener { _, year, month, day ->
-                        date = "$day - ${month + 1} - $year"
-                        }
+                        it.setOnDateChangeListener(onDateChange)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
