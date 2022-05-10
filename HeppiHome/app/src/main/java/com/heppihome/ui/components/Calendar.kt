@@ -4,6 +4,7 @@ import android.widget.CalendarView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -22,18 +23,22 @@ fun Calendar(){
         mutableStateOf("")
     }
     Scaffold(
-        topBar = { TopAppBar(title = {Text( text = stringResource(R.string.Calendar))})},
+        topBar = { TopbarNoBackArrow(title = stringResource(R.string.Calendar)) },
         content = {
             Column(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                AndroidView(factory = { CalendarView(it)},
-                    update = { it.setOnDateChangeListener { _, year, month, day ->
+                AndroidView(
+                    factory = { CalendarView(it)},
+                    update = {
+                        it.setOnDateChangeListener { _, year, month, day ->
                         date = "$day - ${month + 1} - $year"
-                    }
-                })
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
                 Text(text = "view tasks on $date")
             }
         }

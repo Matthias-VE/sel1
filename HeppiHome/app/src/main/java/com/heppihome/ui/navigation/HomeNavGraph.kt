@@ -92,7 +92,7 @@ fun HomeNavGraph(
         }
 
         composable(BottomNavItem.Overview.screen_route) {
-            Calendar()
+            HomeOverViewRoute()
         }
 
         composable(route = BottomNavItem.Tasks.screen_route) {
