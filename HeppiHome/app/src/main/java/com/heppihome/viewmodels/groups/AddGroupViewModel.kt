@@ -1,6 +1,9 @@
 package com.heppihome.viewmodels.groups
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heppihome.data.HomeRepository
@@ -24,6 +27,10 @@ class AddGroupViewModel @Inject constructor(private val rep : HomeRepository) : 
     private var _description : MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue(""))
     var description : StateFlow<TextFieldValue> = _description
 
+    private var _toastMessage : MutableStateFlow<String> = MutableStateFlow("")
+    var toastMessage : StateFlow<String> = _toastMessage
+
+
     fun setGroup(newName : String) {
         _groupName.value = TextFieldValue(newName)
     }
@@ -32,24 +39,34 @@ class AddGroupViewModel @Inject constructor(private val rep : HomeRepository) : 
         _description.value = TextFieldValue(newDes)
     }
 
-    fun addGroups() {
+    fun setToast(newToast : String) {
+        _toastMessage.value = newToast
+    }
+
+    fun addGroups(context: Context) {
         val toAdd = Group(_groupName.value.text, _description.value.text, listOf(rep.user.id))
-            //println(_groupName.value.text)
 
 
         viewModelScope.launch {
             rep.addGroup(toAdd).collect {
                 when(it) {
-                    is ResultState.Success -> "dan wete dat kleir is" // Do something when succes
-                    is ResultState.Loading -> "Tis nog aant laden wete wel" // Do something while loading
-                    is ResultState.Failed -> "Ai das hier nie just gelopen" // Do something when failed
+                    is ResultState.Success -> setToast("Group added succesfully") // Do something when succes
+                    is ResultState.Loading -> setToast("Loading...") // Do something while loading
+                    is ResultState.Failed -> setToast("Something went wrong\nPlease try again") // Do something when failed
                 }
             }
+
+            Toast.makeText(context, _toastMessage.value, Toast.LENGTH_LONG).show()
             setGroup("")
             setDescription("")
         }
     }
 
-
-
+    fun isValid(context: Context): Boolean {
+        if (_groupName.value.text.isEmpty() || _description.value.text.isEmpty()) {
+            Toast.makeText(context, "Please fill in both fields", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
 }
