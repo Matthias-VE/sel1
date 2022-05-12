@@ -269,7 +269,7 @@ class FirebaseDao {
             .addSnapshotListener(listener)
     }
 
-    fun addPoints(user : User, gid : String, newPoints : Int) = flow {
+    fun updatePoints(user : User, gid : String, newPoints : Int) = flow {
         emit(ResultState.loading())
         userDoc.document(user.id).collection(COLLECTION_POINTS)
             .document(gid).update(COLLECTION_POINTS, newPoints).await()
@@ -277,4 +277,5 @@ class FirebaseDao {
     }.catch {
         emit(ResultState.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)
+
 }
