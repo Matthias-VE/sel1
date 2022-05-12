@@ -18,16 +18,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.Timestamp
+import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
 import com.heppihome.data.models.User
 import com.heppihome.ui.components.Header
 import com.heppihome.ui.components.InputField
+import com.heppihome.ui.components.Topbar
 import com.heppihome.viewmodels.tasks.AddTaskViewModel
 import java.util.*
 
@@ -41,43 +44,50 @@ fun AddTaskRoute(
     val name by vM.name.collectAsState()
     val users by vM.users.collectAsState()
     val usersInGroup by vM.usersInGroup.collectAsState()
-    val deadline by vM.deadline.collectAsState()
+    val date by vM.date.collectAsState()
+    val hours by vM.hours.collectAsState()
 
     AddTaskScreen(
         name,
-        deadline,
+        vM.calendar,
         users,
         usersInGroup,
         vM::checkUser,
         onCancelled,
         {vM.updateName(it)},
         {vM.addTask(group); onCancelled()},
-        vM
+        hours, date,
+        vM::updateDate,
+        vM::updateHours
     )
 }
 @Composable
 fun AddTaskScreen(
     name : String,
-    deadline : Timestamp,
+    cal : Calendar,
     users: List<String>,
     usersInGroup : List<User>,
     onCheckUser: (User, Boolean) -> Unit,
     onCancelled : () -> Unit,
     onNameChanged : (String) -> Unit,
     onSaveTask : () -> Unit,
-    vM : AddTaskViewModel = hiltViewModel()
+    hours: String, date : String,
+    updateDatepicker: (Int, Int, Int) -> Unit,
+    updateTimePicker: (Int, Int) -> Unit
 ) {
     Column() {
-        Header("Add Task", onCancelled)
+        Topbar(stringResource(id = R.string.AddTask), onCancelled)
         Column(
             modifier = Modifier.padding(10.dp)
         ) {
-                InputField(name = "Task", description = name, onNameChanged)
+                InputField(name = stringResource(R.string.Task), description = name, onNameChanged)
                 UserSelection(users = usersInGroup, users, onCheckUser = onCheckUser)
                 Log.i("AddTaskRoute", "users size: " + users.size)
-                CalendarView(vM)
+                CalendarView(cal,
+                   hours, date,
+                    updateDatepicker, updateTimePicker)
                 Button(onClick = onSaveTask , enabled = users.isNotEmpty(), modifier = Modifier.padding(10.dp)) {
-                    Text("Add")
+                    Text(stringResource(R.string.Add))
                 }
 
         }
@@ -90,7 +100,7 @@ fun UserSelection(users : List<User>, selected : List<String>, onCheckUser : (Us
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(10.dp)) {
-        Text("This task is for:", fontSize = MaterialTheme.typography.body1.fontSize)
+        Text(stringResource(R.string.TaskForPerson), fontSize = MaterialTheme.typography.body1.fontSize)
         for (user in users) {
             var checked by remember { mutableStateOf(user.id in selected)}
             Row {
@@ -106,36 +116,34 @@ fun UserSelection(users : List<User>, selected : List<String>, onCheckUser : (Us
 }
 
 @Composable
-fun CalendarView(vM: AddTaskViewModel) {
+fun CalendarView(cal : Calendar, hours : String, date : String,
+                 updateDatepicker : (Int, Int, Int) -> Unit,
+                 updateTimePicker: (Int, Int) -> Unit) {
 
     val mContext = LocalContext.current
 
-    val mCalendar = Calendar.getInstance()
 
-    val mYear = mCalendar.get(Calendar.YEAR)
-    val mMonth = mCalendar.get(Calendar.MONTH)
-    val mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+    val mYear = cal.get(Calendar.YEAR)
+    val mMonth = cal.get(Calendar.MONTH)
+    val mDay = cal.get(Calendar.DAY_OF_MONTH)
 
-    mCalendar.time = Date()
 
     val mDatePickerDialog = DatePickerDialog(
         mContext,
-        { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            vM.updateDate("$mDayOfMonth-${mMonth+1}-$mYear")
+        { _: DatePicker, fYear: Int, fMonth: Int, fDayOfMonth: Int ->
+            updateDatepicker(fDayOfMonth, fMonth, fYear)
         }, mYear, mMonth, mDay
     )
 
     val mHour = 0
     val mMinute = 0
 
-    val hours by vM.hours.collectAsState()
-    val date by vM.date.collectAsState()
 
     val mTimePickerDialog = TimePickerDialog(
         mContext,
-        {_, mHour : Int, mMinute: Int ->
-            vM.updateHours("$mHour:$mMinute:00")
-        }, mHour, mMinute, false
+        {_, fHour : Int, fMinute: Int ->
+            updateTimePicker(fHour, fMinute)
+        }, mHour, mMinute, true
     )
 
     Column(modifier = Modifier
@@ -145,18 +153,18 @@ fun CalendarView(vM: AddTaskViewModel) {
         Button(onClick = {
             mDatePickerDialog.show()
         }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary) ) {
-            Text(text = "Open Date Picker", color = Color.White)
+            Text(text = stringResource(R.string.OpenDatePicker), color = Color.White)
         }
 
-        Text(text = "Selected Date: $date", textAlign = TextAlign.Center)
+        Text(text = stringResource(R.string.SelectedDate) + date, textAlign = TextAlign.Center)
 
         Button(onClick = {
             mTimePickerDialog.show()
         }, colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary) ) {
-            Text(text = "Open Time Picker", color = Color.White)
+            Text(text = stringResource(R.string.OpenTimePicker), color = Color.White)
         }
 
-        Text(text = "Selected Time: $hours", textAlign = TextAlign.Center)
+        Text(text = stringResource(R.string.SelectedTime) + hours, textAlign = TextAlign.Center)
     }
 
 }

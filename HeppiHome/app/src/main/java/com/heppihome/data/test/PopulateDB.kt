@@ -24,23 +24,22 @@ class PopulateDB constructor(private val viewmTask : HomeTasksViewModel,
     private val testTasks = listOf(
         Task("Zet de plantjes buiten", false, Timestamp(Date()), listOf(admin_id)),
         Task("Doe eens gek", true, users = listOf(admin_id)),
-        Task("Dit is een mooie en nogal lange taak", false),
+        Task("Dit is een mooie en nogal lange taak", false, users = listOf(admin_id)),
         Task("Nog meer taken", false, users = listOf(admin_id)),
         Task("Sample Task", true, users = listOf(admin_id))
     )
 
     @Composable
-    fun Populate() {
-            if (viewmGroup.groups.collectAsState().value.isEmpty()) {
-                testGroups.forEach {
-                    viewmGroup.addGroupWithId(it)
-                }
-                testGroups.forEach {
-                    testTasks.forEach { t ->
-                        viewmTask.addTask(t, it)
-                    }
+    fun Populate( b : Boolean) {
+        if (b) {
+            testGroups.forEach {
+                viewmGroup.addGroupWithId(it)
+            }
+            testGroups.forEach {
+                testTasks.forEach { t ->
+                    viewmTask.addTask(t, it)
                 }
             }
-
+        }
     }
 }

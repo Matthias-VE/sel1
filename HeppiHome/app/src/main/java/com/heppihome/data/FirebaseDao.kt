@@ -1,5 +1,6 @@
 package com.heppihome.data
 
+import androidx.compose.ui.res.stringResource
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -17,12 +18,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.zone.ZoneOffsetTransitionRule
-import java.util.*
+import com.heppihome.R
 import javax.inject.Singleton
 
 @Singleton
@@ -66,9 +62,10 @@ class FirebaseDao {
         return firebaseAuth.currentUser
     }
 
-    // This gets all the groups
-    suspend fun getAllGroups() : List<Group> {
-        return groupDoc.get().await().toObjects(Group::class.java)
+    // This gets all the groups for a user
+    suspend fun getAllGroups(user : User) : List<Group> {
+        return groupDoc.whereArrayContains(COLLECTION_USERS, user.id).
+        get().await().toObjects(Group::class.java)
     }
 
     suspend fun getUsersForIds(ids : List<String>) : List<User>{
@@ -84,14 +81,39 @@ class FirebaseDao {
         userRef.set(u).await()
     }
 
-    suspend fun addInviteToPerson(email : String, g : Group) : Boolean {
-        val userRef = userDoc.whereEqualTo("email", email).get().await()
+    suspend fun getAllInvites(user : User) : List<Invite>{
+        return userDoc.document(user.id).collection(COLLECTION_INVITES)
+            .get().await().toObjects(Invite::class.java)
+    }
+
+    suspend fun addInviteToPerson(emailTo : String,emailFrom : String, g : Group) : Boolean {
+        val userRef = userDoc.whereEqualTo("email", emailTo).get().await()
         if (userRef.isEmpty) return false
         val users = userRef.toObjects(User::class.java)
-        users.forEach {
-            userDoc.document(it.id).collection(COLLECTION_INVITES).add(Invite(g.id)).await()
-        }
+
+        // email is unique per user so list should always have at most 1 element.
+
+        val inviteRef = userDoc.document(users[0].id).collection(COLLECTION_INVITES).document()
+        inviteRef.set(Invite(g.id, emailFrom, inviteRef.id))
+
         return true
+    }
+
+    suspend fun addPersonToGroupId(u : User, groupId : String) {
+        groupDoc.document(groupId).update(COLLECTION_USERS, FieldValue.arrayUnion(u.id)).await()
+    }
+
+    fun removePersonFromGroupId( u : User, groupId: String) = flow {
+        emit(ResultState.loading())
+        groupDoc.document(groupId).update(COLLECTION_USERS, FieldValue.arrayRemove(u.id)).await()
+        emit(ResultState.success("Successfully left group"))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun removeInviteFromPerson(user: User, invite: Invite) {
+        userDoc.document(user.id).collection(COLLECTION_INVITES)
+            .document(invite.inviteId).delete().await()
     }
 
     // This adds a group with an id set already
@@ -117,6 +139,28 @@ class FirebaseDao {
         }.catch {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
+
+
+    fun deleteGroup(group : Group) : Flow<ResultState<String>> =
+        flow {
+            emit(ResultState.loading())
+
+            val groupRef = groupDoc.document(group.id)
+            groupRef.delete().await()
+            emit(ResultState.success("Group deleted successfully"))
+        }.catch {
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+
+    fun editGroup(group : Group, newName : String, newDesc : String) : Flow<ResultState<String>> {
+        return flow {
+            emit(ResultState.loading())
+            groupDoc.document(group.id).update("name", newName, "description", newDesc).await()
+            emit(ResultState.success("Group edited successfully"))
+        }.catch{
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+    }
 
 
     // Register a listener to changes to tasks in a certain group
@@ -212,5 +256,6 @@ class FirebaseDao {
         }.catch {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
+
 
 }

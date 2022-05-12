@@ -10,11 +10,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.heppihome.R
 import com.heppihome.data.models.User
 import com.heppihome.ui.components.Topbar
 import com.heppihome.viewmodels.users.HomeProfileViewModel
@@ -33,7 +35,7 @@ fun HomeProfileRoute(
 @Composable
 fun HomeProfileScreen(user : User, onBackPressed: () -> Unit, onLogoutPressed : () -> Unit) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Topbar(title = "Profile", expanded = false, {}, onBackPressed = onBackPressed, onInvitePerson = {})
+            Topbar(title = stringResource(R.string.Profile), onBackPressed = onBackPressed)
             ProfileInformation(user.email, user.name)
             Logout(onLogoutPressed = onLogoutPressed)
         }
@@ -66,14 +68,15 @@ fun Logout(onLogoutPressed: () -> Unit) {
             onClick = onLogoutPressed,
         modifier = Modifier.scale(1.3F)
         ) {
-            Text("Log out")
+            Text(stringResource(R.string.LogOut))
         }
     }
 }
 
 @Composable
 fun Loading() {
-    Text("Loading",
+    Text(
+            stringResource(R.string.Loading),
     fontSize = 40.sp,
     fontWeight = FontWeight.Bold)
 }

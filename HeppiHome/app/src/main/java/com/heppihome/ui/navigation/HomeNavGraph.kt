@@ -7,11 +7,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.heppihome.ui.components.Calendar
 
 import com.heppihome.ui.components.NewGroup
 
 import com.heppihome.ui.components.EditGroup
 import com.heppihome.ui.routes.*
+import com.heppihome.ui.routes.groups.DetailInviteRoute
+import com.heppihome.ui.routes.groups.HomeGroupRoute
+import com.heppihome.ui.routes.groups.HomeInvitePersonRoute
+import com.heppihome.ui.routes.groups.HomeInvitesRoute
 import com.heppihome.ui.routes.tasks.AddTaskRoute
 import com.heppihome.ui.routes.tasks.HomeTasksRoute
 import com.heppihome.viewmodels.HomeMainViewModel
@@ -42,6 +47,9 @@ fun HomeNavGraph(
                 }, onEditGroupClicked = {
                     vM.toEditGroup = it;
                     navController.navigate(HomeAppDestinations.GROUP_EDIT)
+                },
+                onInvitesClicked = {
+                    navController.navigate(HomeAppDestinations.ALLINV_ROUTE)
                 }
             )
         }
@@ -60,8 +68,23 @@ fun HomeNavGraph(
             )
         }
 
-        composable(HomeAppDestinations.GROUP_EDIT) {
+        composable(HomeAppDestinations.ALLINV_ROUTE) {
+            HomeInvitesRoute(vM = hiltViewModel(),
+                {vM.selectedInvite = it;
+                    navController.navigate(HomeAppDestinations.INVITE_DETAIL)},
+                {navController.navigate(HomeAppDestinations.GROUP_ROUTE)}
+            )
+        }
 
+        composable(HomeAppDestinations.INVITE_DETAIL) {
+            DetailInviteRoute(
+                vM = hiltViewModel(),
+                invite = vM.selectedInvite,
+                {navController.navigate(HomeAppDestinations.GROUP_ROUTE)}
+            )
+        }
+
+        composable(HomeAppDestinations.GROUP_EDIT) {
             EditGroup(vM = hiltViewModel(),
                 onGroupCancel = {
                     navController.navigate(HomeAppDestinations.GROUP_ROUTE)

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">HeppiHome</string>
     <string name="Calendar">Calendar</string>
     <string name="NewGroup">New Group</string>
@@ -16,4 +16,77 @@
     <string name="Language">Language</string>
     <string name="Help">Help</string>
     <string name="Theme">Theme</string>
+    <string name="Edit">Edit</string>
+    <string name="EditGroup">Edit Group</string>
+    <string name="InviteToGroup">Invite someone for this group</string>
+    <string name="Invite">Invite</string>
+    <string name="GotInvite">You got invited to a group by </string>
+    <string name="AcceptOrDeclineInvite">Accept or Decline this invite.</string>
+    <string name="Accept">Accept</string>
+    <string name="Decline">Decline</string>
+    <string name="Invites">Invites</string>
+    <string name="Email">email</string>
+    <string name="InvitePerson">Invite this person</string>
+    <string name="YourInvites">Your invites</string>
+    <string name="NoInvites">You have not been invited to any groups</string>
+    <string name="InviteFrom">Invite from: </string>
+    <string name="Task">Task</string>
+    <string name="AddTask">Add Task</string>
+    <string name="TaskForPerson">This task is for:</string>
+    <string name="OpenDatePicker">Open Date Picker</string>
+    <string name="OpenTimePicker">Open Time Picker</string>
+    <string name="SelectedDate">Selected Date: </string>
+    <string name="SelectedTime">Selected Time: </string>
+    <string name="LogOut">Log out</string>
+    <string name="Loading">Loading</string>
+    <string name="FeedbackGroupEdited">Group has been edited</string>
+    <string name="FeedbackGroupDeleted">Group has been deleted</string>
+
+    <!-- FireBase -->
+    <string name="fui_progress_dialog_loading" translation_description="Loading text in dialog">Loading…</string>
+    <string name="fui_sign_in_default" translation_description="Button text to sign in">Sign in</string>
+    <string name="fui_continue" translation_description="Button text to continue">Continue</string>
+    <string name="fui_no_internet" translation_descripition="User message shown when sign-in is attempted while offline.">Network error, check your internet connection.</string>
+
+    <!-- Provider -->
+    <string name="fui_idp_name_email">Email</string>
+
+    <!-- Common-->
+    <string name="fui_next_default" translation_description="Button text to continue">Next</string>
+    <string name="fui_email_hint" translation_description="Hint in email input field">Email</string>
+    <string name="fui_password_hint" translation_description="Hint for password input field for existing passwords">Password</string>
+    <string name="fui_new_password_hint" translation_description="Hint for password input field for new passwords">New password</string>
+    <string name="fui_required_field" translation_description="Inline error for required field">You can\'t leave this empty.</string>
+    <string name="fui_invalid_email_address" translation_description="Inline error for invalid email address">That email address isn\'t correct</string>
+    <string name="fui_missing_email_address" translation_description="Inline error for empty email address in input field">Enter your email address to continue</string>
+    <string name="fui_missing_first_and_last_name" translation_description="Inline error for empty email address in input field. [CHAR_LIMIT=60]">Please enter a first and last name.</string>
+    <string name="fui_progress_dialog_checking_accounts" translation_description="Progress dialog text while checking for existing accounts">Checking for existing accounts…</string>
+
+    <!-- Email sign up -->
+    <string name="fui_title_register_email" translation_description="Title for signup form">Sign up</string>
+    <string name="fui_name_hint" translation_description="Hint for last name input field">First &amp; last name</string>
+    <string name="fui_button_text_save" translation_description="Button text to save input form">Save</string>
+    <string name="fui_progress_dialog_signing_up" translation_description="Dialog text while waiting for server's signup response">Signing up…</string>
+    <plurals name="fui_error_weak_password" translation_description="Inline error for weak password">
+        <item quantity="one" translation_description="Inline error for weak password">Password not strong enough. Use at least %1$d character and a mix of letters and numbers</item>
+        <item quantity="other" translation_description="Inline error for weak password">Password not strong enough. Use at least %1$d characters and a mix of letters and numbers</item>
+    </plurals>
+    <string name="fui_email_account_creation_error" translation_description="Inline error for signup failure">Email account registration unsuccessful</string>
+
+    <!-- Idp/Email welcome back -->
+    <string name="fui_title_welcome_back_idp_prompt" translatable="false">@string/fui_sign_in_default</string>
+    <string name="fui_title_welcome_back_password_prompt" translatable="false">@string/fui_sign_in_default</string>
+    <string name="fui_welcome_back_email_header" translation_description="Message for returning users">Welcome back!</string>
+
+    <string name="fui_welcome_back_password_prompt_body" translation_description="Message to users that need to signin using existing email accounts">
+        You\'ve already used <xliff:g example="jane.doe@example.com" id="email_addr" translation_description="">%1$s</xliff:g>
+        to sign in. Enter your password for that account.
+    </string>
+    <string name="fui_progress_dialog_signing_in" translation_description="Progress dialog text">Signing in…</string>
+    <string name="fui_trouble_signing_in" translation_description="Link leading to forgot password flow">Trouble signing in?</string>
+
+    <!-- Other error messages -->
+    <string name="fui_error_unknown" translation_description="General error messages for an unknown failure.">An unknown error occurred.</string>
+    <string name="fui_error_invalid_password" translation_description="Error message for when the user enters an invalid or wrong password.">Incorrect password.</string>
+
 </resources>

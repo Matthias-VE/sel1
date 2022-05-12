@@ -34,10 +34,12 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     //Population of database with dummy data.
+
                     val viewmTask : HomeTasksViewModel = hiltViewModel()
                     val viewmGroup : HomeGroupViewModel = hiltViewModel()
                     val p = PopulateDB(viewmTask, viewmGroup)
-                    p.Populate()
+                    // true does the populate, false does nothing. For quick enabling / disabling.
+                    p.Populate(false)
 
                     val navController = rememberNavController()
                     val context = this

@@ -1,12 +1,15 @@
 package com.heppihome.viewmodels.groups
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
+import com.heppihome.data.models.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,6 +23,9 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
     private var _expanded : MutableStateFlow<Boolean> = MutableStateFlow(false)
     var expanded : StateFlow<Boolean> = _expanded
 
+    private val _status = MutableStateFlow<ResultState<String>>(ResultState.waiting())
+    val status = _status.asStateFlow()
+
     fun expandGroupMenu() {
         viewModelScope.launch {
             _expanded.value = !_expanded.value
@@ -32,21 +38,18 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
         }
     }
 
-    fun addGroup(g : Group) {
+    fun leaveGroup(g : Group) {
         viewModelScope.launch {
-            rep.addGroup(g).collect { }
+            rep.leaveGroup(g).collect {
+                _status.value = it
+            }
+            _groups.value = rep.getAllGroups()
         }
     }
 
     fun addGroupWithId(g : Group) {
         viewModelScope.launch {
             rep.addGroupWithId(g).collect {}
-        }
-    }
-
-    fun deleteGroup(g: Group) {
-        viewModelScope.launch {
-            //fill in removegroup
         }
     }
 }

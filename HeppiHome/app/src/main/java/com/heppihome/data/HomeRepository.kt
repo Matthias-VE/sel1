@@ -7,10 +7,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObjects
 import com.heppihome.BuildConfig
-import com.heppihome.data.models.Group
-import com.heppihome.data.models.ResultState
-import com.heppihome.data.models.Task
-import com.heppihome.data.models.User
+import com.heppihome.data.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
@@ -33,7 +30,7 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
 
     // This gets all the groups
     suspend fun getAllGroups() : List<Group> {
-        return fdao.getAllGroups()
+        return fdao.getAllGroups(user)
     }
 
     suspend fun getAllUsersInGroup(l : List<String>) : List<User> {
@@ -58,8 +55,21 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
         fdao.addUser(u)
     }
 
-    suspend fun sendInviteTo(email : String, g : Group) : Boolean {
-        return fdao.addInviteToPerson(email, g)
+    suspend fun sendInviteTo(emailTo : String, g : Group) : Boolean {
+        return fdao.addInviteToPerson(emailTo,user.email, g)
+    }
+
+    suspend fun acceptInvite(inv : Invite) {
+        fdao.addPersonToGroupId(user, inv.groupId)
+        fdao.removeInviteFromPerson(user, inv)
+    }
+
+    suspend fun declineInvite(inv : Invite) {
+        fdao.removeInviteFromPerson(user, inv)
+    }
+
+    suspend fun getAllInvites() : List<Invite> {
+        return fdao.getAllInvites(user)
     }
 
     // This adds a group with an id set already
@@ -70,6 +80,21 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     fun addGroup(group : Group) : Flow<ResultState<DocumentReference>> =
         fdao.addGroup(group)
 
+    fun editGroup(group : Group, newName : String, newDesc : String) : Flow<ResultState<String>> {
+        var nameCheck = newName.trim()
+        var descCheck = newDesc.trim()
+        if (nameCheck.isEmpty() && descCheck.isEmpty()) {
+            return flow {emit(ResultState.failed("name and desc are empty"))}
+        }
+        if (nameCheck.isEmpty()) nameCheck = group.name
+        if (descCheck.isEmpty()) descCheck = group.description
+        return fdao.editGroup(group, nameCheck, descCheck)
+    }
+    // Delete group from existence
+    fun deleteGroup(group : Group) : Flow<ResultState<String>> = fdao.deleteGroup(group)
+
+    // Remove current user from group
+    fun leaveGroup(group : Group) : Flow<ResultState<String>> = fdao.removePersonFromGroupId(user, group.id)
 
     // Register a listener to changes to tasks in a certain group
     fun registerTaskSnapshotListener(listener : (QuerySnapshot?, FirebaseFirestoreException?) -> Unit, group : Group) {

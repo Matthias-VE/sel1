@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
+import com.heppihome.data.models.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,8 +22,8 @@ class EditGroupViewModel @Inject constructor(private val rep : HomeRepository) :
     private val _description : MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue(""))
     val description : StateFlow<TextFieldValue> = _description
 
-    private var group : Group = Group();
-
+    private val _status : MutableStateFlow<ResultState<String>> = MutableStateFlow(ResultState.waiting())
+    val status = _status.asStateFlow()
 
     fun setName(newName : String) {
         _groupName.value = TextFieldValue(newName)
@@ -30,11 +33,11 @@ class EditGroupViewModel @Inject constructor(private val rep : HomeRepository) :
         _description.value = TextFieldValue(newDes)
     }
 
-    fun updateGroup(g : Group) {
+    fun editGroup(g : Group) {
         viewModelScope.launch {
-
+            rep.editGroup(g, _groupName.value.text, _description.value.text).collect {
+                _status.value = it
+            }
         }
     }
-
-
 }
