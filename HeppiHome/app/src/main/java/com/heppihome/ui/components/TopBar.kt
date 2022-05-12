@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -68,6 +69,22 @@ fun TopbarWithOptionsNoBackArrow(title : String, expanded: Boolean, toggle: () -
                     )
                     DropDownMenuAsOptions( expanded, toggle, itemStrings, itemOnClicks)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun TopbarWithSettings(title: String, onSettingsPressed: () -> Unit) {
+    Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
+        Row(modifier = Modifier.padding(10.dp)) {
+            Text(title, fontSize = 30.sp, style = MaterialTheme.typography.h6)
+        }
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp), horizontalArrangement = Arrangement.End) {
+            IconButton(onClick =  onSettingsPressed) {
+                Icon(Icons.Default.Settings, contentDescription = "Settings", modifier = Modifier.size(40.dp))
             }
         }
     }

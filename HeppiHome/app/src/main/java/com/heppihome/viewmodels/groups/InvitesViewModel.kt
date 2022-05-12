@@ -25,6 +25,7 @@ class InvitesViewModel @Inject constructor(private val rep : HomeRepository)
     }
 
     private fun refreshInvites() {
+        println("word ik ook dan uitgevoerd")
         viewModelScope.launch {
             _invites.value = rep.getAllInvites()
         }

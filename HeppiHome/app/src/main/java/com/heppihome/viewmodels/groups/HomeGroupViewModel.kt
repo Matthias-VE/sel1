@@ -39,11 +39,18 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
         refreshInvites()
     }
 
-    private fun refreshInvites() {
+    fun refreshInvites() {
         viewModelScope.launch {
             var temp = rep.getAllInvites()
-            _hasInvites.value = temp.isNullOrEmpty()
+            _hasInvites.value = !temp.isEmpty()
         }
+    }
+
+    fun checkInvites() : Boolean {
+        viewModelScope.launch {
+            refreshInvites()
+        }
+        return _hasInvites.value
     }
 
     fun setToast(newToast : String, context: Context) {

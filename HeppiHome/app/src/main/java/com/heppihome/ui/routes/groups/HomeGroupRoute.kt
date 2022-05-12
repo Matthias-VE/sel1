@@ -27,6 +27,7 @@ import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.ui.components.ConfirmDialog
 import com.heppihome.ui.components.TopbarWithOptionsNoBackArrow
+import com.heppihome.ui.components.TopbarWithSettings
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
 import kotlin.math.roundToInt
 
@@ -37,7 +38,8 @@ fun HomeGroupRoute(
     onGroupClicked : (Group) -> Unit,
     onNewGroupClicked : () -> Unit,
     onEditGroupClicked : (Group) -> Unit,
-    onInvitesClicked: () -> Unit
+    onInvitesClicked: () -> Unit,
+    onSettingsPressed: () -> Unit
 ) {
     vM.refreshGroups()
     val groups by vM.groups.collectAsState()
@@ -52,7 +54,8 @@ fun HomeGroupRoute(
         vM,
         onEditGroupClicked,
         vM::leaveGroup,
-        onInvitesClicked
+        onInvitesClicked,
+        onSettingsPressed
     )
 }
 
@@ -66,22 +69,15 @@ fun HomeGroupScreen(
     vM : HomeGroupViewModel,
     onEditGroupClicked : (Group) -> Unit,
     onLeaveGroupClicked: (Group, Context) -> Unit,
-    onInvitesClicked : () -> Unit
+    onInvitesClicked : () -> Unit,
+    onSettingsPressed : () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        TopbarWithOptionsNoBackArrow(
+        TopbarWithSettings(
             title = stringResource(id = R.string.Groups),
-            expanded = expanded,
-            toggle = toggle,
-            itemStrings = listOf(
-                stringResource(R.string.NewGroup),
-                stringResource(R.string.Invites)
-            ),
-            itemOnClicks = listOf(
-                onNewGroupClicked,
-                onInvitesClicked
-            )
+            onSettingsPressed = onSettingsPressed
         )
+
         Alltasks()
         //Groups(groups, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked)
         AddButton(groups, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked, onNewGroupClicked, onInvitesClicked)
@@ -176,7 +172,8 @@ fun AddButton(
         }
     }, floatingActionButtonPosition = FabPosition.End) {
         Groups(groups, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked)
-        if (true) {
+        //vM.refreshInvites()
+        if (vM.checkInvites()) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Button(onClick = onInvitesClicked, modifier = Modifier
                     .padding(10.dp)
