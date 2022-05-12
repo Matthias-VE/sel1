@@ -41,6 +41,8 @@
     <string name="Loading">Loading</string>
     <string name="FeedbackGroupEdited">Group has been edited</string>
     <string name="FeedbackGroupDeleted">Group has been deleted</string>
+    <string name="No">No</string>
+    <string name="Yes">Yes</string>
 
     <!-- FireBase -->
     <string name="fui_progress_dialog_loading" translation_description="Loading text in dialog">Loading…</string>

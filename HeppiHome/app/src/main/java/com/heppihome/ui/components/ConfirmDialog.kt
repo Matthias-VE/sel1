@@ -9,7 +9,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.heppihome.R
 
 @Composable
 fun ConfirmDialog(title: String? = null, content: String, onDismiss: () -> Unit, onConfirm: () -> Unit) {
@@ -48,12 +50,12 @@ fun ConfirmDialog(title: String? = null, content: String, onDismiss: () -> Unit,
         // buttons = { }
         dismissButton = {
             Button(onClick = { onDismiss() }) {
-                Text("No")
+                Text(stringResource(R.string.No))
             }
         },
         confirmButton = {
             Button(onClick = { onConfirm() }) {
-                Text("Yes")
+                Text(stringResource(R.string.Yes))
             }
         }
     )

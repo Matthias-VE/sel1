@@ -15,10 +15,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import com.heppihome.R
+import com.heppihome.viewmodels.HomeOverviewViewModel
 
 
 @Composable
-fun Calendar(date: String, onDateChange : (CalendarView, Int, Int, Int) -> Unit){
+fun Calendar(date: String, vM: HomeOverviewViewModel,onDateChange : (CalendarView, Int, Int, Int) -> Unit){
+    vM.refreshGroups()
     Scaffold(
         topBar = { TopbarNoBackArrow(title = stringResource(R.string.Calendar)) },
         content = {
