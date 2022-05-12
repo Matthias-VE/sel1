@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,8 +32,10 @@ import com.heppihome.data.models.Task
 import com.heppihome.data.models.User
 import com.heppihome.ui.components.Header
 import com.heppihome.ui.components.InputField
+import com.heppihome.ui.components.InputNumberField
 import com.heppihome.ui.components.Topbar
 import com.heppihome.viewmodels.tasks.AddTaskViewModel
+import java.lang.Integer.parseInt
 import java.util.*
 
 @Composable
@@ -42,6 +46,7 @@ fun AddTaskRoute(
 ) {
     vM.usersInGroup(group)
     val name by vM.name.collectAsState()
+    val points by vM.points.collectAsState()
     val users by vM.users.collectAsState()
     val usersInGroup by vM.usersInGroup.collectAsState()
     val date by vM.date.collectAsState()
@@ -49,6 +54,7 @@ fun AddTaskRoute(
 
     AddTaskScreen(
         name,
+        points,
         vM.calendar,
         users,
         usersInGroup,
@@ -58,12 +64,14 @@ fun AddTaskRoute(
         {vM.addTask(group); onCancelled()},
         hours, date,
         vM::updateDate,
-        vM::updateHours
+        vM::updateHours,
+        vM::updatePoints
     )
 }
 @Composable
 fun AddTaskScreen(
     name : String,
+    points : String,
     cal : Calendar,
     users: List<String>,
     usersInGroup : List<User>,
@@ -73,22 +81,24 @@ fun AddTaskScreen(
     onSaveTask : () -> Unit,
     hours: String, date : String,
     updateDatepicker: (Int, Int, Int) -> Unit,
-    updateTimePicker: (Int, Int) -> Unit
+    updateTimePicker: (Int, Int) -> Unit,
+    updatePoints: (String) -> Unit
 ) {
     Column() {
         Topbar(stringResource(id = R.string.AddTask), onCancelled)
         Column(
             modifier = Modifier.padding(10.dp)
         ) {
-                InputField(name = stringResource(R.string.Task), description = name, onNameChanged)
-                UserSelection(users = usersInGroup, users, onCheckUser = onCheckUser)
-                Log.i("AddTaskRoute", "users size: " + users.size)
-                CalendarView(cal,
-                   hours, date,
-                    updateDatepicker, updateTimePicker)
-                Button(onClick = onSaveTask , enabled = users.isNotEmpty(), modifier = Modifier.padding(10.dp)) {
-                    Text(stringResource(R.string.Add))
-                }
+            InputField(name = stringResource(R.string.Task), description = name, onNameChanged)
+            InputNumberField(name = "Points", value = points, edit = updatePoints)
+            UserSelection(users = usersInGroup, users, onCheckUser = onCheckUser)
+            Log.i("AddTaskRoute", "users size: " + users.size)
+            CalendarView(cal,
+                hours, date,
+                updateDatepicker, updateTimePicker)
+            Button(onClick = onSaveTask , enabled = users.isNotEmpty(), modifier = Modifier.padding(10.dp)) {
+                Text(stringResource(R.string.Add))
+            }
 
         }
     }
@@ -168,3 +178,4 @@ fun CalendarView(cal : Calendar, hours : String, date : String,
     }
 
 }
+

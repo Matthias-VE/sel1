@@ -156,4 +156,11 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     fun checkTask(task : Task, group : Group) : Flow<ResultState<DocumentReference>> =
         fdao.checkTask(task, group)
 
+    fun getPoints(gid : String) =
+        fdao.getPoints(user, gid)
+
+    fun registerPointsListener(
+        listener : (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit,
+        gid : String
+    ) = fdao.addPointsListener(listener, user, gid)
 }

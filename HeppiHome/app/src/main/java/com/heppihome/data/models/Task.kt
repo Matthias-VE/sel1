@@ -9,4 +9,5 @@ data class Task(val text: String = "default",
                 val done : Boolean = false,
                 val deadline : Timestamp = Timestamp.now(),
                 val users : List<String> = listOf(),
+                val points : Int = 0,
                 val id : String = "default")
