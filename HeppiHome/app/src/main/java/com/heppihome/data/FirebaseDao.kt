@@ -132,6 +132,19 @@ class FirebaseDao {
         listeners.clear()
     }
 
+    fun getTasksBetweenStartAndEnd(user : User, g : Group, start : Timestamp, end : Timestamp) =
+        flow {
+            emit(ResultState.loading<List<Task>>())
+            emit(ResultState.success(
+                groupDoc.document(g.id).collection(COLLECTION_TASKS)
+                .whereArrayContains(COLLECTION_USERS, user.id)
+                .whereGreaterThan("deadline", start)
+                .whereLessThan("deadline", end).get().await().toObjects(Task::class.java))
+            )
+        }.catch {
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+
     // Get all tasks for a certain group
     fun getAllTasks(user : FirebaseUser, group : Group) : Flow<ResultState<List<Task>>> =
         flow<ResultState<List<Task>>> {
