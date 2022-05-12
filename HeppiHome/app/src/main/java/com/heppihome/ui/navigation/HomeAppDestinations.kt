@@ -11,4 +11,5 @@ object HomeAppDestinations {
     const val INVITE_ROUTE = "invite"
     const val ALLINV_ROUTE = "allinvites"
     const val INVITE_DETAIL = "invitedetail"
+    const val SHOP_ROUTE = "shop"
 }

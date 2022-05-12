@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
@@ -20,7 +22,7 @@ fun BottomNavigation(navController: NavController) {
     val items = listOf(
         BottomNavItem.Tasks,
         BottomNavItem.Overview,
-        BottomNavItem.Settings
+        BottomNavItem.Shop
     )
 
     BottomNavigation(
@@ -30,11 +32,15 @@ fun BottomNavigation(navController: NavController) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
+
             BottomNavigationItem(
-                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
+                icon = { if (item.icon != 666) {
+                    Icon(painterResource(id = item.icon), item.title)
+                } else {
+                    Icon(Icons.Default.ShoppingCart, item.title)} },
                 label = { Text(text = item.title, fontSize = 14.sp) },
-                selectedContentColor = Color.White,
-                unselectedContentColor = Color.White,
+                selectedContentColor = Color.Black,
+                unselectedContentColor = Color.Black,
                 alwaysShowLabel = true,
                 selected = currentRoute == item.screen_route,
                 onClick = {

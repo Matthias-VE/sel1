@@ -1,12 +1,18 @@
 package com.heppihome.ui.navigation
 
 import android.content.Context
+import android.widget.Toast
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.internal.ComposableLambda
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.heppihome.data.models.Constants
 import com.heppihome.ui.components.Calendar
 
 import com.heppihome.ui.components.NewGroup
@@ -92,10 +98,18 @@ fun HomeNavGraph(
         }
 
         composable(BottomNavItem.Overview.screen_route) {
-            HomeOverViewRoute()
+            Scaffold() {
+                HomeOverViewRoute()
+            }
         }
 
-        composable(route = BottomNavItem.Tasks.screen_route) {
+        composable(HomeAppDestinations.SHOP_ROUTE) {
+
+            HomeShopRoute(hiltViewModel(),vM.selectedGroup)
+
+        }
+
+        composable(BottomNavItem.Tasks.screen_route) {
 
             HomeTasksRoute(vM = hiltViewModel(), onBackPressed = {
                 navController.navigate(HomeAppDestinations.GROUP_ROUTE)
@@ -124,5 +138,14 @@ fun HomeNavGraph(
                 {navController.navigate(HomeAppDestinations.LOGIN_ROUTE)}
             )
         }
+    }
+}
+
+@Composable
+fun ContentWithNavbar(content : @Composable Unit) {
+    Scaffold(
+        bottomBar = BottomNavigation(navController = )
+    ) {
+        
     }
 }

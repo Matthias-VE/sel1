@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import com.heppihome.R
+import com.heppihome.data.models.Constants.COLLECTION_POINTS
 import javax.inject.Singleton
 
 @Singleton
@@ -101,6 +102,11 @@ class FirebaseDao {
 
     suspend fun addPersonToGroupId(u : User, groupId : String) {
         groupDoc.document(groupId).update(COLLECTION_USERS, FieldValue.arrayUnion(u.id)).await()
+        val docref = userDoc.document(u.id).collection(COLLECTION_POINTS).document(groupId)
+        val points = docref.get().await().toObject(Points::class.java)
+        if (points == null) {
+            docref.set(Points(groupId)).await()
+        }
     }
 
     fun removePersonFromGroupId( u : User, groupId: String) = flow {
@@ -134,7 +140,8 @@ class FirebaseDao {
 
             val groupRef = groupDoc.document()
             groupRef.set(Group(group.name, group.description, group.users, groupRef.id)).await()
-
+            userDoc.document(group.users[0]).collection(COLLECTION_POINTS).document(groupRef.id)
+                .set(Points(groupRef.id)).await()
             emit(ResultState.success(groupRef))
         }.catch {
             emit(ResultState.failed(it.message.toString()))
@@ -223,7 +230,7 @@ class FirebaseDao {
             emit(ResultState.loading())
 
             val taskRef = groupDoc.document(group.id).collection(COLLECTION_TASKS).document()
-            taskRef.set(Task(task.text, task.done,task.deadline, task.users, taskRef.id)).await()
+            taskRef.set(Task(task.text, task.done,task.deadline, task.users,0, taskRef.id)).await()
 
             //emit data
             emit(ResultState.success(taskRef))
@@ -244,5 +251,30 @@ class FirebaseDao {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
 
+    fun getPoints(user: User, gid : String) = flow {
+        emit(ResultState.loading())
+        val p = userDoc.document(user.id).collection(COLLECTION_POINTS).document(gid).get().await()
+            .toObject(Points::class.java)
+        emit(ResultState.success(p))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
 
+    fun addPointsListener(
+        listener: (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit,
+        user : User,
+        groupId: String
+    ) {
+        userDoc.document(user.id).collection(COLLECTION_POINTS).document(groupId)
+            .addSnapshotListener(listener)
+    }
+
+    fun addPoints(user : User, gid : String, newPoints : Int) = flow {
+        emit(ResultState.loading())
+        userDoc.document(user.id).collection(COLLECTION_POINTS)
+            .document(gid).update(COLLECTION_POINTS, newPoints).await()
+        emit(ResultState.success("Successfully updated points"))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
 }

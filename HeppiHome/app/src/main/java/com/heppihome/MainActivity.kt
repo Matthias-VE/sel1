@@ -41,17 +41,7 @@ class MainActivity : ComponentActivity() {
                     // true does the populate, false does nothing. For quick enabling / disabling.
                     p.Populate(false)
 
-                    val navController = rememberNavController()
-                    val context = this
-
-                    Scaffold(
-                        bottomBar = { com.heppihome.ui.navigation.BottomNavigation(navController = navController) }) {
-                        Box(modifier = Modifier.padding(it)) {
-                            HomeNavGraph(
-                                navController = navController, vM = hiltViewModel(), context = context
-                            )
-                        }
-                    }
+                    HomeNavGraph(vM = hiltViewModel(), context = this)
                 }
             }
         }
