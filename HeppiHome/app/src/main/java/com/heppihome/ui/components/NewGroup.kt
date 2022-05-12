@@ -14,6 +14,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Observer
 import com.heppihome.R
 import com.heppihome.viewmodels.groups.AddGroupViewModel
 
@@ -22,10 +23,15 @@ fun NewGroup(
     vM : AddGroupViewModel,
     onGroupCancel : () -> Unit
 ) {
+
     val temp by vM.groupName.collectAsState()
     val temp2 by vM.description.collectAsState()
 
+    val toastMessage by vM.toastMessage.collectAsState()
+
     val context = LocalContext.current
+
+
 
     Column() {
         Header(stringResource(R.string.NewGroup), onGroupCancel)
@@ -34,9 +40,11 @@ fun NewGroup(
             InputField(name = stringResource(R.string.GroupName), description = temp.text, { x -> vM.setGroup(x)})
             InputField(name = stringResource(R.string.Description), description = temp2.text, { x -> vM.setDescription(x)})
             Button(onClick = {
-                    vM.addGroups()
-                    Toast.makeText(context, "Group added succesfully", Toast.LENGTH_LONG).show()
-                    onGroupCancel()
+                    if (vM.isValid(context)) {
+                        vM.addGroups(context)
+
+                        onGroupCancel()
+                    }
                 },
                 modifier = Modifier.padding(10.dp)) {
                 Text(stringResource(R.string.Add))
@@ -70,7 +78,9 @@ fun Header(title : String, onGroupCancel: () -> Unit) {
 @Composable
 fun InputField(name: String, description: String, edit: (String) -> Unit) {
 
-    Column(modifier = Modifier.padding(10.dp).fillMaxWidth()) {
+    Column(modifier = Modifier
+        .padding(10.dp)
+        .fillMaxWidth()) {
         Text(name, color = Color.Gray)
         OutlinedTextField(value = description, modifier = Modifier.fillMaxWidth(), onValueChange = { newText ->
             edit(newText)

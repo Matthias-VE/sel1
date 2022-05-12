@@ -50,6 +50,8 @@ fun HomeNavGraph(
                 },
                 onInvitesClicked = {
                     navController.navigate(HomeAppDestinations.ALLINV_ROUTE)
+                }, onSettingsPressed = {
+                    navController.navigate(BottomNavItem.Settings.screen_route)
                 }
             )
         }
