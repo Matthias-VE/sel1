@@ -1,12 +1,16 @@
 package com.heppihome.ui.navigation
 
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.ui.graphics.vector.ImageVector
 
-sealed class BottomNavItem(var title: String, var icon: Int, var screen_route:String){
+sealed class BottomNavItem(var title: String, var icon: ImageVector, var screen_route:String){
 
-    object Tasks: BottomNavItem("Tasks", android.R.drawable.ic_menu_edit, HomeAppDestinations.TASKS_ROUTE)
-    object Overview: BottomNavItem("Overview", android.R.drawable.ic_menu_my_calendar, "calendar")
-    object Shop : BottomNavItem("Shop", 666, HomeAppDestinations.SHOP_ROUTE)
-    object Settings: BottomNavItem("Settings", android.R.drawable.ic_menu_preferences, "settings")
+    object Tasks: BottomNavItem("Tasks", Icons.Filled.Edit, HomeAppDestinations.TASKS_ROUTE)
+    object Overview: BottomNavItem("Overview", Icons.Filled.DateRange, "calendar")
+    object Shop : BottomNavItem("Shop", Icons.Filled.ShoppingCart, HomeAppDestinations.SHOP_ROUTE)
+    object Settings: BottomNavItem("Settings", Icons.Filled.Settings, "settings")
 }

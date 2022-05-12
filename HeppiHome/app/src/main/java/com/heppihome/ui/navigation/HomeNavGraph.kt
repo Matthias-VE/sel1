@@ -2,15 +2,20 @@ package com.heppihome.ui.navigation
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.internal.ComposableLambda
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heppihome.data.models.Constants
 import com.heppihome.ui.components.Calendar
@@ -98,25 +103,26 @@ fun HomeNavGraph(
         }
 
         composable(BottomNavItem.Overview.screen_route) {
-            Scaffold() {
+            ContentWithNavbar(navController) {
                 HomeOverViewRoute()
             }
         }
 
         composable(HomeAppDestinations.SHOP_ROUTE) {
-
-            HomeShopRoute(hiltViewModel(),vM.selectedGroup)
-
+            ContentWithNavbar(navController) {
+                HomeShopRoute(hiltViewModel(),vM.selectedGroup)
+            }
         }
 
         composable(BottomNavItem.Tasks.screen_route) {
-
-            HomeTasksRoute(vM = hiltViewModel(), onBackPressed = {
-                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
-            },
-                onAddTask = {navController.navigate(HomeAppDestinations.TASK_ADD)},
-                onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)},
-                group = vM.selectedGroup)
+            ContentWithNavbar(navController) {
+                HomeTasksRoute(vM = hiltViewModel(), onBackPressed = {
+                    navController.navigate(HomeAppDestinations.GROUP_ROUTE)
+                },
+                    onAddTask = {navController.navigate(HomeAppDestinations.TASK_ADD)},
+                    onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)},
+                    group = vM.selectedGroup)
+            }
         }
 
         composable(HomeAppDestinations.TASK_ADD) {
@@ -142,10 +148,10 @@ fun HomeNavGraph(
 }
 
 @Composable
-fun ContentWithNavbar(content : @Composable Unit) {
+fun ContentWithNavbar(navController : NavController, content : @Composable() (BoxScope.() -> Unit)) {
     Scaffold(
-        bottomBar = BottomNavigation(navController = )
+        bottomBar = {BottomNavigation(navController) }
     ) {
-        
+        Box(modifier = Modifier.padding(it), content = content)
     }
 }
