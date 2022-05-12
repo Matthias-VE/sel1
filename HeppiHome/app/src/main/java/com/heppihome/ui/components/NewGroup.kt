@@ -42,8 +42,6 @@ fun NewGroup(
             Button(onClick = {
                     if (vM.isValid(context)) {
                         vM.addGroups(context)
-                        //Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show()
-                        println("hier word ik geprint")
 
                         onGroupCancel()
                     }

@@ -39,8 +39,9 @@ class AddGroupViewModel @Inject constructor(private val rep : HomeRepository) : 
         _description.value = TextFieldValue(newDes)
     }
 
-    fun setToast(newToast : String) {
+    fun setToast(newToast : String, context: Context) {
         _toastMessage.value = newToast
+        Toast.makeText(context, _toastMessage.value, Toast.LENGTH_LONG).show()
     }
 
     fun addGroups(context: Context) {
@@ -50,15 +51,11 @@ class AddGroupViewModel @Inject constructor(private val rep : HomeRepository) : 
         viewModelScope.launch {
             rep.addGroup(toAdd).collect {
                 when(it) {
-                    is ResultState.Success -> setToast("Group added succesfully") // Do something when succes
-                    is ResultState.Loading -> setToast("Loading...") // Do something while loading
-                    is ResultState.Failed -> setToast("Something went wrong\nPlease try again") // Do something when failed
+                    is ResultState.Success -> setToast("Group added succesfully", context) // Do something when succes
+                    is ResultState.Loading -> setToast("Processing...", context) // Do something while loading
+                    is ResultState.Failed -> setToast("Something went wrong\nPlease try again", context) // Do something when failed
                 }
             }
-
-            Toast.makeText(context, _toastMessage.value, Toast.LENGTH_LONG).show()
-            setGroup("")
-            setDescription("")
         }
     }
 
