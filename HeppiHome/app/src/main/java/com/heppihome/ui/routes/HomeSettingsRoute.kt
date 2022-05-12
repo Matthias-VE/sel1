@@ -22,22 +22,24 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.heppihome.R
 import com.heppihome.data.models.User
+import com.heppihome.ui.components.Topbar
 import com.heppihome.ui.components.TopbarNoBackArrow
 import com.heppihome.viewmodels.HomeSettingsViewModel
 
 @Composable
 fun HomeSettingsRoute(
+    onBackPressed : () -> Unit,
     onProfileClicked : () -> Unit
 ) {
 
     val vM : HomeSettingsViewModel = hiltViewModel()
-    HomeSettingsScreen(onProfileClicked)
+    HomeSettingsScreen(onBackPressed, onProfileClicked)
 }
 
 @Composable
-fun HomeSettingsScreen(onProfileClicked: () -> Unit) {
+fun HomeSettingsScreen(onBackPressed: () -> Unit, onProfileClicked: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        TopbarNoBackArrow(stringResource(R.string.Settings))
+        Topbar(stringResource(R.string.Settings), onBackPressed)
         AllSettings(onProfileClicked = onProfileClicked)
     }
 }

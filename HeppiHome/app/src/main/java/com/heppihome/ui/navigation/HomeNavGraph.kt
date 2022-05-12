@@ -116,7 +116,7 @@ fun HomeNavGraph(
             }
         }
 
-        composable(BottomNavItem.Tasks.screen_route) {
+        composable(HomeAppDestinations.TASKS_ROUTE) {
             ContentWithNavbar(navController) {
                 HomeTasksRoute(vM = hiltViewModel(), onBackPressed = {
                     navController.navigate(HomeAppDestinations.GROUP_ROUTE)
@@ -133,10 +133,15 @@ fun HomeNavGraph(
             })
         }
 
-        composable(BottomNavItem.Settings.screen_route){
-            HomeSettingsRoute( onProfileClicked = {
-                navController.navigate(HomeAppDestinations.PROFILE_ROUTE)
-            })
+        composable(HomeAppDestinations.SETTINGS_ROUTE){
+            HomeSettingsRoute(
+                onBackPressed = {
+                                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
+                },
+                onProfileClicked = {
+                    navController.navigate(HomeAppDestinations.PROFILE_ROUTE)
+                }
+            )
         }
 
         composable(HomeAppDestinations.PROFILE_ROUTE) {
