@@ -19,6 +19,23 @@ import javax.inject.Singleton
 class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
 
     lateinit var user : User
+    var isLoggedIn = false
+
+    init {
+        val u = getUser()
+        if (u != null) {
+            user = fuToUser(u)
+            isLoggedIn = true
+        }
+    }
+
+    private fun fuToUser(fu : FirebaseUser) : User {
+        var name = "default"
+        var email = "default"
+        fu.displayName?.let { name = it }
+        fu.email?.let { email = it }
+        return User(name, email, fu.uid)
+    }
 
     fun isAnonymousUser() : Boolean {
         return fdao.isAnonymousUser()
