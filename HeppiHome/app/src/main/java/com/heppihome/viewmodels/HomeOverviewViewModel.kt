@@ -3,6 +3,7 @@ package com.heppihome.viewmodels
 import android.util.Log
 import android.widget.CalendarView
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heppihome.Util.DateUtil
@@ -23,7 +24,9 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
     private val _groups : MutableStateFlow<List<Group>> = MutableStateFlow(emptyList())
     val groups : StateFlow<List<Group>> = _groups
 
-    private var groupsWithTasks : MutableMap<Group, List<Task>> = mutableMapOf()
+    private var _groupsWithTasks : MutableMap<Group, List<Task>> = mutableMapOf()
+    val groupsWithTasks : StateFlow<MutableMap<Group, List<Task>>> = MutableStateFlow(_groupsWithTasks)
+
 
     fun refreshGroups() {
         viewModelScope.launch {
@@ -53,14 +56,13 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
         cal.set(Calendar.YEAR, day)
     }
 
-    fun getGroupsWithTasks(groups : List<Group>, calendar : Calendar): MutableMap<Group, List<Task>> {
+    fun updateGroupsWithTasks(groups : List<Group>, calendar : Calendar) {
         viewModelScope.launch {
             for (group in groups) {
                 Log.d("groep", "$group")
                 getTasks(group, calendar)
             }
         }
-        return groupsWithTasks
     }
 
 
@@ -70,7 +72,7 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
                 when(it){
                     is ResultState.Success -> {
                         Log.d("data", "gettasks succes: ${it.data}")
-                        groupsWithTasks[group] = it.data}
+                        _groupsWithTasks[group] = it.data}
                     else -> {
                         Log.d("fail", "gettasks failed")
                         Unit}

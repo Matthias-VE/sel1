@@ -33,7 +33,7 @@ fun Calendar(date: String,
 ) {
     vM.refreshGroups()
     val groups by vM.groups.collectAsState()
-    var groupsWithTasks : MutableMap<Group, List<Task>> = mutableMapOf()
+    val groupsWithTasks by vM.groupsWithTasks.collectAsState()
     Scaffold(
         topBar = { TopbarNoBackArrow(title = stringResource(R.string.Calendar)) },
         content = {
@@ -46,15 +46,18 @@ fun Calendar(date: String,
                     factory = { CalendarView(it)},
                     update = {
                         it.setOnDateChangeListener(onDateChange)
-                        groupsWithTasks = vM.getGroupsWithTasks(groups, vM.cal)
+                        vM.updateGroupsWithTasks(groups, vM.cal)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
                 LazyColumn(modifier = Modifier.fillMaxWidth()){
                     items(1){
                         Text(text = "view tasks on $date")
-                        Text(text = "groupsWithTasks : $groupsWithTasks")
-                        Text(text= "$groups")
+                        Text(text = "groupsWithTasks:")
+                        for((group, tasks) in groupsWithTasks){
+                            Text(text = "groep ${group.name}, tasks $tasks")
+                        }
+                        Text(text= "groupsWithTasks: $groupsWithTasks")
                     }
                 }
             }
