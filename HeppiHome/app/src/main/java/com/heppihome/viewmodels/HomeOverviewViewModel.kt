@@ -50,10 +50,11 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
         month : Int,
         day : Int
     ) {
+        Log.i("datum", "$day, $month, $year")
         _date.value = DateUtil.formatDate(day, month, year)
-        cal.set(Calendar.DAY_OF_MONTH, year)
+        cal.set(Calendar.DAY_OF_MONTH, day)
         cal.set(Calendar.MONTH, month)
-        cal.set(Calendar.YEAR, day)
+        cal.set(Calendar.YEAR, year)
     }
 
     fun updateGroupsWithTasks(groups : List<Group>, calendar : Calendar) {
@@ -68,6 +69,7 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
 
     private fun getTasks(group : Group, calendar : Calendar) {
         viewModelScope.launch{
+            Log.i("taskdate", "${calendar.get(Calendar.DAY_OF_MONTH)}-${calendar.get(Calendar.MONTH)}-${calendar.get(Calendar.YEAR)}")
             rep.getTasksBetweenStartOfDayAnd24Hours(group, calendar).collect {
                 when(it){
                     is ResultState.Success -> {

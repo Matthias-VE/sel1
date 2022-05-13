@@ -33,6 +33,7 @@ fun Calendar(date: String,
 ) {
     vM.refreshGroups()
     val groups by vM.groups.collectAsState()
+    vM.updateGroupsWithTasks(groups, vM.cal)
     val groupsWithTasks by vM.groupsWithTasks.collectAsState()
     Scaffold(
         topBar = { TopbarNoBackArrow(title = stringResource(R.string.Calendar)) },
@@ -52,7 +53,8 @@ fun Calendar(date: String,
                 )
                 LazyColumn(modifier = Modifier.fillMaxWidth()){
                     items(1){
-                        Text(text = "view tasks on $date")
+                        Text(text = date)
+                        Text(text = "view tasks on ${vM.cal.get(java.util.Calendar.DAY_OF_MONTH)}-${vM.cal.get(java.util.Calendar.MONTH)}-${vM.cal.get(java.util.Calendar.YEAR)}")
                         Text(text = "groupsWithTasks:")
                         for((group, tasks) in groupsWithTasks){
                             Text(text = "groep ${group.name}, tasks $tasks")
