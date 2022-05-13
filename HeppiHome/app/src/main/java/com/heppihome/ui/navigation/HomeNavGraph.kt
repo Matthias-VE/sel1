@@ -92,7 +92,8 @@ fun HomeNavGraph(
         }
 
         composable(BottomNavItem.Overview.screen_route) {
-            HomeOverViewRoute()
+            HomeOverViewRoute(vM = hiltViewModel(),
+                onBackPressed = { navController.navigate(BottomNavItem.Overview.screen_route) })
         }
 
         composable(route = BottomNavItem.Tasks.screen_route) {

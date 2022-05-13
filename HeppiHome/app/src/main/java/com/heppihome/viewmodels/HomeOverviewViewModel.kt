@@ -1,5 +1,6 @@
 package com.heppihome.viewmodels
 
+import android.util.Log
 import android.widget.CalendarView
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
@@ -17,15 +18,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
-    private val cal = GregorianCalendar()
+    val cal = GregorianCalendar()
 
     private val _groups : MutableStateFlow<List<Group>> = MutableStateFlow(emptyList())
     val groups : StateFlow<List<Group>> = _groups
 
     private var groupsWithTasks : MutableMap<Group, List<Task>> = mutableMapOf()
-
-
-    fun getGroupsWithTasks() = MutableStateFlow(groupsWithTasks)
 
     fun refreshGroups() {
         viewModelScope.launch {
@@ -55,20 +53,35 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
         cal.set(Calendar.YEAR, day)
     }
 
-    fun getAllTasks(groups : List<Group>, calendar : Calendar){
-        for (group in groups){
-            getTasks(group, calendar)
+    fun getGroupsWithTasks(groups : List<Group>, calendar : Calendar): MutableMap<Group, List<Task>> {
+        viewModelScope.launch {
+            for (group in groups) {
+                Log.d("groep", "$group")
+                getTasks(group, calendar)
+            }
         }
+        return groupsWithTasks
     }
 
 
-    fun getTasks(group : Group, calendar : Calendar) {
+    private fun getTasks(group : Group, calendar : Calendar) {
         viewModelScope.launch{
             rep.getTasksBetweenStartOfDayAnd24Hours(group, calendar).collect {
                 when(it){
-                    is ResultState.Success -> groupsWithTasks[group] = it.data
-                    else -> Unit
+                    is ResultState.Success -> {
+                        Log.d("data", "gettasks succes: ${it.data}")
+                        groupsWithTasks[group] = it.data}
+                    else -> {
+                        Log.d("fail", "gettasks failed")
+                        Unit}
                 }
+            }
+        }
+    }
+
+    fun toggleTask(task: Task, group : Group) {
+        viewModelScope.launch {
+            rep.checkTask(task, group).collect {
             }
         }
     }
