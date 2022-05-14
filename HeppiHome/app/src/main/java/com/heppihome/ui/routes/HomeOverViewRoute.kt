@@ -5,25 +5,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.heppihome.data.models.Group
+import com.heppihome.data.models.Task
 import com.heppihome.ui.components.Calendar
 import com.heppihome.viewmodels.HomeOverviewViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun HomeOverViewRoute(
-    vM : HomeOverviewViewModel = hiltViewModel()
+    vM : HomeOverviewViewModel = hiltViewModel(),
+    group : Group
 ) {
+    vM.setGroup(group)
 
-    val date by vM.date.collectAsState()
     HomeOverViewScreen(
-        date,
+        vM,
         vM::onDateChange
     )
 }
 
 @Composable
 fun HomeOverViewScreen(
-    date : String,
-    onDateChange : (CalendarView, Int, Int, Int) -> Unit
+    vM: HomeOverviewViewModel,
+    onDateChange: (CalendarView, Int, Int, Int) -> Unit
 ) {
-    Calendar(date, onDateChange)
+    val format = SimpleDateFormat("kk:mm", Locale.getDefault())
+    Calendar(vM, onDateChange)
 }

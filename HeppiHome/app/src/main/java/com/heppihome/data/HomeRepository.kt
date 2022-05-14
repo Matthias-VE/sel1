@@ -148,6 +148,21 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
         fdao.removeListeners()
     }
 
+    fun getTasksBetweenStartOfDayAnd24Hours(group : Group, start : Calendar):
+            Flow<ResultState<List<Task>>> {
+        val copy = GregorianCalendar()
+        copy.set(Calendar.HOUR_OF_DAY, 0)
+        copy.set(Calendar.MINUTE, 0)
+        copy.set(Calendar.SECOND, 0)
+        copy.set(Calendar.YEAR, start.get(Calendar.YEAR))
+        copy.set(Calendar.MONTH, start.get(Calendar.MONTH))
+        copy.set(Calendar.DAY_OF_MONTH, start.get(Calendar.DAY_OF_MONTH))
+        val t1 = Timestamp(copy.time)
+        copy.add(Calendar.DAY_OF_YEAR, 1)
+        val t2 = Timestamp(copy.time)
+        return fdao.getTasksBetweenStartAndEnd(user, group, t1, t2)
+    }
+
     // This adds a task to a certain group
     fun addTask(task : Task, group: Group) : Flow<ResultState<DocumentReference>> =
         fdao.addTask(task, group)

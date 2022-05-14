@@ -106,7 +106,7 @@ fun HomeNavGraph(
 
         composable(BottomNavItem.Overview.screen_route) {
             ContentWithNavbar(navController) {
-                HomeOverViewRoute()
+                HomeOverViewRoute(vM = hiltViewModel(), vM.selectedGroup)
             }
         }
 

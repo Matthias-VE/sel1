@@ -42,6 +42,8 @@
     <string name="Loading">Laden</string>
     <string name="FeedbackGroupEdited">Groep is bewerkt</string>
     <string name="FeedbackGroupDeleted">Groep is verwijderd</string>
+    <string name="No">Nee</string>
+    <string name="Yes">Ja</string>
 
     <!-- FireBase -->
     <string name="fui_progress_dialog_loading" translation_description="Loading text in dialog">Laden…</string>
