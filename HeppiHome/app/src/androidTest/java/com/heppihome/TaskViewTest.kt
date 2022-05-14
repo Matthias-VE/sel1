@@ -11,6 +11,7 @@ import com.heppihome.ui.theme.HeppiHomeTheme
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.*
+import java.text.SimpleDateFormat
 
 class TaskViewTest {
 
@@ -34,7 +35,9 @@ class TaskViewTest {
                     onChecked = test1,
                     group = Group(),
                     onBackPressed = test2,
-                    onInvitePerson = test2)
+                    onInvitePerson = test2,
+                    SimpleDateFormat("kk:mm", java.util.Locale.getDefault())
+                )
             }
         }
         composeTestRule.onNodeWithText("test_tommorow").assertExists("task niet zichtbaar")

@@ -113,10 +113,16 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     // Remove current user from group
     fun leaveGroup(group : Group) : Flow<ResultState<String>> = fdao.removePersonFromGroupId(user, group.id)
 
-    // Register a listener to changes to tasks in a certain group
-    fun registerTaskSnapshotListener(listener : (QuerySnapshot?, FirebaseFirestoreException?) -> Unit, group : Group) {
-        fdao.registerTaskSnapshotListener(listener, group)
+    fun addAdminToGroup(otherUser : User, groupId : String) =
+        fdao.makeOtherUserAdmin(otherUser, groupId)
+
+    fun isAdmin(g : Group) : Boolean {
+        return user.id in g.admins
     }
+
+    fun removeAdminFromGroup(otherUser: User, groupId: String) =
+        fdao.removeUserFromAdmin(otherUser, groupId)
+
 
     fun registerTodayTasksListenerForUserAndGroup(listener: (QuerySnapshot?, FirebaseFirestoreException?) -> Unit,
                                                   group : Group) {
@@ -152,9 +158,30 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     fun addTask(task : Task, group: Group) : Flow<ResultState<DocumentReference>> =
         fdao.addTask(task, group)
 
+    fun updatePoints(group : Group, toBeAdded : Int) =
+        fdao.updatePoints(user.id, group.id, toBeAdded)
+
+    fun updatePointsWithUser(uid : String, groupId : String, toBeAdded: Int) =
+        fdao.updatePoints(uid, groupId, toBeAdded)
+
     // This updates a task in a certain group's entry 'done' field. Changes true to false and false to true
-    fun checkTask(task : Task, group : Group) : Flow<ResultState<DocumentReference>> =
-        fdao.checkTask(task, group)
+    fun checkTask(task : Task, group : Group) : Flow<ResultState<String>> = flow<ResultState<String>> {
+        val toAdd = !task.done
+        emit(ResultState.loading())
+        fdao.checkTask(task, group).collect { result ->
+            if (result is ResultState.Success) {
+                for (u in task.users) {
+                    val user = fdao.getUserForId(u)
+                    if (user != null) {
+                        if (toAdd) fdao.updatePoints(user.id, group.id, task.points).collect { emit(it) }
+                        else fdao.updatePoints(user.id, group.id, -task.points).collect { emit(it) }
+                    }
+                }
+            }
+        }
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
 
     fun getPoints(gid : String) =
         fdao.getPoints(user, gid)
@@ -163,4 +190,22 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
         listener : (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit,
         gid : String
     ) = fdao.addPointsListener(listener, user, gid)
+
+    fun getShopItems(gid : String) =
+        fdao.getAllShopItems(gid)
+
+    fun addItemToShop(groupId: String, shopItem: ShopItem) =
+        fdao.addItemToShop(groupId, shopItem)
+
+    fun removeItemFromShop(gid : String, item : ShopItem) =
+        fdao.deleteShopItem(gid, item)
+
+    fun editShopItemInShop(gid : String, sitem : ShopItem) =
+        fdao.updateShopItem(gid, sitem)
+
+    fun addItemToInventory(gid : String, sitem : ShopItem) =
+        fdao.addShopItemToInventory(user, gid, sitem)
+
+    fun cashInInventoryItem(gid : String, sitem : ShopItem) =
+        fdao.deleteShopItemFromInventory(user, gid, sitem)
 }

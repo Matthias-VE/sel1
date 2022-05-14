@@ -17,12 +17,12 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
 
-    private var testGroup : Group = Group("test groep", "dit is een groep dus", listOf(), "KXuXm9sRW43maz0Dbi2u")
+    private var _group : Group = Group()
 
     private val _tasksTod = MutableStateFlow<List<Task>>(emptyList())
     private val _tasksTom = MutableStateFlow<List<Task>>(emptyList())
 
-    val group = {testGroup}
+    val group = {_group}
     val tasksToday : StateFlow<List<Task>> = _tasksTod
 
     val tasksTomorrow : StateFlow<List<Task>> = _tasksTom
@@ -30,10 +30,7 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
     private var _expanded : MutableStateFlow<Boolean> = MutableStateFlow(false)
     var expanded : StateFlow<Boolean> = _expanded
 
-    init {
-        rep.registerTaskSnapshotListener(this::taskListenerToday, testGroup)
-        rep.registerTaskSnapshotListener(this::taskListenerTomorrow, testGroup)
-    }
+
     private fun taskListenerToday(value : QuerySnapshot?, ex : FirebaseFirestoreException?) {
         if (ex != null) {
             Log.w("HomeMainViewModel", "Listen failed.", ex)
@@ -60,9 +57,9 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     fun onChangeGroup(group : Group) {
         rep.removeListeners()
-        testGroup = group
-        rep.registerTodayTasksListenerForUserAndGroup(this::taskListenerToday, testGroup)
-        rep.registerTomorrowTasksListenerForUserAndGroup(this::taskListenerTomorrow, testGroup)
+        _group = group
+        rep.registerTodayTasksListenerForUserAndGroup(this::taskListenerToday, _group)
+        rep.registerTomorrowTasksListenerForUserAndGroup(this::taskListenerTomorrow, _group)
     }
 
     fun onGoBack() {
@@ -75,12 +72,12 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     fun toggleTask(t : Task) {
         viewModelScope.launch {
-            rep.checkTask(t, testGroup).collect {
+            rep.checkTask(t, _group).collect {
             }
         }
     }
 
-    fun addTask(t : Task , g : Group = testGroup) {
+    fun addTask(t : Task , g : Group = _group) {
         viewModelScope.launch {
             rep.addTask(t, g).collect { s ->
             }

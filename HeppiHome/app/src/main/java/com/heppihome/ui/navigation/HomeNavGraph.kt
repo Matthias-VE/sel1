@@ -112,7 +112,7 @@ fun HomeNavGraph(
 
         composable(HomeAppDestinations.SHOP_ROUTE) {
             ContentWithNavbar(navController) {
-                HomeShopRoute(hiltViewModel(),vM.selectedGroup)
+                HomeShopRoute(hiltViewModel(),vM.selectedGroup, {})
             }
         }
 
