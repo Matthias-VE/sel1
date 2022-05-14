@@ -203,6 +203,9 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     fun editShopItemInShop(gid : String, sitem : ShopItem) =
         fdao.updateShopItem(gid, sitem)
 
+    fun getAllInventoryItems(gid : String) =
+        fdao.getAllInventoryItems(user.id, gid)
+
     fun addItemToInventory(gid : String, sitem : ShopItem) =
         fdao.addShopItemToInventory(user, gid, sitem)
 

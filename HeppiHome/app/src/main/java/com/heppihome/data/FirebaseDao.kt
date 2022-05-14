@@ -297,6 +297,19 @@ class FirebaseDao {
         emit(ResultState.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
+    fun getAllInventoryItems(uid : String, gid : String) = flow {
+        emit(ResultState.loading())
+
+        val items = userDoc.document(uid).collection(COLLECTION_SHOP).document(gid)
+            .collection(COLLECTION_INVENTORY).orderBy("points")
+            .get().await().toObjects(ShopItem::class.java)
+        emit(ResultState.success(items))
+
+    }.catch{
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
     fun addShopItemToInventory(user : User, groupId : String, item : ShopItem) =
         flow {
             emit(ResultState.loading())

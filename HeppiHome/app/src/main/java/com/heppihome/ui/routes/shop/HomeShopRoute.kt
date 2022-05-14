@@ -1,4 +1,4 @@
-package com.heppihome.ui.routes
+package com.heppihome.ui.routes.shop
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,13 +29,15 @@ import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.ShopItem
 import com.heppihome.ui.components.TopbarNoBackArrow
-import com.heppihome.viewmodels.HomeShopViewModel
+import com.heppihome.ui.components.TopbarWithIcon
+import com.heppihome.viewmodels.shop.HomeShopViewModel
 
 @Composable
 fun HomeShopRoute(
     vM : HomeShopViewModel = hiltViewModel(),
     g : Group,
-    goToItemDetail : (ShopItem) -> Unit
+    goToItemDetail : (ShopItem) -> Unit,
+    goToInventory : () -> Unit
 ){
     vM.setGroup(g)
     vM.refreshItems()
@@ -45,6 +48,7 @@ fun HomeShopRoute(
     val buySuccess by vM.buySuccess.collectAsState()
 
     HomeShopScreen(
+        goToInventory,
         buySuccess,
         vM::resetSuccess,
         points = points.points,
@@ -57,6 +61,7 @@ fun HomeShopRoute(
 
 @Composable
 fun HomeShopScreen(
+    goToInventory : () -> Unit,
     buySuccess : Pair<Boolean, Boolean>,
     reset : () -> Unit,
     points : Int,
@@ -71,7 +76,7 @@ fun HomeShopScreen(
     }
 
     Column() {
-        TopbarNoBackArrow(title = "Shop")
+        TopbarWithIcon(title = "Shop", Icons.Filled.List, "Inventory", goToInventory)
         PointsDisplay(points = points)
         Spacer(modifier = Modifier.height(15.dp))
         ShopItems(l = items, onBuyItem = onBuyItem, clickable = clickable, onClickItem = onClickItem)
@@ -182,6 +187,7 @@ fun ListShopItem(
 @Composable
 fun HomeShopRoutePreview() {
     HomeShopScreen(
+        {},
         Pair(false, false),
         {},
         points = 100,

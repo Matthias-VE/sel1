@@ -1,11 +1,10 @@
-package com.heppihome.viewmodels
+package com.heppihome.viewmodels.shop
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.*
 import dagger.hilt.android.lifecycle.HiltViewModel
