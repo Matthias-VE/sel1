@@ -7,21 +7,21 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.heppihome.data.FirebaseDao
 import com.heppihome.data.HomeRepository
-import com.heppihome.ui.components.NewGroup
+import com.heppihome.data.models.Group
+import com.heppihome.ui.components.EditGroup
 import com.heppihome.ui.theme.HeppiHomeTheme
-import com.heppihome.viewmodels.groups.AddGroupViewModel
-import org.junit.After
+import com.heppihome.viewmodels.groups.EditGroupViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.validateMockitoUsage
 import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.*
+import org.mockito.kotlin.atLeastOnce
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
-
-class NewGroupTest {
+class EditGroupTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -29,7 +29,7 @@ class NewGroupTest {
     @Mock
     private lateinit var repository: HomeRepository
     @Mock
-    private lateinit var vM : AddGroupViewModel
+    private lateinit var vM : EditGroupViewModel
 
     private lateinit var test: () -> Unit
 
@@ -37,56 +37,54 @@ class NewGroupTest {
     fun init(){
         MockitoAnnotations.openMocks(this)
         repository = Mockito.mock(HomeRepository(Mockito.mock(FirebaseDao::class.java))::class.java)
-        vM = AddGroupViewModel(repository)
+        vM = EditGroupViewModel(repository)
         test = mock<() -> Unit>()
         composeTestRule.setContent {
             HeppiHomeTheme {
-                NewGroup(vM = vM, onGroupCancel = test)
+                EditGroup(vM = vM, onGroupCancel = test, g = Group())
             }
         }
-    }
-
-    @After
-    fun validate() {
-        validateMockitoUsage()
     }
 
     @Test
     fun titleExists(){
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-        @StringRes val label : String = context.resources.getString(R.string.NewGroup)
+        @StringRes val label : String = context.resources.getString(R.string.EditGroup)
         composeTestRule.onNodeWithText(label).assertIsDisplayed()
     }
 
     @Test
-    fun testFieldEmpty(){
+    fun fieldContentDisplayedCorrectly(){
+        val default = "default"
+
         val context1: Context = InstrumentationRegistry.getInstrumentation().targetContext
         @StringRes val label1 : String = context1.resources.getString(R.string.GroupName)
         val context2: Context = InstrumentationRegistry.getInstrumentation().targetContext
         @StringRes val label2 : String = context2.resources.getString(R.string.Description)
 
         composeTestRule.onNodeWithText(label1).onSiblings().filter(hasSetTextAction()).onFirst()
-            .assertTextEquals("")
+            .assertTextEquals(default)
         composeTestRule.onNodeWithText(label2).onSiblings().filter(hasSetTextAction()).onLast()
-            .assertTextEquals("")
+            .assertTextEquals(default)
     }
 
     @Test
-    fun testFieldContent(){
-        val naam = "Groepsnaam"
-        val beschrijving = "De tofste groep"
+    fun fieldContentEditable(){
+        val groep = "groep 12"
+        val beschrijving = "sel groep"
 
         val context1: Context = InstrumentationRegistry.getInstrumentation().targetContext
-        @StringRes val label1 : String = context1.resources.getString(com.heppihome.R.string.GroupName)
+        @StringRes val label1 : String = context1.resources.getString(R.string.GroupName)
         val context2: Context = InstrumentationRegistry.getInstrumentation().targetContext
-        @StringRes val label2 : String = context2.resources.getString(com.heppihome.R.string.Description)
+        @StringRes val label2 : String = context2.resources.getString(R.string.Description)
 
         composeTestRule.onNodeWithText(label1).onSiblings().filter(hasSetTextAction()).onFirst()
-            .performTextInput(naam)
+            .performTextReplacement(groep)
         composeTestRule.onNodeWithText(label2).onSiblings().filter(hasSetTextAction()).onLast()
-            .performTextInput(beschrijving)
+            .performTextReplacement(beschrijving)
+
         composeTestRule.onNodeWithText(label1).onSiblings().filter(hasSetTextAction()).onFirst()
-            .assertTextEquals(naam)
+            .assertTextEquals(groep)
         composeTestRule.onNodeWithText(label2).onSiblings().filter(hasSetTextAction()).onLast()
             .assertTextEquals(beschrijving)
     }

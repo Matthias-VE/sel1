@@ -9,11 +9,18 @@ class ComposeTestApplication {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
+    // error met theme
 
     @Test
-    fun testBottomBar(){
+    fun testBottomBarExists(){
         composeTestRule.onNodeWithContentDescription("Tasks").assertExists()
         composeTestRule.onNodeWithContentDescription("Overview").assertExists()
         composeTestRule.onNodeWithContentDescription("Settings").assertExists()
     }
+
+    // testTaskNav
+
+    // testOverviewNav
+
+    // testSettingsNav
 }
