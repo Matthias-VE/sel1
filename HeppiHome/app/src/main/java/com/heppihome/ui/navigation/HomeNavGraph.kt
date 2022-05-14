@@ -47,12 +47,12 @@ fun HomeNavGraph(
         }
         
         composable(HomeAppDestinations.GROUP_ROUTE) {
-            HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {vM.selectedGroup = it;
+            HomeGroupRoute(vM = hiltViewModel(), onGroupClicked = {
                 navController.navigate(HomeAppDestinations.TASKS_ROUTE) },
                 onNewGroupClicked = {
                     navController.navigate(HomeAppDestinations.GROUP_ADD)
                 }, onEditGroupClicked = {
-                    vM.toEditGroup = it;
+                    vM.toEditGroup = it
                     navController.navigate(HomeAppDestinations.GROUP_EDIT)
                 },
                 onInvitesClicked = {
@@ -72,14 +72,13 @@ fun HomeNavGraph(
         composable(HomeAppDestinations.INVITE_ROUTE) {
             HomeInvitePersonRoute(hiltViewModel(), {
                 navController.navigate(BottomNavItem.Tasks.screen_route)
-            },
-                vM.selectedGroup
+            }
             )
         }
 
         composable(HomeAppDestinations.ALLINV_ROUTE) {
             HomeInvitesRoute(vM = hiltViewModel(),
-                {vM.selectedInvite = it;
+                {vM.selectedInvite = it
                     navController.navigate(HomeAppDestinations.INVITE_DETAIL)},
                 {navController.navigate(HomeAppDestinations.GROUP_ROUTE)}
             )
@@ -108,7 +107,7 @@ fun HomeNavGraph(
 
         composable(HomeAppDestinations.SHOP_ROUTE) {
             ContentWithNavbar(navController) {
-                HomeShopRoute(hiltViewModel(),vM.selectedGroup, {} ,
+                HomeShopRoute(hiltViewModel(), {} ,
                     {navController.navigate(HomeAppDestinations.INVENTORY_ROUTE)}
                 )
             }
@@ -118,8 +117,7 @@ fun HomeNavGraph(
             ContentWithNavbar(navController = navController) {
                 HomeInventoryRoute(
                     vM = hiltViewModel(),
-                    onBackPressed = { navController.navigate(HomeAppDestinations.SHOP_ROUTE) },
-                    group = vM.selectedGroup
+                    onBackPressed = { navController.navigate(HomeAppDestinations.SHOP_ROUTE) }
                 )
             }
         }
@@ -130,13 +128,12 @@ fun HomeNavGraph(
                     navController.navigate(HomeAppDestinations.GROUP_ROUTE)
                 },
                     onAddTask = {navController.navigate(HomeAppDestinations.TASK_ADD)},
-                    onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)},
-                    group = vM.selectedGroup)
+                    onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)})
             }
         }
 
         composable(HomeAppDestinations.TASK_ADD) {
-            AddTaskRoute(vM = hiltViewModel(), vM.selectedGroup, onCancelled = {
+            AddTaskRoute(vM = hiltViewModel(), onCancelled = {
                 navController.navigate(BottomNavItem.Tasks.screen_route)
             })
         }
@@ -163,7 +160,7 @@ fun HomeNavGraph(
 }
 
 @Composable
-fun ContentWithNavbar(navController : NavController, content : @Composable() (BoxScope.() -> Unit)) {
+fun ContentWithNavbar(navController : NavController, content : @Composable (BoxScope.() -> Unit)) {
     Scaffold(
         bottomBar = {BottomNavigation(navController) }
     ) {

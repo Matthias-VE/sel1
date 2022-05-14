@@ -24,10 +24,9 @@ import com.heppihome.viewmodels.shop.HomeInventoryViewModel
 @Composable
 fun HomeInventoryRoute(
     vM : HomeInventoryViewModel,
-    onBackPressed : () -> Unit,
-    group : Group
+    onBackPressed : () -> Unit
 ){
-    vM.setGroup(group)
+    vM.refreshInventory()
 
     val items by vM.inventory.collectAsState()
 

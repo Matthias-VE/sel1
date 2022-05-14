@@ -17,12 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
 
-    private var _group : Group = Group()
-
     private val _tasksTod = MutableStateFlow<List<Task>>(emptyList())
     private val _tasksTom = MutableStateFlow<List<Task>>(emptyList())
 
-    val group = {_group}
     val tasksToday : StateFlow<List<Task>> = _tasksTod
 
     val tasksTomorrow : StateFlow<List<Task>> = _tasksTom
@@ -30,6 +27,7 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
     private var _expanded : MutableStateFlow<Boolean> = MutableStateFlow(false)
     var expanded : StateFlow<Boolean> = _expanded
 
+    val group = {rep.selectedGroup}
 
     private fun taskListenerToday(value : QuerySnapshot?, ex : FirebaseFirestoreException?) {
         if (ex != null) {
@@ -55,11 +53,9 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
         _tasksTom.value = newList
     }
 
-    fun onChangeGroup(group : Group) {
-        rep.removeListeners()
-        _group = group
-        rep.registerTodayTasksListenerForUserAndGroup(this::taskListenerToday, _group)
-        rep.registerTomorrowTasksListenerForUserAndGroup(this::taskListenerTomorrow, _group)
+    fun startListeners() {
+        rep.registerTodayTasksListenerForUserAndGroup(this::taskListenerToday)
+        rep.registerTomorrowTasksListenerForUserAndGroup(this::taskListenerTomorrow)
     }
 
     fun onGoBack() {
@@ -72,15 +68,9 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     fun toggleTask(t : Task) {
         viewModelScope.launch {
-            rep.checkTask(t, _group).collect {
+            rep.checkTask(t).collect {
             }
         }
     }
 
-    fun addTask(t : Task , g : Group = _group) {
-        viewModelScope.launch {
-            rep.addTask(t, g).collect { s ->
-            }
-        }
-    }
 }

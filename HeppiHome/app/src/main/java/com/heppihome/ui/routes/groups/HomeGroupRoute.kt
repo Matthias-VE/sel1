@@ -35,7 +35,7 @@ import kotlin.math.roundToInt
 @Composable
 fun HomeGroupRoute(
     vM : HomeGroupViewModel,
-    onGroupClicked : (Group) -> Unit,
+    onGroupClicked : () -> Unit,
     onNewGroupClicked : () -> Unit,
     onEditGroupClicked : (Group) -> Unit,
     onInvitesClicked: () -> Unit,
@@ -47,7 +47,7 @@ fun HomeGroupRoute(
 
     HomeGroupScreen(
         groups,
-        onGroupClicked,
+        {vM.setGroup(it); onGroupClicked()},
         expanded,
         vM::expandGroupMenu,
         onNewGroupClicked,

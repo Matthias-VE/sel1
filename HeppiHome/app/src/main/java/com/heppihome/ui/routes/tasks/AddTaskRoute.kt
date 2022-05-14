@@ -41,10 +41,11 @@ import java.util.*
 @Composable
 fun AddTaskRoute(
     vM : AddTaskViewModel = hiltViewModel(),
-    group : Group,
     onCancelled: () -> Unit
 ) {
-    vM.usersInGroup(group)
+    vM.usersInGroup()
+
+    val isAdmin by vM.isAdmin.collectAsState()
     val name by vM.name.collectAsState()
     val points by vM.points.collectAsState()
     val users by vM.users.collectAsState()
@@ -61,7 +62,7 @@ fun AddTaskRoute(
         vM::checkUser,
         onCancelled,
         {vM.updateName(it)},
-        {vM.addTask(group); onCancelled()},
+        {vM.addTask(); onCancelled()},
         hours, date,
         vM::updateDate,
         vM::updateHours,

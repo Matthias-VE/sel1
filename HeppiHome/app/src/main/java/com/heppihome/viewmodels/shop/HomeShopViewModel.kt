@@ -23,18 +23,17 @@ class HomeShopViewModel @Inject constructor(private val rep : HomeRepository) : 
     private val _shopItems = MutableStateFlow<List<ShopItem>>(emptyList())
     val shopItems = _shopItems.asStateFlow()
 
-    private val _isAdmin = MutableStateFlow(false)
+    private val _isAdmin = MutableStateFlow(rep.isAdmin)
     val isAdmin = _isAdmin.asStateFlow()
 
     private val _buySuccess = MutableStateFlow(Pair(false, false))
     val buySuccess = _buySuccess.asStateFlow()
 
-    private var group : Group = Group()
-
 
     fun refreshItems() {
+        _isAdmin.value = rep.isAdmin
         viewModelScope.launch {
-            rep.getShopItems(group.id).collect {
+            rep.getShopItems().collect {
                 if (it is ResultState.Success) {
                     _shopItems.value = it.data
                 }
@@ -49,8 +48,8 @@ class HomeShopViewModel @Inject constructor(private val rep : HomeRepository) : 
     fun buyItem(si : ShopItem) : Boolean {
         return if (si.points <= _points.value.points) {
             viewModelScope.launch{
-                rep.updatePoints(group, -si.points).collect { if (it is ResultState.Success) _buySuccess.value = Pair(true, false) }
-                rep.addItemToInventory(group.id, si).collect { if (it is ResultState.Success) _buySuccess.value = Pair(true, true) }
+                rep.updatePoints(toBeAdded = -si.points).collect { if (it is ResultState.Success) _buySuccess.value = Pair(true, false) }
+                rep.addItemToInventory(sitem = si).collect { if (it is ResultState.Success) _buySuccess.value = Pair(true, true) }
             }
             true
         } else false
@@ -70,10 +69,9 @@ class HomeShopViewModel @Inject constructor(private val rep : HomeRepository) : 
         } else return
     }
 
-    fun setGroup(g : Group) {
-        group = g
-        _isAdmin.value = rep.isAdmin(g)
-        rep.registerPointsListener(this::pointsListener, g.id)
+    fun setListener() {
+        _isAdmin.value = rep.isAdmin
+        rep.registerPointsListener(this::pointsListener)
     }
 
 }

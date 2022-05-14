@@ -19,13 +19,11 @@ fun HomeTasksRoute(
     vM : HomeTasksViewModel,
     onAddTask : () -> Unit,
     onBackPressed : () -> Unit,
-    onInvitePerson: () -> Unit,
-    group : Group?
+    onInvitePerson: () -> Unit
 ){
 
-    group?.let {
-        vM.onChangeGroup(it)
-    }
+    vM.startListeners()
+
     val tasksToday by vM.tasksToday.collectAsState()
     val tasksTomorrow by vM.tasksTomorrow.collectAsState()
     val expanded by vM.expanded.collectAsState()

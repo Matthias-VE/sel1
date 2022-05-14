@@ -43,6 +43,16 @@ class FirebaseDao {
         groupDoc = db.collection(COLLECTION_GROUPS)
         userDoc = db.collection(COLLECTION_USERS)
     }
+
+    fun registerGroupListener(
+        listener: (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit,
+        gid : String
+    ) {
+        listeners.add(
+            groupDoc.document(gid).addSnapshotListener(listener)
+        )
+    }
+
     fun registerListenerForRecentTasks(
         listener : (QuerySnapshot?, FirebaseFirestoreException?) -> Unit,
         group : Group,
@@ -332,6 +342,12 @@ class FirebaseDao {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
 
+
+    suspend fun getAllAdmins(gid : String) : List<String> {
+        val group = groupDoc.document(gid).get().await().toObject(Group::class.java)
+        return group?.admins ?: emptyList()
+    }
+
     fun makeOtherUserAdmin(otherUser : User, groupId : String) = flow {
         emit(ResultState.loading())
         groupDoc.document(groupId).update("admins", FieldValue.arrayUnion(otherUser.id)).await()
@@ -344,7 +360,7 @@ class FirebaseDao {
     fun removeUserFromAdmin(otherUser: User, groupId: String) = flow {
         emit(ResultState.loading())
         groupDoc.document(groupId).update("admins", FieldValue.arrayRemove(otherUser.id)).await()
-        emit(ResultState.success("Successfully made ${otherUser.name} admin"))
+        emit(ResultState.success("Successfully removed ${otherUser.name} from admin"))
     }.catch {
         emit(ResultState.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)

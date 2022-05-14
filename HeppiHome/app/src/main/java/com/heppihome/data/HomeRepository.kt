@@ -10,6 +10,7 @@ import com.heppihome.BuildConfig
 import com.heppihome.data.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -19,7 +20,34 @@ import javax.inject.Singleton
 class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
 
     lateinit var user : User
+
     var isLoggedIn = false
+
+    var selectedGroup : Group = Group()
+        private set(value) {field = value; isAdmin = user.id in value.admins}
+
+    var isAdmin = false
+
+    private fun groupListener(value : DocumentSnapshot?, ex : FirebaseFirestoreException?)
+    {
+        if (ex != null) {
+            Log.w("HomeMainViewModel", "Listen failed.", ex)
+            return
+        }
+        if (value == null) {
+            return
+        }
+        val newGroup = value.toObject(Group::class.java)
+        if (newGroup != null) {
+            selectedGroup = newGroup
+        } else return
+    }
+
+    fun changeGroup(g : Group) {
+        removeListeners()
+        selectedGroup = g
+        registerSelectedGroupListener(this::groupListener, g.id)
+    }
 
     init {
         val u = getUser()
@@ -27,6 +55,10 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
             user = fuToUser(u)
             isLoggedIn = true
         }
+    }
+
+    fun registerSelectedGroupListener(listener: (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit, gid : String) {
+        fdao.registerGroupListener(listener, gid)
     }
 
     private fun fuToUser(fu : FirebaseUser) : User {
@@ -72,7 +104,7 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
         fdao.addUser(u)
     }
 
-    suspend fun sendInviteTo(emailTo : String, g : Group) : Boolean {
+    suspend fun sendInviteTo(emailTo : String, g : Group = selectedGroup) : Boolean {
         return fdao.addInviteToPerson(emailTo,user.email, g)
     }
 
@@ -97,7 +129,7 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     fun addGroup(group : Group) : Flow<ResultState<DocumentReference>> =
         fdao.addGroup(group)
 
-    fun editGroup(group : Group, newName : String, newDesc : String) : Flow<ResultState<String>> {
+    fun editGroup(group : Group , newName : String, newDesc : String) : Flow<ResultState<String>> {
         var nameCheck = newName.trim()
         var descCheck = newDesc.trim()
         if (nameCheck.isEmpty() && descCheck.isEmpty()) {
@@ -108,24 +140,23 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
         return fdao.editGroup(group, nameCheck, descCheck)
     }
     // Delete group from existence
-    fun deleteGroup(group : Group) : Flow<ResultState<String>> = fdao.deleteGroup(group)
+    fun deleteGroup(group : Group = selectedGroup) : Flow<ResultState<String>> =
+        fdao.deleteGroup(group)
 
     // Remove current user from group
-    fun leaveGroup(group : Group) : Flow<ResultState<String>> = fdao.removePersonFromGroupId(user, group.id)
+    fun leaveGroup(group : Group = selectedGroup) : Flow<ResultState<String>> =
+        fdao.removePersonFromGroupId(user, group.id)
 
-    fun addAdminToGroup(otherUser : User, groupId : String) =
+    fun addAdminToGroup(otherUser : User, groupId : String = selectedGroup.id) =
         fdao.makeOtherUserAdmin(otherUser, groupId)
 
-    fun isAdmin(g : Group) : Boolean {
-        return user.id in g.admins
-    }
 
-    fun removeAdminFromGroup(otherUser: User, groupId: String) =
+    fun removeAdminFromGroup(otherUser: User, groupId: String = selectedGroup.id) =
         fdao.removeUserFromAdmin(otherUser, groupId)
 
 
     fun registerTodayTasksListenerForUserAndGroup(listener: (QuerySnapshot?, FirebaseFirestoreException?) -> Unit,
-                                                  group : Group) {
+                                                  group : Group = selectedGroup) {
         val cal = GregorianCalendar()
         cal.set(Calendar.HOUR_OF_DAY, 0)
         cal.set(Calendar.MINUTE, 0)
@@ -137,7 +168,7 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     }
 
     fun registerTomorrowTasksListenerForUserAndGroup(listener: (QuerySnapshot?, FirebaseFirestoreException?) -> Unit,
-                                                     group : Group) {
+                                                     group : Group = selectedGroup) {
         val cal = GregorianCalendar()
         cal.set(Calendar.HOUR_OF_DAY, 0)
         cal.set(Calendar.MINUTE, 0)
@@ -155,17 +186,17 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     }
 
     // This adds a task to a certain group
-    fun addTask(task : Task, group: Group) : Flow<ResultState<DocumentReference>> =
+    fun addTask(task : Task, group: Group = selectedGroup) : Flow<ResultState<DocumentReference>> =
         fdao.addTask(task, group)
 
-    fun updatePoints(group : Group, toBeAdded : Int) =
+    fun updatePoints(group : Group = selectedGroup, toBeAdded : Int) =
         fdao.updatePoints(user.id, group.id, toBeAdded)
 
-    fun updatePointsWithUser(uid : String, groupId : String, toBeAdded: Int) =
+    fun updatePointsWithUser(uid : String, groupId : String = selectedGroup.id, toBeAdded: Int) =
         fdao.updatePoints(uid, groupId, toBeAdded)
 
     // This updates a task in a certain group's entry 'done' field. Changes true to false and false to true
-    fun checkTask(task : Task, group : Group) : Flow<ResultState<String>> = flow<ResultState<String>> {
+    fun checkTask(task : Task, group : Group = selectedGroup) : Flow<ResultState<String>> = flow<ResultState<String>> {
         val toAdd = !task.done
         emit(ResultState.loading())
         fdao.checkTask(task, group).collect { result ->
@@ -183,32 +214,32 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
         emit(ResultState.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
-    fun getPoints(gid : String) =
+    fun getPoints(gid : String = selectedGroup.id) =
         fdao.getPoints(user, gid)
 
     fun registerPointsListener(
         listener : (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit,
-        gid : String
+        gid : String = selectedGroup.id
     ) = fdao.addPointsListener(listener, user, gid)
 
-    fun getShopItems(gid : String) =
+    fun getShopItems(gid : String = selectedGroup.id) =
         fdao.getAllShopItems(gid)
 
-    fun addItemToShop(groupId: String, shopItem: ShopItem) =
+    fun addItemToShop(groupId: String = selectedGroup.id, shopItem: ShopItem) =
         fdao.addItemToShop(groupId, shopItem)
 
-    fun removeItemFromShop(gid : String, item : ShopItem) =
+    fun removeItemFromShop(gid : String = selectedGroup.id, item : ShopItem) =
         fdao.deleteShopItem(gid, item)
 
-    fun editShopItemInShop(gid : String, sitem : ShopItem) =
+    fun editShopItemInShop(gid : String = selectedGroup.id, sitem : ShopItem) =
         fdao.updateShopItem(gid, sitem)
 
-    fun getAllInventoryItems(gid : String) =
+    fun getAllInventoryItems(gid: String = selectedGroup.id) =
         fdao.getAllInventoryItems(user.id, gid)
 
-    fun addItemToInventory(gid : String, sitem : ShopItem) =
+    fun addItemToInventory (gid : String = selectedGroup.id, sitem : ShopItem) =
         fdao.addShopItemToInventory(user, gid, sitem)
 
-    fun cashInInventoryItem(gid : String, sitem : ShopItem) =
+    fun cashInInventoryItem(gid : String = selectedGroup.id, sitem : ShopItem) =
         fdao.deleteShopItemFromInventory(user, gid, sitem)
 }

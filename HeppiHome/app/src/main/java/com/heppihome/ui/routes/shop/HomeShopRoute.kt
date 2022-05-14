@@ -35,11 +35,10 @@ import com.heppihome.viewmodels.shop.HomeShopViewModel
 @Composable
 fun HomeShopRoute(
     vM : HomeShopViewModel = hiltViewModel(),
-    g : Group,
     goToItemDetail : (ShopItem) -> Unit,
     goToInventory : () -> Unit
 ){
-    vM.setGroup(g)
+    vM.setListener()
     vM.refreshItems()
 
     val points by vM.points.collectAsState()
