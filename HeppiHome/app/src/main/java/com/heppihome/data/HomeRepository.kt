@@ -19,6 +19,23 @@ import javax.inject.Singleton
 class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
 
     lateinit var user : User
+    var isLoggedIn = false
+
+    init {
+        val u = getUser()
+        if (u != null) {
+            user = fuToUser(u)
+            isLoggedIn = true
+        }
+    }
+
+    private fun fuToUser(fu : FirebaseUser) : User {
+        var name = "default"
+        var email = "default"
+        fu.displayName?.let { name = it }
+        fu.email?.let { email = it }
+        return User(name, email, fu.uid)
+    }
 
     fun isAnonymousUser() : Boolean {
         return fdao.isAnonymousUser()
@@ -154,4 +171,11 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     fun checkTask(task : Task, group : Group) : Flow<ResultState<DocumentReference>> =
         fdao.checkTask(task, group)
 
+    fun getPoints(gid : String) =
+        fdao.getPoints(user, gid)
+
+    fun registerPointsListener(
+        listener : (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit,
+        gid : String
+    ) = fdao.addPointsListener(listener, user, gid)
 }

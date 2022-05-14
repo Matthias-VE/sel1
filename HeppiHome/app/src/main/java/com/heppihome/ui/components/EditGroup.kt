@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,8 @@ fun EditGroup(
         vM.setDescription(g.description)
     }
 
+    val context = LocalContext.current
+
     Column() {
         EditGroupHeader(onGroupCancel = onGroupCancel)
         Column(modifier = Modifier
@@ -45,14 +48,18 @@ fun EditGroup(
             InputField(name = stringResource(R.string.GroupName), description = groupName.text) { x -> vM.setName(x) }
             InputField(name = stringResource(R.string.Description), description = description.text) { x -> vM.setDescription(x) }
             Button(onClick = {
-                vM.editGroup(g);
+                if (vM.isValid(context)) {
+                    vM.editGroup(g, context);
+
+                    onGroupCancel();
+                }
                 when (status) {
                     is ResultState.Failed -> "Toastje me zalm"
                     is ResultState.Loading -> "Toastje me choco"
                     is ResultState.Success -> "Toastje me wreed goei beleg"
                     else -> Unit
                 }
-                onGroupCancel();
+
             },
                 modifier = Modifier.padding(10.dp)) {
                 Text(stringResource(R.string.Edit))

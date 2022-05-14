@@ -26,6 +26,7 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     val calendar = GregorianCalendar()
 
     private val _name = MutableStateFlow<String>("")
+    private val _points = MutableStateFlow("0")
     private val _users = MutableStateFlow<List<String>>(listOf(rep.user.id))
     private val _usersInGroup = MutableStateFlow<List<User>>(listOf(rep.user))
     private val _hours = MutableStateFlow<String>(
@@ -43,6 +44,7 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     )
 
     val name = _name.asStateFlow()
+    val points = _points.asStateFlow()
     val users = _users.asStateFlow()
     val usersInGroup = _usersInGroup.asStateFlow()
     val hours = _hours.asStateFlow()
@@ -52,11 +54,14 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         viewModelScope.launch {
             _usersInGroup.value = rep.getAllUsersInGroup(g.users)
         }
-
     }
 
     fun updateName(s : String) {
         _name.value = s
+    }
+
+    fun updatePoints(p : String) {
+        _points.value = p
     }
 
     fun checkUser(u : User, selected : Boolean) {
@@ -72,8 +77,17 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         _users.value = _users.value.minus(u.id)
     }
 
+    private fun verifyInput(s : String) : Int {
+        var i = 0
+        runCatching {
+            i = Integer.parseInt(s)
+        }
+        return i
+    }
+
     fun addTask(g : Group) {
-        val task = Task(_name.value, false, Timestamp(calendar.time), _users.value)
+        val task = Task(_name.value, false, Timestamp(calendar.time),
+            _users.value, verifyInput(_points.value))
         viewModelScope.launch {
             rep.addTask(task, g).collect {  }
         }

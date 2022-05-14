@@ -14,9 +14,9 @@ import javax.inject.Inject
 class HomeMainViewModel @Inject constructor (private val rep : HomeRepository) : ViewModel() {
 
     var selectedGroup : Group = Group(
-        Constants.ALL_TASKS,
-        Constants.ALL_TASKS,
-        id = Constants.ALL_TASKS
+        Constants.NOT_SELECTED,
+        Constants.NOT_SELECTED,
+        id = Constants.NOT_SELECTED
     )
 
     var selectedInvite : Invite = Invite(

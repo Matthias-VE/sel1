@@ -20,23 +20,15 @@ fun ConfirmDialog(title: String? = null, content: String, onDismiss: () -> Unit,
         onDismissRequest = {
             onDismiss()
         },
-        /*
-        // https://stackoverflow.com/questions/69452854/increase-space-between-title-and-text-of-alertdialog-in-compose
-        title = {
-           if (!title.isNullOrEmpty()) {
-               Text(title)
-           }
-        },
-         */
+
         text = {
             Column (
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                // horizontalAlignment = Alignment.CenterHorizontally
+
             ) {
-                // CircularProgressIndicator()
-                // Text("Hello")
+
                 if (!title.isNullOrEmpty()) {
                     Text(title,
                         modifier = Modifier.padding(vertical = 8.dp),
@@ -44,10 +36,10 @@ fun ConfirmDialog(title: String? = null, content: String, onDismiss: () -> Unit,
                 }
 
                 Text(content)
-                // Timber.d("message=${progressState.message}")
+
             }
         },
-        // buttons = { }
+
         dismissButton = {
             Button(onClick = { onDismiss() }) {
                 Text(stringResource(R.string.No))
