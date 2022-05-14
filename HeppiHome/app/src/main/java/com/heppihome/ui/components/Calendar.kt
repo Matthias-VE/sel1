@@ -29,6 +29,7 @@ fun Calendar(
     vM.refreshGroups()
     val groups by vM.groups.collectAsState()
     vM.updateGroupsWithTasks(groups, vM.cal)
+    val date by vM.date.collectAsState()
     val groupsWithTasks by vM.groupsWithTasks.collectAsState()
     Scaffold(
         topBar = { TopbarNoBackArrow(title = stringResource(R.string.Calendar)) },
@@ -47,7 +48,7 @@ fun Calendar(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Button(onClick = {} ) {
-                    Text(text = "view tasks on ${vM.date}")
+                    Text(text = "view tasks on $date")
                 }
 
                 //om te testen

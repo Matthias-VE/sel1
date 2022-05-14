@@ -15,7 +15,9 @@ import java.util.*
 @Composable
 fun HomeOverViewRoute(
     vM : HomeOverviewViewModel = hiltViewModel(),
+    group : Group
 ) {
+    vM.setGroup(group)
 
     HomeOverViewScreen(
         vM,

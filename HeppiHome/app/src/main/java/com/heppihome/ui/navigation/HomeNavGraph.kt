@@ -92,7 +92,7 @@ fun HomeNavGraph(
         }
 
         composable(BottomNavItem.Overview.screen_route) {
-            HomeOverViewRoute(vM = hiltViewModel())
+            HomeOverViewRoute(vM = hiltViewModel(), vM.selectedGroup)
         }
 
         composable(route = BottomNavItem.Tasks.screen_route) {

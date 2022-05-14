@@ -21,12 +21,17 @@ import javax.inject.Inject
 class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
     val cal = GregorianCalendar()
 
+    private var selectedGroup = Group()
+
     private val _groups : MutableStateFlow<List<Group>> = MutableStateFlow(emptyList())
     val groups : StateFlow<List<Group>> = _groups
 
     private var _groupsWithTasks : MutableMap<Group, List<Task>> = mutableMapOf()
     val groupsWithTasks : StateFlow<MutableMap<Group, List<Task>>> = MutableStateFlow(_groupsWithTasks)
 
+    fun setGroup(g : Group) {
+        selectedGroup = g
+    }
 
     fun refreshGroups() {
         viewModelScope.launch {
