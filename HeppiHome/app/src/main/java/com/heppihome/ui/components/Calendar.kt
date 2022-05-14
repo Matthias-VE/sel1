@@ -1,5 +1,6 @@
 package com.heppihome.ui.components
 
+import android.util.Log
 import android.widget.CalendarView
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -40,7 +41,6 @@ fun Calendar(
                     factory = { CalendarView(it)},
                     update = {
                         it.setOnDateChangeListener(onDateChange)
-                        vM.getTasks()
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -49,22 +49,27 @@ fun Calendar(
                 }
                 LazyColumn(modifier = Modifier.fillMaxWidth()){
                     items(1){
-                        Text(text = "tasks: $tasks")
-                        for (task in tasks) {
-                            Row {
-                                Checkbox(checked = task.done, onCheckedChange = {vM.toggleTask(task)})
-                                Text(
-                                    text = task.text,
-                                    fontSize = MaterialTheme.typography.subtitle1.fontSize
-                                )
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(10.dp), horizontalArrangement = Arrangement.End
-                                ) {
+                        if(tasks.isEmpty()){
+                            Text(text = "No tasks due on $date")
+                        }else {
+                            for (task in tasks) {
+                                Row {
+                                    Checkbox(
+                                        checked = task.done,
+                                        onCheckedChange = { vM.toggleTask(task) })
                                     Text(
-                                        text = format.format(task.deadline.toDate())
+                                        text = task.text,
+                                        fontSize = MaterialTheme.typography.subtitle1.fontSize
                                     )
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(10.dp), horizontalArrangement = Arrangement.End
+                                    ) {
+                                        Text(
+                                            text = format.format(task.deadline.toDate())
+                                        )
+                                    }
                                 }
                             }
                         }

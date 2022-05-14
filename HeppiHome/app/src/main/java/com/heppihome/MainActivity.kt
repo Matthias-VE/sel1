@@ -35,11 +35,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //Population of database with dummy data.
 
-                    val viewmTask : HomeTasksViewModel = hiltViewModel()
-                    val viewmGroup : HomeGroupViewModel = hiltViewModel()
-                    val p = PopulateDB(viewmTask, viewmGroup)
+                    // val viewmTask : HomeTasksViewModel = hiltViewModel()
+                    // val viewmGroup : HomeGroupViewModel = hiltViewModel()
+                    // val p = PopulateDB(viewmTask, viewmGroup)
                     // true does the populate, false does nothing. For quick enabling / disabling.
-                    p.Populate(false)
+                    // p.Populate(false)
 
                     HomeNavGraph(vM = hiltViewModel(), context = this)
                 }
@@ -47,4 +47,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
