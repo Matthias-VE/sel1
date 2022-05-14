@@ -24,9 +24,10 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     var isLoggedIn = false
 
     var selectedGroup : Group = Group()
-        private set(value) {field = value; isAdmin = user.id in value.admins}
+        private set(value) {field = value; _isAdmin.value = user.id in value.admins}
 
-    var isAdmin = false
+    private val _isAdmin = MutableStateFlow(false)
+    val isAdmin = _isAdmin.asStateFlow()
 
     private fun groupListener(value : DocumentSnapshot?, ex : FirebaseFirestoreException?)
     {
@@ -150,9 +151,14 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     fun addAdminToGroup(otherUser : User, groupId : String = selectedGroup.id) =
         fdao.makeOtherUserAdmin(otherUser, groupId)
 
+    fun checkLastAdmin() : Boolean{
+        return selectedGroup.admins.size <= 1
+    }
 
-    fun removeAdminFromGroup(otherUser: User, groupId: String = selectedGroup.id) =
-        fdao.removeUserFromAdmin(otherUser, groupId)
+
+    suspend fun removeSelfAdmin(groupId: String = selectedGroup.id) {
+        fdao.removeUserFromAdmin(user, groupId).collect { }
+    }
 
 
     fun registerTodayTasksListenerForUserAndGroup(listener: (QuerySnapshot?, FirebaseFirestoreException?) -> Unit,

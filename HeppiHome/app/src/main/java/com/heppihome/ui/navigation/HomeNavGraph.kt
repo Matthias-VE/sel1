@@ -122,13 +122,19 @@ fun HomeNavGraph(
             }
         }
 
+        composable(HomeAppDestinations.MAKE_ADMIN_ROUTE) {
+
+        }
+
         composable(HomeAppDestinations.TASKS_ROUTE) {
             ContentWithNavbar(navController) {
                 HomeTasksRoute(vM = hiltViewModel(), onBackPressed = {
                     navController.navigate(HomeAppDestinations.GROUP_ROUTE)
                 },
                     onAddTask = {navController.navigate(HomeAppDestinations.TASK_ADD)},
-                    onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)})
+                    onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)},
+                    onMakeSomeoneAdmin = {navController.navigate(HomeAppDestinations.MAKE_ADMIN_ROUTE)}
+                )
             }
         }
 

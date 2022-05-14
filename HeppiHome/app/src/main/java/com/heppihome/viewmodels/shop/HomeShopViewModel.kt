@@ -23,15 +23,13 @@ class HomeShopViewModel @Inject constructor(private val rep : HomeRepository) : 
     private val _shopItems = MutableStateFlow<List<ShopItem>>(emptyList())
     val shopItems = _shopItems.asStateFlow()
 
-    private val _isAdmin = MutableStateFlow(rep.isAdmin)
-    val isAdmin = _isAdmin.asStateFlow()
+    val isAdmin = rep.isAdmin
 
     private val _buySuccess = MutableStateFlow(Pair(false, false))
     val buySuccess = _buySuccess.asStateFlow()
 
 
     fun refreshItems() {
-        _isAdmin.value = rep.isAdmin
         viewModelScope.launch {
             rep.getShopItems().collect {
                 if (it is ResultState.Success) {
@@ -70,7 +68,6 @@ class HomeShopViewModel @Inject constructor(private val rep : HomeRepository) : 
     }
 
     fun setListener() {
-        _isAdmin.value = rep.isAdmin
         rep.registerPointsListener(this::pointsListener)
     }
 

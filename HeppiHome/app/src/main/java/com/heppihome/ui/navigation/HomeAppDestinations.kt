@@ -14,4 +14,5 @@ object HomeAppDestinations {
     const val SHOP_ROUTE = "shop"
     const val INVENTORY_ROUTE = "inventory"
     const val SETTINGS_ROUTE = "settings"
+    const val MAKE_ADMIN_ROUTE = "make_admin"
 }

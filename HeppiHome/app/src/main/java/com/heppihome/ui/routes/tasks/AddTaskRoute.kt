@@ -55,6 +55,7 @@ fun AddTaskRoute(
 
     AddTaskScreen(
         name,
+        isAdmin,
         points,
         vM.calendar,
         users,
@@ -72,6 +73,7 @@ fun AddTaskRoute(
 @Composable
 fun AddTaskScreen(
     name : String,
+    isAdmin : Boolean,
     points : String,
     cal : Calendar,
     users: List<String>,
@@ -91,7 +93,9 @@ fun AddTaskScreen(
             modifier = Modifier.padding(10.dp)
         ) {
             InputField(name = stringResource(R.string.Task), description = name, onNameChanged)
-            InputNumberField(name = "Points", value = points, edit = updatePoints)
+            if (isAdmin) {
+                InputNumberField(name = "Points", value = points, edit = updatePoints)
+            }
             UserSelection(users = usersInGroup, users, onCheckUser = onCheckUser)
             Log.i("AddTaskRoute", "users size: " + users.size)
             CalendarView(cal,

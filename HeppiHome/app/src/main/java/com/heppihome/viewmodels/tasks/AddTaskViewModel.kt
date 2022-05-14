@@ -25,7 +25,6 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
 
     val calendar = GregorianCalendar()
 
-    private val _isAdmin = MutableStateFlow(rep.isAdmin)
     private val _name = MutableStateFlow<String>("")
     private val _points = MutableStateFlow("0")
     private val _users = MutableStateFlow<List<String>>(listOf(rep.user.id))
@@ -44,7 +43,7 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         )
     )
 
-    val isAdmin = _isAdmin.asStateFlow()
+    val isAdmin = rep.isAdmin
 
     val name = _name.asStateFlow()
     val points = _points.asStateFlow()
@@ -55,7 +54,6 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
 
 
     fun usersInGroup() {
-        _isAdmin.value = rep.isAdmin
         viewModelScope.launch {
             _usersInGroup.value = rep.getAllUsersInGroup(rep.selectedGroup.users)
         }

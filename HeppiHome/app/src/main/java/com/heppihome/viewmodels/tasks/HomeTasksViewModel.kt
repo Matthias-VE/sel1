@@ -19,6 +19,7 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     private val _tasksTod = MutableStateFlow<List<Task>>(emptyList())
     private val _tasksTom = MutableStateFlow<List<Task>>(emptyList())
+    private val _canNotResign = MutableStateFlow(false)
 
     val tasksToday : StateFlow<List<Task>> = _tasksTod
 
@@ -27,7 +28,9 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
     private var _expanded : MutableStateFlow<Boolean> = MutableStateFlow(false)
     var expanded : StateFlow<Boolean> = _expanded
 
+    val canNotResign = _canNotResign.asStateFlow()
     val group = {rep.selectedGroup}
+    val isAdmin = rep.isAdmin
 
     private fun taskListenerToday(value : QuerySnapshot?, ex : FirebaseFirestoreException?) {
         if (ex != null) {
@@ -56,6 +59,19 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
     fun startListeners() {
         rep.registerTodayTasksListenerForUserAndGroup(this::taskListenerToday)
         rep.registerTomorrowTasksListenerForUserAndGroup(this::taskListenerTomorrow)
+    }
+
+    // Return true for success and false for failed
+    fun resignAsAdmin() : Boolean {
+        // true if last admin, false if not
+        val check = rep.checkLastAdmin()
+        if (!check) {
+            viewModelScope.launch {
+                rep.removeSelfAdmin()
+            }
+            return true
+        }
+        return false
     }
 
     fun onGoBack() {
