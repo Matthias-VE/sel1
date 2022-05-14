@@ -37,7 +37,7 @@ import java.util.*
 @ExperimentalMaterialApi
 @Composable
 fun GroupsWithTasks(groupsWithTasks: Map<Group, List<Task>>,
-                    vM : HomeOverviewViewModel,
+                    onChecked : (Task, Group) -> Unit,
                     onBackPressed : () -> Unit ,
                     date : String,
                     format : SimpleDateFormat
@@ -50,7 +50,7 @@ fun GroupsWithTasks(groupsWithTasks: Map<Group, List<Task>>,
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {
                 for((group, tasks) in groupsWithTasks){
-                    GroupWithTasks(group = group, tasks = tasks, vM = vM, format = format)
+                    GroupWithTasks(group = group, tasks = tasks, onChecked = onChecked, format = format)
                 }
             }
         }
@@ -60,7 +60,7 @@ fun GroupsWithTasks(groupsWithTasks: Map<Group, List<Task>>,
 
 @ExperimentalMaterialApi
 @Composable
-fun GroupWithTasks(group:Group, tasks : List<Task>, vM: HomeOverviewViewModel, format : SimpleDateFormat){
+fun GroupWithTasks(group:Group, tasks : List<Task>, onChecked : (Task, Group) -> Unit, format : SimpleDateFormat){
 
     var expended by remember { mutableStateOf(true)}
     val rotation by animateFloatAsState(targetValue = if(expended) 180f else 0f)
@@ -108,7 +108,7 @@ fun GroupWithTasks(group:Group, tasks : List<Task>, vM: HomeOverviewViewModel, f
             if(expended){
                 for (task in tasks) {
                     Row {
-                        Checkbox(checked = task.done, onCheckedChange = {vM.toggleTask(task, group)})
+                        Checkbox(checked = task.done, onCheckedChange = {onChecked(task, group)})
                         Text(
                             text = task.text,
                             fontSize = MaterialTheme.typography.subtitle1.fontSize

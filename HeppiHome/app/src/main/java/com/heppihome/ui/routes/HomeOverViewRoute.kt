@@ -15,13 +15,9 @@ import java.util.*
 @Composable
 fun HomeOverViewRoute(
     vM : HomeOverviewViewModel = hiltViewModel(),
-    onBackPressed: () -> Unit
 ) {
 
-    val date by vM.date.collectAsState()
     HomeOverViewScreen(
-        date,
-        onBackPressed,
         vM,
         vM::onDateChange
     )
@@ -29,11 +25,9 @@ fun HomeOverViewRoute(
 
 @Composable
 fun HomeOverViewScreen(
-    date: String,
-    onBackPressed: () -> Unit,
     vM: HomeOverviewViewModel,
     onDateChange: (CalendarView, Int, Int, Int) -> Unit
 ) {
     val format = SimpleDateFormat("kk:mm", Locale.getDefault())
-    Calendar(date, vM, onDateChange, format,onBackPressed)
+    Calendar(vM, onDateChange)
 }
