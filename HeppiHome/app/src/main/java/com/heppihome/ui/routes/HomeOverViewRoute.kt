@@ -31,5 +31,5 @@ fun HomeOverViewScreen(
     onDateChange: (CalendarView, Int, Int, Int) -> Unit
 ) {
     val format = SimpleDateFormat("kk:mm", Locale.getDefault())
-    Calendar(vM, onDateChange)
+    Calendar(vM, onDateChange, format)
 }

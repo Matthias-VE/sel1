@@ -36,7 +36,7 @@ import java.util.*
 //Task View
 @ExperimentalMaterialApi
 @Composable
-fun GroupsWithTasks(groupsWithTasks: Map<Group, List<Task>>,
+fun AllTasks(groupsWithTasks: Map<Group, List<Task>>,
                     onChecked : (Task, Group) -> Unit,
                     onBackPressed : () -> Unit ,
                     date : String,
