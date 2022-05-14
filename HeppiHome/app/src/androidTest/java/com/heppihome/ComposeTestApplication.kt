@@ -1,8 +1,7 @@
 package com.heppihome
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.onNodeWithContentDescription
 import org.junit.Rule
 import org.junit.Test
 
@@ -12,7 +11,9 @@ class ComposeTestApplication {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    fun changeScreen(){
-        //composeTestRule.onNodeWithText().performClick()
+    fun testBottomBar(){
+        composeTestRule.onNodeWithContentDescription("Tasks").assertExists()
+        composeTestRule.onNodeWithContentDescription("Overview").assertExists()
+        composeTestRule.onNodeWithContentDescription("Settings").assertExists()
     }
 }
