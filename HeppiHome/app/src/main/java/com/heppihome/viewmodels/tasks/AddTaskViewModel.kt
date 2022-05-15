@@ -3,6 +3,7 @@ package com.heppihome.viewmodels.tasks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
+import com.heppihome.Util.DateUtil
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
@@ -25,16 +26,17 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     val calendar = GregorianCalendar()
 
     private val _name = MutableStateFlow<String>("")
+    private val _points = MutableStateFlow("0")
     private val _users = MutableStateFlow<List<String>>(listOf(rep.user.id))
     private val _usersInGroup = MutableStateFlow<List<User>>(listOf(rep.user))
     private val _hours = MutableStateFlow<String>(
-        formatHours(
+        DateUtil.formatHours(
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE)
         )
     )
     private val _date = MutableStateFlow<String>(
-        formatDate(
+        DateUtil.formatDate(
             calendar.get(Calendar.DAY_OF_MONTH),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.YEAR)
@@ -42,6 +44,7 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     )
 
     val name = _name.asStateFlow()
+    val points = _points.asStateFlow()
     val users = _users.asStateFlow()
     val usersInGroup = _usersInGroup.asStateFlow()
     val hours = _hours.asStateFlow()
@@ -51,11 +54,14 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         viewModelScope.launch {
             _usersInGroup.value = rep.getAllUsersInGroup(g.users)
         }
-
     }
 
     fun updateName(s : String) {
         _name.value = s
+    }
+
+    fun updatePoints(p : String) {
+        _points.value = p
     }
 
     fun checkUser(u : User, selected : Boolean) {
@@ -71,46 +77,30 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         _users.value = _users.value.minus(u.id)
     }
 
+    private fun verifyInput(s : String) : Int {
+        var i = 0
+        runCatching {
+            i = Integer.parseInt(s)
+        }
+        return i
+    }
+
     fun addTask(g : Group) {
-        val task = Task(_name.value, false, Timestamp(calendar.time), _users.value)
+        val task = Task(_name.value, false, Timestamp(calendar.time),
+            _users.value, verifyInput(_points.value))
         viewModelScope.launch {
             rep.addTask(task, g).collect {  }
         }
     }
 
-    private fun formatHours(hour: Int, minutes: Int) : String {
-        return if (hour < 10 && minutes < 10) {
-            "0$hour:0$minutes"
-        } else if (hour < 10) {
-            "0$hour:$minutes"
-        } else if (minutes < 10) {
-            "$hour:0$minutes"
-        } else {
-            "$hour:$minutes"
-        }
-    }
-
-    private fun formatDate(day : Int, month : Int, year : Int) : String {
-        val acMonth = month + 1
-        return if (day < 10 && acMonth < 10) {
-            "$year-0$acMonth-0$day"
-        } else if (day < 10) {
-            "$year-$acMonth-0$day"
-        } else if (month < 10) {
-            "$year-0$acMonth-$day"
-        } else {
-            "$year-$acMonth-$day"
-        }
-    }
-
     fun updateHours(hour : Int, minutes : Int) {
-        _hours.value = formatHours(hour, minutes)
+        _hours.value = DateUtil.formatHours(hour, minutes)
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, minutes)
     }
 
     fun updateDate(day : Int, month : Int, year: Int) {
-        _date.value = formatDate(day, month, year)
+        _date.value = DateUtil.formatDate(day, month, year)
         calendar.set(Calendar.DAY_OF_MONTH, day)
         calendar.set(Calendar.MONTH, month)
         calendar.set(Calendar.YEAR, year)

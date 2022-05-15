@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">HeppiHome</string>
     <string name="Calendar">Kalender</string>
     <string name="NewGroup">Groep aanmaken</string>
@@ -32,6 +32,7 @@
     <string name="NoInvites">Je hebt momenteel geen openstaande uitnodingen</string>
     <string name="InviteFrom">Uitnodiging van: </string>
     <string name="Task">Task</string>
+    <string name="AddTask">Voeg een Taak toe</string>
     <string name="TaskForPerson">Deze taak is voor:</string>
     <string name="OpenDatePicker">Datumkiezer openen</string>
     <string name="OpenTimePicker">Tijdkiezer openen</string>
@@ -39,4 +40,56 @@
     <string name="SelectedTime">Geselecteerde tijd: </string>
     <string name="LogOut">Uitloggen</string>
     <string name="Loading">Laden</string>
+    <string name="FeedbackGroupEdited">Groep is bewerkt</string>
+    <string name="FeedbackGroupDeleted">Groep is verwijderd</string>
+    <string name="No">Nee</string>
+    <string name="Yes">Ja</string>
+
+    <!-- FireBase -->
+    <string name="fui_progress_dialog_loading" translation_description="Loading text in dialog">Laden…</string>
+    <string name="fui_sign_in_default" translation_description="Button text to sign in">Log in</string>
+    <string name="fui_continue" translation_description="Button text to continue">Doorgaan</string>
+    <string name="fui_no_internet" translation_descripition="User message shown when sign-in is attempted while offline.">Netwerk fout, controleer uw internet verbinding.</string>
+
+    <!-- Provider -->
+    <string name="fui_idp_name_email">E-mail</string>
+
+    <!-- Common-->
+    <string name="fui_next_default" translation_description="Button text to continue">Volgende</string>
+    <string name="fui_email_hint" translation_description="Hint in email input field">E-mail</string>
+    <string name="fui_password_hint" translation_description="Hint for password input field for existing passwords">Wachtwoord</string>
+    <string name="fui_new_password_hint" translation_description="Hint for password input field for new passwords">Nieuw wachtwoord</string>
+    <string name="fui_required_field" translation_description="Inline error for required field">Dit veld mag niet leeg zijn.</string>
+    <string name="fui_invalid_email_address" translation_description="Inline error for invalid email address">Incorrect e-mailadres</string>
+    <string name="fui_missing_email_address" translation_description="Inline error for empty email address in input field">Voer je e-mailadres in om door te gaan</string>
+    <string name="fui_missing_first_and_last_name" translation_description="Inline error for empty email address in input field. [CHAR_LIMIT=60]">Vul een voor- en achternaam in.</string>
+    <string name="fui_progress_dialog_checking_accounts" translation_description="Progress dialog text while checking for existing accounts">Controleren op bestaande accounts...</string>
+
+    <!-- Email sign up -->
+    <string name="fui_title_register_email" translation_description="Title for signup form">Aanmelden</string>
+    <string name="fui_name_hint" translation_description="Hint for last name input field">Voor- &amp; achternaam</string>
+    <string name="fui_button_text_save" translation_description="Button text to save input form">Opslaan</string>
+    <string name="fui_progress_dialog_signing_up" translation_description="Dialog text while waiting for server's signup response">Aanmelden…</string>
+    <plurals name="fui_error_weak_password" translation_description="Inline error for weak password">
+        <item quantity="one" translation_description="Inline error for weak password">Wachtwoord niet sterk genoeg. Gebruik minimaal %1$d karakter en een combinatie van letters en cijfers</item>
+        <item quantity="other" translation_description="Inline error for weak password">Wachtwoord niet sterk genoeg. Gebruik ten minste %1$d karakters en een combinatie van letters en cijfers</item>
+    </plurals>
+    <string name="fui_email_account_creation_error" translation_description="Inline error for signup failure">Registratie van e-mailt mislukt</string>
+
+    <!-- Idp/Email welcome back -->
+    <string name="fui_title_welcome_back_idp_prompt" translatable="false">@string/fui_sign_in_default</string>
+    <string name="fui_title_welcome_back_password_prompt" translatable="false">@string/fui_sign_in_default</string>
+    <string name="fui_welcome_back_email_header" translation_description="Message for returning users">Welkom terug!</string>
+
+    <string name="fui_welcome_back_password_prompt_body" translation_description="Message to users that need to signin using existing email accounts">
+        Je hebt <xliff:g example="jane.doe@example.com" id="email_addr" translation_description="">%1$s</xliff:g>
+        al gebruikt om in te loggen. Voer uw wachtwoord voor dat account in.
+    </string>
+    <string name="fui_progress_dialog_signing_in" translation_description="Progress dialog text">Inloggen…</string>
+    <string name="fui_trouble_signing_in" translation_description="Link leading to forgot password flow">Problemen met inloggen?</string>
+
+    <!-- Other error messages -->
+    <string name="fui_error_unknown" translation_description="General error messages for an unknown failure.">Een onbekende fout is opgetreden.</string>
+    <string name="fui_error_invalid_password" translation_description="Error message for when the user enters an invalid or wrong password.">Incorrect wachtwoord.</string>
+
 </resources>

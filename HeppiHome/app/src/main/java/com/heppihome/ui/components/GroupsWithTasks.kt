@@ -28,32 +28,30 @@ import androidx.compose.ui.unit.sp
 import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
+import com.heppihome.viewmodels.HomeOverviewViewModel
 import java.text.SimpleDateFormat
-
-
+import java.util.*
 
 
 //Task View
 @ExperimentalMaterialApi
 @Composable
-fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
-          expandMenu : Boolean, toggleMenu : () -> Unit,
-          onChecked: (Task) -> Unit, group : Group,
-          onBackPressed : () -> Unit,
-          onInvitePerson : () -> Unit,
-          format : SimpleDateFormat
+fun GroupsWithTasks(groupsWithTasks: Map<Group, List<Task>>,
+                    onChecked : (Task, Group) -> Unit,
+                    onBackPressed : () -> Unit ,
+                    date : String,
+                    format : SimpleDateFormat
 ) {
 
     Column {
-        TopbarWithOptions(group.name,expandMenu, toggleMenu,
-            onBackPressed = onBackPressed,
-            listOf(stringResource(R.string.Invite)),
-            listOf(onInvitePerson)
+        Topbar(date,
+        onBackPressed = onBackPressed
         )
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {
-                Day("today", tasksToday, onChecked, format)
-                Day("tomorrow", tasksTomorrow, onChecked, format)
+                for((group, tasks) in groupsWithTasks){
+                    GroupWithTasks(group = group, tasks = tasks, onChecked = onChecked, format = format)
+                }
             }
         }
     }
@@ -62,7 +60,8 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
 
 @ExperimentalMaterialApi
 @Composable
-fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit, format : SimpleDateFormat){
+fun GroupWithTasks(group:Group, tasks : List<Task>, onChecked : (Task, Group) -> Unit, format : SimpleDateFormat){
+
     var expended by remember { mutableStateOf(true)}
     val rotation by animateFloatAsState(targetValue = if(expended) 180f else 0f)
 
@@ -77,7 +76,7 @@ fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit, format : S
             ),
         shape = MaterialTheme.shapes.medium,
 
-    ){
+        ){
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,7 +87,7 @@ fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit, format : S
             }){
                 Text(
                     modifier = Modifier.weight(6f),
-                    text = day,
+                    text = group.name,
                     fontSize = MaterialTheme.typography.h6.fontSize,
                     fontWeight =  FontWeight.Bold
                 )
@@ -109,7 +108,7 @@ fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit, format : S
             if(expended){
                 for (task in tasks) {
                     Row {
-                        Checkbox(checked = task.done, onCheckedChange = {onChecked(task)})
+                        Checkbox(checked = task.done, onCheckedChange = {onChecked(task, group)})
                         Text(
                             text = task.text,
                             fontSize = MaterialTheme.typography.subtitle1.fontSize

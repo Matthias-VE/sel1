@@ -34,22 +34,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     //Population of database with dummy data.
-                    //val viewmTask : HomeTasksViewModel = hiltViewModel()
-                    // val viewmGroup : HomeGroupViewModel = hiltViewModel()
-                    // val p = PopulateDB(viewmTask, viewmGroup)
-                    // p.Populate()
 
-                    val navController = rememberNavController()
-                    val context = this
+                    val viewmTask : HomeTasksViewModel = hiltViewModel()
+                    val viewmGroup : HomeGroupViewModel = hiltViewModel()
+                    val p = PopulateDB(viewmTask, viewmGroup)
+                    // true does the populate, false does nothing. For quick enabling / disabling.
+                    p.Populate(false)
 
-                    Scaffold(
-                        bottomBar = { com.heppihome.ui.navigation.BottomNavigation(navController = navController) }) {
-                        Box(modifier = Modifier.padding(it)) {
-                            HomeNavGraph(
-                                navController = navController, vM = hiltViewModel(), context = context
-                            )
-                        }
-                    }
+                    HomeNavGraph(vM = hiltViewModel(), context = this)
                 }
             }
         }

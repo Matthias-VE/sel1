@@ -34,7 +34,7 @@ fun HomeInvitePersonScreen(
     onPersonInvited : () -> Unit
 ) {
     Column {
-        Topbar(title = stringResource(R.string.Invite), expanded = false, toggle = {}, onBackPressed = onBackPressed, {})
+        Topbar(title = stringResource(R.string.Invite), onBackPressed = onBackPressed)
         InputField(name = stringResource(R.string.Email), description = email, onEmailChanged)
         Button(onClick = onPersonInvited, enabled = email.length > 3, modifier =
         Modifier.padding(10.dp)) {

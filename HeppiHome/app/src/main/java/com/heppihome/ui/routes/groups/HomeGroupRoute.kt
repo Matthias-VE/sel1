@@ -1,5 +1,6 @@
 package com.heppihome.ui.routes.groups
 
+import android.content.Context
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
@@ -9,14 +10,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.heppihome.R
 import com.heppihome.data.models.Group
+import com.heppihome.ui.components.ConfirmDialog
+import com.heppihome.ui.components.TopbarWithOptionsNoBackArrow
+import com.heppihome.ui.components.TopbarWithSettings
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
 import kotlin.math.roundToInt
 
@@ -35,7 +38,8 @@ fun HomeGroupRoute(
     onGroupClicked : (Group) -> Unit,
     onNewGroupClicked : () -> Unit,
     onEditGroupClicked : (Group) -> Unit,
-    onInvitesClicked: () -> Unit
+    onInvitesClicked: () -> Unit,
+    onSettingsPressed: () -> Unit
 ) {
     vM.refreshGroups()
     val groups by vM.groups.collectAsState()
@@ -45,11 +49,13 @@ fun HomeGroupRoute(
         groups,
         onGroupClicked,
         expanded,
-        { vM.expandGroupMenu() },
+        vM::expandGroupMenu,
         onNewGroupClicked,
         vM,
         onEditGroupClicked,
-        onInvitesClicked
+        vM::leaveGroup,
+        onInvitesClicked,
+        onSettingsPressed
     )
 }
 
@@ -62,44 +68,26 @@ fun HomeGroupScreen(
     onNewGroupClicked : () -> Unit,
     vM : HomeGroupViewModel,
     onEditGroupClicked : (Group) -> Unit,
-    onInvitesClicked : () -> Unit
+    onLeaveGroupClicked: (Group, Context) -> Unit,
+    onInvitesClicked : () -> Unit,
+    onSettingsPressed : () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Header(expanded, toggle, onNewGroupClicked)
-        Alltasks(onInvitesClicked)
-        Groups(groups, onGroupClicked, vM, onEditGroupClicked)
+        TopbarWithSettings(
+            title = stringResource(id = R.string.Groups),
+            onSettingsPressed = onSettingsPressed
+        )
+
+        Alltasks()
+        //Groups(groups, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked)
+        AddButton(groups, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked, onNewGroupClicked, onInvitesClicked)
     }
 }
 
 @Composable
-fun Header(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit) {
-    
-    Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
-        Row(modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()) {
-            Row(modifier = Modifier.padding(10.dp)) {
-                Text(stringResource(R.string.Groups), fontSize = 30.sp)
-            }
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp), horizontalArrangement = Arrangement.End) {
-                DropdownIcon(expanded = expanded, toggle = toggle, onNewGroupClicked)
-            }
-        }
-    }
-}
-
-@Composable
-fun Alltasks(onClickInvites : () -> Unit) {
+fun Alltasks() {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.secondary) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(
-                modifier = Modifier.padding(10.dp).clickable { onClickInvites() },
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(stringResource(R.string.Invites), fontSize = 30.sp)
-            }
             Spacer(Modifier.padding(5.dp))
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
                 Text(stringResource(R.string.AllTasks), fontSize = 30.sp)
@@ -109,10 +97,13 @@ fun Alltasks(onClickInvites : () -> Unit) {
 }
 
 @Composable
-fun Groups(groups : List<Group>, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel, onEditGroupClicked : (Group) -> Unit) {
+fun Groups(groups : List<Group>, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel,
+           onEditGroupClicked : (Group) -> Unit,
+           onLeaveGroupClicked : (Group, Context) -> Unit
+) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(groups) { group ->
-            SideView(group, onGroupClicked, vM, onEditGroupClicked)
+            SideView(group, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked)
         }
     }
 
@@ -134,42 +125,92 @@ fun Groupdetail(g : Group, onGroupClicked: (Group) -> Unit) {
 }
 
 @Composable
-fun DropDown(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit) {
+fun DropDown(expanded: Boolean, toggle: () -> Unit,
+             onNewGroupClicked: () -> Unit,
+             onInvitesClicked: () -> Unit
+) {
 
     DropdownMenu(expanded = expanded, onDismissRequest = toggle) {
         DropdownMenuItem(onClick = onNewGroupClicked) {
             Text(stringResource(R.string.NewGroup))
         }
-        DropdownMenuItem(onClick = { println("Join Group") }) {
-            Text(stringResource(R.string.JoinGroup))
-        }
-        DropdownMenuItem(onClick = { println("Leave Group") }) {
-            Text(stringResource(R.string.LeaveGroup))
+        DropdownMenuItem(onClick = onInvitesClicked) {
+            Text(stringResource(R.string.Invites))
         }
     }
 
 }
 
 @Composable
-fun DropdownIcon(expanded: Boolean, toggle: () -> Unit, onNewGroupClicked: () -> Unit) {
+fun DropdownIcon(expanded: Boolean, toggle: () -> Unit,
+                 onNewGroupClicked: () -> Unit,
+                 onInvitesClicked: () -> Unit
+) {
 
     IconButton(onClick = toggle) {
         Icon(
             Icons.Default.MoreVert, contentDescription = "Options", modifier = Modifier
                 .size(40.dp)
         )
-        DropDown(expanded = expanded, toggle = toggle, onNewGroupClicked)
+        DropDown(expanded = expanded, toggle = toggle, onNewGroupClicked, onInvitesClicked)
+    }
+}
+
+@Composable
+fun AddButton(
+    groups: List<Group>,
+    onGroupClicked: (Group) -> Unit,
+    vM: HomeGroupViewModel,
+    onEditGroupClicked: (Group) -> Unit,
+    onLeaveGroupClicked: (Group, Context) -> Unit,
+    onNewGroupClicked: () -> Unit,
+    onInvitesClicked: () -> Unit
+) {
+    Scaffold(floatingActionButton = {
+        FloatingActionButton(onClick =  onNewGroupClicked ) {
+            Icon(Icons.Default.Add, "add task button")
+        }
+    }, floatingActionButtonPosition = FabPosition.End) {
+        Groups(groups, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked)
+        //vM.refreshInvites()
+        if (vM.checkInvites()) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                Button(onClick = onInvitesClicked, modifier = Modifier
+                    .padding(10.dp)
+                    .size(60.dp), shape = RoundedCornerShape(50)) {
+                    Icon(Icons.Default.Notifications, "invite", Modifier.size(40.dp))
+                }
+            }
+        }
+
+
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel, onEditGroupClicked: (Group) -> Unit) {
+fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel,
+             onEditGroupClicked: (Group) -> Unit,
+             onLeaveGroupClicked : (Group, Context) -> Unit
+) {
+
+    val context = LocalContext.current
 
     val squareSize = 150.dp
     val swipeAbleState = rememberSwipeableState(initialValue = 0f)
+    var showDeleteConfirm by remember { mutableStateOf(false) }
     val sizePx = with(LocalDensity.current) { squareSize.toPx() }
     val anchors = mapOf(0f to 0f, sizePx to 1f)
+
+    if (showDeleteConfirm) {
+        ConfirmDialog(content = "Do you want to leave this group?",
+            onDismiss = { showDeleteConfirm = false},
+            onConfirm = {
+                showDeleteConfirm = false
+                onLeaveGroupClicked(g, context)
+            }
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -188,8 +229,9 @@ fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel
                     state = swipeAbleState,
                     anchors = anchors,
                     thresholds = { _, _ ->
-                        FractionalThreshold(0.3f) },
-                        orientation = Orientation.Horizontal
+                        FractionalThreshold(0.3f)
+                    },
+                    orientation = Orientation.Horizontal
                 )
         ) {
             Column(
@@ -213,7 +255,7 @@ fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel
 
                 IconButton(
                     onClick = {
-                        println("remove") },
+                        showDeleteConfirm = true },
                     modifier = Modifier
                         .size(50.dp)
                         .clip(CircleShape)

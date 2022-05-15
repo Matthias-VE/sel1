@@ -6,10 +6,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.text.intl.Locale
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
 import com.heppihome.ui.components.Tasks
 import com.heppihome.viewmodels.tasks.HomeTasksViewModel
+import java.text.SimpleDateFormat
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -48,12 +50,13 @@ fun HomeTasksScreen(
     onBackPressed: () -> Unit,
     onInvitePerson : () -> Unit
     ) {
+    val format = SimpleDateFormat("kk:mm", java.util.Locale.getDefault())
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick =  onAddTask ) {
             Icon(Icons.Default.Add, "add task button")
         }
     }, floatingActionButtonPosition = FabPosition.End) {
         Tasks(today, tomorrow,expanded, toggleDropDown, onChecked = onChecked,
-            group = group, onBackPressed, onInvitePerson)
+            group = group, onBackPressed, onInvitePerson, format)
     }
 }

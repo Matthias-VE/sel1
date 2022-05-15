@@ -35,7 +35,7 @@ fun HomeProfileRoute(
 @Composable
 fun HomeProfileScreen(user : User, onBackPressed: () -> Unit, onLogoutPressed : () -> Unit) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Topbar(title = stringResource(R.string.Profile), expanded = false, {}, onBackPressed = onBackPressed, onInvitePerson = {})
+            Topbar(title = stringResource(R.string.Profile), onBackPressed = onBackPressed)
             ProfileInformation(user.email, user.name)
             Logout(onLogoutPressed = onLogoutPressed)
         }

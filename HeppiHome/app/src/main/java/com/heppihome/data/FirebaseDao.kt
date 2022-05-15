@@ -1,5 +1,6 @@
 package com.heppihome.data
 
+import androidx.compose.ui.res.stringResource
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -17,12 +18,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.zone.ZoneOffsetTransitionRule
-import java.util.*
+import com.heppihome.R
+import com.heppihome.data.models.Constants.COLLECTION_POINTS
 import javax.inject.Singleton
 
 @Singleton
@@ -105,7 +102,20 @@ class FirebaseDao {
 
     suspend fun addPersonToGroupId(u : User, groupId : String) {
         groupDoc.document(groupId).update(COLLECTION_USERS, FieldValue.arrayUnion(u.id)).await()
+        val docref = userDoc.document(u.id).collection(COLLECTION_POINTS).document(groupId)
+        val points = docref.get().await().toObject(Points::class.java)
+        if (points == null) {
+            docref.set(Points(groupId)).await()
+        }
     }
+
+    fun removePersonFromGroupId( u : User, groupId: String) = flow {
+        emit(ResultState.loading())
+        groupDoc.document(groupId).update(COLLECTION_USERS, FieldValue.arrayRemove(u.id)).await()
+        emit(ResultState.success("Successfully left group"))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
 
     suspend fun removeInviteFromPerson(user: User, invite: Invite) {
         userDoc.document(user.id).collection(COLLECTION_INVITES)
@@ -130,11 +140,34 @@ class FirebaseDao {
 
             val groupRef = groupDoc.document()
             groupRef.set(Group(group.name, group.description, group.users, groupRef.id)).await()
-
+            userDoc.document(group.users[0]).collection(COLLECTION_POINTS).document(groupRef.id)
+                .set(Points(groupRef.id)).await()
             emit(ResultState.success(groupRef))
         }.catch {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
+
+
+    fun deleteGroup(group : Group) : Flow<ResultState<String>> =
+        flow {
+            emit(ResultState.loading())
+
+            val groupRef = groupDoc.document(group.id)
+            groupRef.delete().await()
+            emit(ResultState.success("Group deleted successfully"))
+        }.catch {
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+
+    fun editGroup(group : Group, newName : String, newDesc : String) : Flow<ResultState<String>> {
+        return flow {
+            emit(ResultState.loading())
+            groupDoc.document(group.id).update("name", newName, "description", newDesc).await()
+            emit(ResultState.success("Group edited successfully"))
+        }.catch{
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+    }
 
 
     // Register a listener to changes to tasks in a certain group
@@ -149,6 +182,19 @@ class FirebaseDao {
         }
         listeners.clear()
     }
+
+    fun getTasksBetweenStartAndEnd(user : User, g : Group, start : Timestamp, end : Timestamp) =
+        flow {
+            emit(ResultState.loading<List<Task>>())
+            emit(ResultState.success(
+                groupDoc.document(g.id).collection(COLLECTION_TASKS)
+                .whereArrayContains(COLLECTION_USERS, user.id)
+                .whereGreaterThan("deadline", start)
+                .whereLessThan("deadline", end).get().await().toObjects(Task::class.java))
+            )
+        }.catch {
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
 
     // Get all tasks for a certain group
     fun getAllTasks(user : FirebaseUser, group : Group) : Flow<ResultState<List<Task>>> =
@@ -197,7 +243,7 @@ class FirebaseDao {
             emit(ResultState.loading())
 
             val taskRef = groupDoc.document(group.id).collection(COLLECTION_TASKS).document()
-            taskRef.set(Task(task.text, task.done,task.deadline, task.users, taskRef.id)).await()
+            taskRef.set(Task(task.text, task.done,task.deadline, task.users,0, taskRef.id)).await()
 
             //emit data
             emit(ResultState.success(taskRef))
@@ -217,5 +263,32 @@ class FirebaseDao {
         }.catch {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
+
+    fun getPoints(user: User, gid : String) = flow {
+        emit(ResultState.loading())
+        val p = userDoc.document(user.id).collection(COLLECTION_POINTS).document(gid).get().await()
+            .toObject(Points::class.java)
+        emit(ResultState.success(p))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+    fun addPointsListener(
+        listener: (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit,
+        user : User,
+        groupId: String
+    ) {
+        userDoc.document(user.id).collection(COLLECTION_POINTS).document(groupId)
+            .addSnapshotListener(listener)
+    }
+
+    fun updatePoints(user : User, gid : String, newPoints : Int) = flow {
+        emit(ResultState.loading())
+        userDoc.document(user.id).collection(COLLECTION_POINTS)
+            .document(gid).update(COLLECTION_POINTS, newPoints).await()
+        emit(ResultState.success("Successfully updated points"))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
 
 }

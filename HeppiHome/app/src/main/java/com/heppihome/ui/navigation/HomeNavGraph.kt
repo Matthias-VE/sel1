@@ -1,12 +1,23 @@
 package com.heppihome.ui.navigation
 
 import android.content.Context
+import android.widget.Toast
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.internal.ComposableLambda
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heppihome.data.models.Constants
 import com.heppihome.ui.components.Calendar
 
 import com.heppihome.ui.components.NewGroup
@@ -50,6 +61,8 @@ fun HomeNavGraph(
                 },
                 onInvitesClicked = {
                     navController.navigate(HomeAppDestinations.ALLINV_ROUTE)
+                }, onSettingsPressed = {
+                    navController.navigate(BottomNavItem.Settings.screen_route)
                 }
             )
         }
@@ -92,17 +105,26 @@ fun HomeNavGraph(
         }
 
         composable(BottomNavItem.Overview.screen_route) {
-            Calendar()
+            ContentWithNavbar(navController) {
+                HomeOverViewRoute(vM = hiltViewModel(), vM.selectedGroup)
+            }
         }
 
-        composable(route = BottomNavItem.Tasks.screen_route) {
+        composable(HomeAppDestinations.SHOP_ROUTE) {
+            ContentWithNavbar(navController) {
+                HomeShopRoute(hiltViewModel(),vM.selectedGroup)
+            }
+        }
 
-            HomeTasksRoute(vM = hiltViewModel(), onBackPressed = {
-                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
-            },
-                onAddTask = {navController.navigate(HomeAppDestinations.TASK_ADD)},
-                onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)},
-                group = vM.selectedGroup)
+        composable(HomeAppDestinations.TASKS_ROUTE) {
+            ContentWithNavbar(navController) {
+                HomeTasksRoute(vM = hiltViewModel(), onBackPressed = {
+                    navController.navigate(HomeAppDestinations.GROUP_ROUTE)
+                },
+                    onAddTask = {navController.navigate(HomeAppDestinations.TASK_ADD)},
+                    onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)},
+                    group = vM.selectedGroup)
+            }
         }
 
         composable(HomeAppDestinations.TASK_ADD) {
@@ -111,10 +133,15 @@ fun HomeNavGraph(
             })
         }
 
-        composable(BottomNavItem.Settings.screen_route){
-            HomeSettingsRoute( onProfileClicked = {
-                navController.navigate(HomeAppDestinations.PROFILE_ROUTE)
-            })
+        composable(HomeAppDestinations.SETTINGS_ROUTE){
+            HomeSettingsRoute(
+                onBackPressed = {
+                                navController.navigate(HomeAppDestinations.GROUP_ROUTE)
+                },
+                onProfileClicked = {
+                    navController.navigate(HomeAppDestinations.PROFILE_ROUTE)
+                }
+            )
         }
 
         composable(HomeAppDestinations.PROFILE_ROUTE) {
@@ -124,5 +151,14 @@ fun HomeNavGraph(
                 {navController.navigate(HomeAppDestinations.LOGIN_ROUTE)}
             )
         }
+    }
+}
+
+@Composable
+fun ContentWithNavbar(navController : NavController, content : @Composable() (BoxScope.() -> Unit)) {
+    Scaffold(
+        bottomBar = {BottomNavigation(navController) }
+    ) {
+        Box(modifier = Modifier.padding(it), content = content)
     }
 }

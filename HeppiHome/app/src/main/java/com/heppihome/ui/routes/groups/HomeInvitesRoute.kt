@@ -58,7 +58,7 @@ fun HomeInvitesScreen(invites : List<Invite>, onInviteClicked: (Invite) -> Unit,
                       onBackPressed: () -> Unit
                       ) {
     Column() {
-        Topbar(title = stringResource(R.string.YourInvites), expanded = false, toggle = {}, onBackPressed = onBackPressed, {})
+        Topbar(title = stringResource(R.string.YourInvites), onBackPressed = onBackPressed)
         if (invites.isEmpty()) {
             Text(stringResource(R.string.NoInvites))
         } else {
