@@ -8,8 +8,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
 import com.heppihome.ui.components.Topbar
 import com.heppihome.viewmodels.tasks.DateTasksViewModel
@@ -21,8 +23,10 @@ import java.util.*
 fun DateTasksRoute(
     vM : DateTasksViewModel,
     onBackPressed : () -> Unit,
-    calendar: GregorianCalendar
+    calendar: GregorianCalendar,
+    group : Group
 ) {
+    vM.setGroup(group)
     vM.setCalendar(calendar)
     vM.getTasks()
     val date by vM.date.collectAsState()
@@ -33,7 +37,7 @@ fun DateTasksRoute(
         Topbar(date,
             onBackPressed = onBackPressed
         )
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        LazyColumn(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,) {
             items(1) {
                 if (tasks.isEmpty()) {
                     Text(text = "No tasks due on $date")

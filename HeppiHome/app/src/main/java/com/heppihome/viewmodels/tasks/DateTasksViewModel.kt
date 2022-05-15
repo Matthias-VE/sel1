@@ -34,6 +34,10 @@ class DateTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     private var selectedGroup = Group()
 
+    fun setGroup(group : Group){
+        selectedGroup = group
+    }
+
     private val _tasks : MutableStateFlow<List<Task>> = MutableStateFlow(emptyList())
 
     val tasks : StateFlow<List<Task>> = _tasks
