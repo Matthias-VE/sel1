@@ -1,10 +1,11 @@
-package com.heppihome
+package com.heppihome.componentTests
 
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.platform.app.InstrumentationRegistry
+import com.heppihome.R
 import com.heppihome.ui.components.Topbar
 import com.heppihome.ui.theme.HeppiHomeTheme
 import org.junit.Rule

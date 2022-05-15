@@ -1,4 +1,4 @@
-package com.heppihome
+package com.heppihome.componentTests
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.test.*

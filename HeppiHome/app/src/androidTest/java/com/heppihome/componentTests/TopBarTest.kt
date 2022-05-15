@@ -1,4 +1,4 @@
-package com.heppihome
+package com.heppihome.componentTests
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
