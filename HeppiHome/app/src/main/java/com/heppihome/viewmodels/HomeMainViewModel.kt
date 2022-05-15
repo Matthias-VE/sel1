@@ -3,11 +3,9 @@ package com.heppihome.viewmodels
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import com.heppihome.data.HomeRepository
-import com.heppihome.data.models.Constants
-import com.heppihome.data.models.Group
-import com.heppihome.data.models.Invite
-import com.heppihome.data.models.User
+import com.heppihome.data.models.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,4 +24,6 @@ class HomeMainViewModel @Inject constructor (private val rep : HomeRepository) :
     )
 
     var toEditGroup : Group = Group()
+
+    var calendar : GregorianCalendar = GregorianCalendar()
 }

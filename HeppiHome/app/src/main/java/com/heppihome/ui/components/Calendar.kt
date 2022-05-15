@@ -17,6 +17,8 @@ import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
 import com.heppihome.viewmodels.HomeOverviewViewModel
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.concurrent.timerTask
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -24,11 +26,10 @@ import java.text.SimpleDateFormat
 fun Calendar(
              vM: HomeOverviewViewModel,
              onDateChange : (CalendarView, Int, Int, Int) -> Unit,
-             format : SimpleDateFormat
+             onButtonClicked : (GregorianCalendar) -> Unit
 ) {
     vM.resetDate()
     val date by vM.date.collectAsState()
-    val tasks by vM.tasks.collectAsState()
     Scaffold(
         topBar = { TopbarNoBackArrow(title = stringResource(R.string.Calendar)) },
         content = {
@@ -44,36 +45,10 @@ fun Calendar(
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
-                Button(onClick = {} ) {
+                Button(onClick = {
+                    onButtonClicked(vM.cal)
+                } ) {
                     Text(text = "view tasks on $date")
-                }
-                LazyColumn(modifier = Modifier.fillMaxWidth()){
-                    items(1){
-                        if(tasks.isEmpty()){
-                            Text(text = "No tasks due on $date")
-                        }else {
-                            for (task in tasks) {
-                                Row {
-                                    Checkbox(
-                                        checked = task.done,
-                                        onCheckedChange = { vM.toggleTask(task) })
-                                    Text(
-                                        text = task.text,
-                                        fontSize = MaterialTheme.typography.subtitle1.fontSize
-                                    )
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(10.dp), horizontalArrangement = Arrangement.End
-                                    ) {
-                                        Text(
-                                            text = format.format(task.deadline.toDate())
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }

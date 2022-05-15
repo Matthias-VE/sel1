@@ -13,4 +13,7 @@ object HomeAppDestinations {
     const val INVITE_DETAIL = "invitedetail"
     const val SHOP_ROUTE = "shop"
     const val SETTINGS_ROUTE = "settings"
+    const val CALENDAR = "calendar"
+    const val DATE_TASKS = "dateTasks"
+    const val ALL_TASKS = "allTasks"
 }

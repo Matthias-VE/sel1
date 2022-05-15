@@ -3,6 +3,7 @@ package com.heppihome.viewmodels.tasks
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.heppihome.Util.DateUtil
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.ResultState
@@ -10,6 +11,7 @@ import com.heppihome.data.models.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
@@ -17,6 +19,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AllTasksViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
+
+    var calendar = GregorianCalendar()
+
+    private val _date = MutableStateFlow(
+        DateUtil.formatDate(
+            calendar.get(Calendar.DAY_OF_MONTH),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.YEAR)
+        )
+    )
+
+    val date = _date.asStateFlow()
 
     private val _groups : MutableStateFlow<List<Group>> = MutableStateFlow(emptyList())
     val groups : StateFlow<List<Group>> = _groups
@@ -30,17 +44,24 @@ class AllTasksViewModel @Inject constructor(private val rep : HomeRepository) : 
         }
     }
 
-    fun updateGroupsWithTasks(groups : List<Group>, calendar : Calendar) {
+    fun toggleTask(task: Task, group: Group) {
+        viewModelScope.launch {
+            rep.checkTask(task, group).collect {
+            }
+        }
+    }
+
+    fun updateGroupsWithTasks(groups : List<Group>) {
         viewModelScope.launch {
             for (group in groups) {
                 Log.d("groep", "$group")
-                getTasks(group, calendar)
+                getTasks(group)
             }
         }
     }
 
 
-    private fun getTasks(group : Group, calendar : Calendar) {
+    private fun getTasks(group : Group) {
         viewModelScope.launch{
             Log.i("taskdate", "${calendar.get(Calendar.DAY_OF_MONTH)}-${calendar.get(Calendar.MONTH)}-${calendar.get(
                 Calendar.YEAR)}")
@@ -56,4 +77,5 @@ class AllTasksViewModel @Inject constructor(private val rep : HomeRepository) : 
             }
         }
     }
+
 }

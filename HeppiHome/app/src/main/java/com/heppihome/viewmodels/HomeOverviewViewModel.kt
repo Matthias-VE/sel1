@@ -21,16 +21,6 @@ import javax.inject.Inject
 class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
     var cal = GregorianCalendar()
 
-    private var selectedGroup = Group()
-
-    private val _tasks : MutableStateFlow<List<Task>> = MutableStateFlow(emptyList())
-
-    val tasks : StateFlow<List<Task>> = _tasks
-
-    fun setGroup(g : Group) {
-        selectedGroup = g
-    }
-
     private val _date = MutableStateFlow(
         DateUtil.formatDate(
             cal.get(Calendar.DAY_OF_MONTH),
@@ -40,7 +30,6 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
     )
 
     fun resetDate(){
-        _tasks.value = emptyList()
         cal = GregorianCalendar()
         _date.value = DateUtil.formatDate(
             cal.get(Calendar.DAY_OF_MONTH),
@@ -62,29 +51,5 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
         cal.set(Calendar.DAY_OF_MONTH, day)
         cal.set(Calendar.MONTH, month)
         cal.set(Calendar.YEAR, year)
-        getTasks()
-    }
-
-    private fun getTasks() {
-        viewModelScope.launch{
-            Log.i("taskdate", "${cal.get(Calendar.DAY_OF_MONTH)}-${cal.get(Calendar.MONTH)}-${cal.get(Calendar.YEAR)}")
-            rep.getTasksBetweenStartOfDayAnd24Hours(selectedGroup, cal).collect {
-                when(it){
-                    is ResultState.Success -> {
-                        _tasks.value = it.data
-                        Log.d("data", "gettasks succes: $_tasks")}
-                    else -> {
-                        Log.d("fail", "gettasks failed")
-                        Unit}
-                }
-            }
-        }
-    }
-
-    fun toggleTask(task: Task) {
-        viewModelScope.launch {
-            rep.checkTask(task, selectedGroup).collect {
-            }
-        }
     }
 }
