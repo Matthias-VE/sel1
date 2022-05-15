@@ -37,7 +37,11 @@ fun DateTasksRoute(
         Topbar(date,
             onBackPressed = onBackPressed
         )
-        LazyColumn(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,) {
+        LazyColumn(
+            modifier =  Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             items(1) {
                 if (tasks.isEmpty()) {
                     Text(text = "No tasks due on $date")
