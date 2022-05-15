@@ -123,7 +123,9 @@ fun HomeNavGraph(
         }
 
         composable(HomeAppDestinations.MAKE_ADMIN_ROUTE) {
-
+            MakeAdminRoute(
+                onBackPressed = {navController.navigate(HomeAppDestinations.TASKS_ROUTE)}
+            )
         }
 
         composable(HomeAppDestinations.TASKS_ROUTE) {

@@ -24,7 +24,10 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     var isLoggedIn = false
 
     var selectedGroup : Group = Group()
-        private set(value) {field = value; _isAdmin.value = user.id in value.admins}
+        private set(value) {field = value; _isAdmin.value = user.id in value.admins; _admins.value = value.admins}
+
+    private val _admins = MutableStateFlow(emptyList<String>())
+    val admins = _admins.asStateFlow()
 
     private val _isAdmin = MutableStateFlow(false)
     val isAdmin = _isAdmin.asStateFlow()

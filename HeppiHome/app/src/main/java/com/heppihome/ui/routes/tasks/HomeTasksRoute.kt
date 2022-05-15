@@ -44,7 +44,7 @@ fun HomeTasksRoute(
             if (!vM.resignAsAdmin()) {
                 Toast.makeText(context, "You can't resign as admin since you are the last admin of the group", Toast.LENGTH_LONG).show()
             }
-        }, {}
+        }, onMakeSomeoneAdmin
     )
 }
 

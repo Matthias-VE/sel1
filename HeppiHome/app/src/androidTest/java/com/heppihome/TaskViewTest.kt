@@ -23,6 +23,8 @@ class TaskViewTest {
     fun testOnClickTask(){
         val test1 = mock<(Task) -> Unit>()
         val test2 = mock<() -> Unit>()
+        val test3 = mock<() -> Unit>()
+        val test4 = mock<() -> Unit>()
         val list1 = listOf(Task("test_today"))
         val list2 = listOf(Task("test_tomorrow"))
         composeTestRule.setContent {
@@ -36,7 +38,10 @@ class TaskViewTest {
                     group = Group(),
                     onBackPressed = test2,
                     onInvitePerson = test2,
-                    SimpleDateFormat("kk:mm", java.util.Locale.getDefault())
+                    SimpleDateFormat("kk:mm", java.util.Locale.getDefault()),
+                    true,
+                    test3,
+                    test4
                 )
             }
         }
