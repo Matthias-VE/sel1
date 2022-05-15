@@ -31,6 +31,5 @@ fun HomeOverViewScreen(
     onDateChange: (CalendarView, Int, Int, Int) -> Unit,
     onButtonClicked : (GregorianCalendar) -> Unit
 ) {
-    val format = SimpleDateFormat("kk:mm", Locale.getDefault())
     Calendar(vM, onDateChange, onButtonClicked)
 }

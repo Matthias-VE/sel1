@@ -1,16 +1,18 @@
 package com.heppihome.ui.routes.tasks
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
 import com.heppihome.ui.components.Topbar
@@ -37,15 +39,31 @@ fun DateTasksRoute(
         Topbar(date,
             onBackPressed = onBackPressed
         )
-        LazyColumn(
-            modifier =  Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            items(1) {
-                if (tasks.isEmpty()) {
-                    Text(text = "No tasks due on $date")
-                } else {
+        Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.secondary) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Spacer(Modifier.padding(5.dp))
+                Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
+                    Text(stringResource(R.string.Tasks), fontSize = 30.sp)
+                }
+            }
+        }
+        if (tasks.isEmpty()) {
+            Column(
+                modifier =  Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(horizontalArrangement = Arrangement.Center) {
+                    Text(text = stringResource(R.string.NoTasksDue)  + date)
+                }
+            }
+        } else {
+            LazyColumn(
+                modifier =  Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                items(1) {
+                    Spacer(Modifier.padding(10.dp))
                     for (task in tasks) {
                         Row {
                             Checkbox(

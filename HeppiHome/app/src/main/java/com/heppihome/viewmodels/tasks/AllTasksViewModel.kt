@@ -35,8 +35,11 @@ class AllTasksViewModel @Inject constructor(private val rep : HomeRepository) : 
     private val _groups : MutableStateFlow<List<Group>> = MutableStateFlow(emptyList())
     val groups : StateFlow<List<Group>> = _groups
 
-    private var _groupsWithTasks : MutableMap<Group, List<Task>> = mutableMapOf()
-    var groupsWithTasks : StateFlow<MutableMap<Group, List<Task>>> = MutableStateFlow(_groupsWithTasks)
+    private val _test : MutableStateFlow<MutableList<List<Task>>> = MutableStateFlow(mutableListOf())
+    val test : StateFlow<List<List<Task>>> = _test
+
+    private val _groupsWithTasks : MutableStateFlow<MutableMap<Group, List<Task>>> = MutableStateFlow(mutableMapOf())
+    val groupsWithTasks : StateFlow<MutableMap<Group, List<Task>>> = _groupsWithTasks
 
     fun refreshGroups() {
         viewModelScope.launch {
@@ -68,11 +71,14 @@ class AllTasksViewModel @Inject constructor(private val rep : HomeRepository) : 
             rep.getTasksBetweenStartOfDayAnd24Hours(group, calendar).collect {
                 when(it){
                     is ResultState.Success -> {
-                        Log.d("data", "gettasks succes: ${it.data}")
-                        _groupsWithTasks[group] = it.data}
+                        _test.value += it.data
+                        _groupsWithTasks.value[group] = it.data
+                        Log.d("data", "gettasks succes: ${it.data} \n ${_groupsWithTasks.value}\n ${_test.value}")
+                    }
                     else -> {
                         Log.d("fail", "gettasks failed")
-                        Unit}
+                        Unit
+                    }
                 }
             }
         }

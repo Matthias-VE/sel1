@@ -44,6 +44,12 @@ class DateTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     fun setCalendar(cal : GregorianCalendar){
         this.cal = cal
+        _date.value =
+            DateUtil.formatDate(
+                cal.get(Calendar.DAY_OF_MONTH),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.YEAR)
+            )
     }
 
     fun toggleTask(task: Task) {

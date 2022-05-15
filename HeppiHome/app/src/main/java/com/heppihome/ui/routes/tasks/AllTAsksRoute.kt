@@ -32,11 +32,12 @@ fun AllTasksRoute(
 ){
     vM.refreshGroups()
     val groups by vM.groups.collectAsState()
+    vM.updateGroupsWithTasks(groups)
     val groupsWithTasks by vM.groupsWithTasks.collectAsState()
+    val tasks by vM.test.collectAsState()
     val date by vM.date.collectAsState()
     val format = SimpleDateFormat("kk:mm", Locale.getDefault())
 
-    vM.updateGroupsWithTasks(groups)
 
     Column {
         Topbar(date,
@@ -44,6 +45,9 @@ fun AllTasksRoute(
         )
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {
+                Text(text = "$tasks")
+                Text(text = "$groups")
+                Text(text = "$groupsWithTasks")
                 for((group, tasks) in groupsWithTasks){
                     GroupWithTasks(group = group, tasks = tasks, onChecked = vM::toggleTask, format = format)
                 }
