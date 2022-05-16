@@ -28,7 +28,7 @@ class TopBarTest {
         test = mock<() -> Unit>()
         composeTestRule.setContent {
             HeppiHomeTheme {
-                Topbar(title = "TestBar", expanded = false, toggle = test, onBackPressed = test){}
+                Topbar(title = "TestBar", onBackPressed = test)
             }
         }
 

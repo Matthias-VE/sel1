@@ -28,6 +28,7 @@ import com.heppihome.data.models.Group
 import com.heppihome.ui.components.ConfirmDialog
 import com.heppihome.ui.components.TopbarWithOptionsNoBackArrow
 import com.heppihome.ui.components.TopbarWithSettings
+import com.heppihome.ui.navigation.HomeAppDestinations
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
 import kotlin.math.roundToInt
 
@@ -35,11 +36,12 @@ import kotlin.math.roundToInt
 @Composable
 fun HomeGroupRoute(
     vM : HomeGroupViewModel,
-    onGroupClicked : (Group) -> Unit,
+    onGroupClicked : () -> Unit,
     onNewGroupClicked : () -> Unit,
     onEditGroupClicked : (Group) -> Unit,
     onInvitesClicked: () -> Unit,
-    onSettingsPressed: () -> Unit
+    onSettingsPressed: () -> Unit,
+    onAllTasks : () -> Unit
 ) {
     vM.refreshGroups()
     val groups by vM.groups.collectAsState()
@@ -47,7 +49,7 @@ fun HomeGroupRoute(
 
     HomeGroupScreen(
         groups,
-        onGroupClicked,
+        {vM.setGroup(it); onGroupClicked()},
         expanded,
         vM::expandGroupMenu,
         onNewGroupClicked,
@@ -55,7 +57,8 @@ fun HomeGroupRoute(
         onEditGroupClicked,
         vM::leaveGroup,
         onInvitesClicked,
-        onSettingsPressed
+        onSettingsPressed,
+        onAllTasks
     )
 }
 
@@ -70,7 +73,8 @@ fun HomeGroupScreen(
     onEditGroupClicked : (Group) -> Unit,
     onLeaveGroupClicked: (Group, Context) -> Unit,
     onInvitesClicked : () -> Unit,
-    onSettingsPressed : () -> Unit
+    onSettingsPressed : () -> Unit,
+    onAllTasks : () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         TopbarWithSettings(
@@ -78,18 +82,18 @@ fun HomeGroupScreen(
             onSettingsPressed = onSettingsPressed
         )
 
-        Alltasks()
+        Alltasks(onAllTasks)
         //Groups(groups, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked)
         AddButton(groups, onGroupClicked, vM, onEditGroupClicked, onLeaveGroupClicked, onNewGroupClicked, onInvitesClicked)
     }
 }
 
 @Composable
-fun Alltasks() {
+fun Alltasks(onAllTasks : () -> Unit) {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.secondary) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.padding(5.dp))
-            Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
+            Row(modifier = Modifier.padding(10.dp).clickable { onAllTasks() }, horizontalArrangement = Arrangement.Center) {
                 Text(stringResource(R.string.AllTasks), fontSize = 30.sp)
             }
         }

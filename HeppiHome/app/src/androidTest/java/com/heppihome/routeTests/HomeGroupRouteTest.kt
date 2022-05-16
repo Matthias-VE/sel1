@@ -39,18 +39,20 @@ class HomeGroupRouteTest {
     fun testHeader() {
         val groupclick = mock<(Group) -> Unit>()
         val click = mock<() -> Unit>()
+        val leave = mock<(Group, Context) -> Unit>()
         val groups = listOf(Group())
-
         composeTestRule.setContent {
             HomeGroupScreen(
                 groups = groups,
-                vM = vM,
                 onGroupClicked = groupclick,
+                expanded = true,
+                toggle = click,
                 onNewGroupClicked = click,
+                vM = vM,
                 onEditGroupClicked = groupclick,
-                expanded = false,
                 onInvitesClicked = click,
-                toggle = click
+                onLeaveGroupClicked = leave,
+                onSettingsPressed = click
             )
         }
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -64,6 +66,7 @@ class HomeGroupRouteTest {
     fun testDropDown() {
         val groupclick = mock<(Group) -> Unit>()
         val click = mock<() -> Unit>()
+        val leave = mock<(Group, Context) -> Unit>()
         val groups = listOf(Group())
         composeTestRule.setContent {
             HomeGroupScreen(
@@ -75,6 +78,8 @@ class HomeGroupRouteTest {
                 vM = vM,
                 onEditGroupClicked = groupclick,
                 onInvitesClicked = click,
+                onLeaveGroupClicked = leave,
+                onSettingsPressed = click
             )
         }
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -89,11 +94,11 @@ class HomeGroupRouteTest {
     @Test
     fun testSideView(){
         val groupclick = mock<(Group) -> Unit>()
-        val click = mock<() -> Unit>()
+        val groupLeave = mock<(Group, Context) -> Unit>()
         val group = Group()
         composeTestRule.setContent{
             SideView(g = group, onGroupClicked = groupclick, vM = vM,
-                onEditGroupClicked = groupclick)
+                onEditGroupClicked = groupclick, groupLeave)
         }
         composeTestRule.onNodeWithContentDescription("Edit").assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("Delete").assertIsDisplayed()

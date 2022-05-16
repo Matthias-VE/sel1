@@ -20,11 +20,10 @@ import com.heppihome.viewmodels.groups.InvitePersonViewModel
 @Composable
 fun HomeInvitePersonRoute(
     vM : InvitePersonViewModel = hiltViewModel(),
-    onBackPressed: () -> Unit,
-    group : Group
+    onBackPressed: () -> Unit
 ){
     val email by vM.email.collectAsState()
-    HomeInvitePersonScreen(email, onBackPressed, vM::onChangeEmail, {vM.invitePerson(group); onBackPressed()})
+    HomeInvitePersonScreen(email, onBackPressed, vM::onChangeEmail, {vM.invitePerson(); onBackPressed()})
 }
 @Composable
 fun HomeInvitePersonScreen(

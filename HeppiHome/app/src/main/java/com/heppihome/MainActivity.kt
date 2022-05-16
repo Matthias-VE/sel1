@@ -16,6 +16,7 @@ import com.heppihome.ui.navigation.HomeNavGraph
 import com.heppihome.ui.theme.HeppiHomeTheme
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
 import com.heppihome.viewmodels.tasks.HomeTasksViewModel
+import com.heppihome.viewmodels.test.PopulateViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -35,16 +36,17 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //Population of database with dummy data.
 
-                    val viewmTask : HomeTasksViewModel = hiltViewModel()
-                    val viewmGroup : HomeGroupViewModel = hiltViewModel()
-                    val p = PopulateDB(viewmTask, viewmGroup)
-                    // true does the populate, false does nothing. For quick enabling / disabling.
-                    p.Populate(false)
-
+                    val populate = false
+                    if (populate) {
+                        val viewm : PopulateViewModel = hiltViewModel()
+                        // true does the populate, false does nothing. For quick enabling / disabling.
+                        val p = PopulateDB(viewm)
+                        p.Populate(populate)
+                    }
+                    
                     HomeNavGraph(vM = hiltViewModel(), context = this)
                 }
             }
         }
     }
 }
-

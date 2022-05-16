@@ -41,10 +41,11 @@ import java.util.*
 @Composable
 fun AddTaskRoute(
     vM : AddTaskViewModel = hiltViewModel(),
-    group : Group,
     onCancelled: () -> Unit
 ) {
-    vM.usersInGroup(group)
+    vM.usersInGroup()
+
+    val isAdmin by vM.isAdmin.collectAsState()
     val name by vM.name.collectAsState()
     val points by vM.points.collectAsState()
     val users by vM.users.collectAsState()
@@ -54,6 +55,7 @@ fun AddTaskRoute(
 
     AddTaskScreen(
         name,
+        isAdmin,
         points,
         vM.calendar,
         users,
@@ -61,7 +63,7 @@ fun AddTaskRoute(
         vM::checkUser,
         onCancelled,
         {vM.updateName(it)},
-        {vM.addTask(group); onCancelled()},
+        {vM.addTask(); onCancelled()},
         hours, date,
         vM::updateDate,
         vM::updateHours,
@@ -71,6 +73,7 @@ fun AddTaskRoute(
 @Composable
 fun AddTaskScreen(
     name : String,
+    isAdmin : Boolean,
     points : String,
     cal : Calendar,
     users: List<String>,
@@ -90,7 +93,9 @@ fun AddTaskScreen(
             modifier = Modifier.padding(10.dp)
         ) {
             InputField(name = stringResource(R.string.Task), description = name, onNameChanged)
-            InputNumberField(name = "Points", value = points, edit = updatePoints)
+            if (isAdmin) {
+                InputNumberField(name = "Points", value = points, edit = updatePoints)
+            }
             UserSelection(users = usersInGroup, users, onCheckUser = onCheckUser)
             Log.i("AddTaskRoute", "users size: " + users.size)
             CalendarView(cal,

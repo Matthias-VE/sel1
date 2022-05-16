@@ -1,0 +1,92 @@
+package com.heppihome.ui.routes.shop
+
+import android.content.Context
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.heppihome.R
+
+import com.heppihome.ui.components.InputField
+import com.heppihome.ui.components.InputNumberField
+import com.heppihome.ui.components.Topbar
+import com.heppihome.viewmodels.shop.AddShopItemViewModel
+
+@Composable
+fun AddShopItemRoute(
+    vM : AddShopItemViewModel = hiltViewModel(),
+    goBackToShop : () -> Unit
+) {
+
+    val name by vM.name.collectAsState()
+    val points by vM.points.collectAsState()
+
+    AddShopItemScreen(
+        goBackToShop,
+        name,
+        points,
+        vM::updateName,
+        vM::updatePoints,
+        vM::isValid,
+        vM::addShopItem
+    )
+
+}
+@Composable
+fun AddShopItemScreen(
+    onCancel : () -> Unit,
+    name : String,
+    points : String,
+    changeName : (String) -> Unit,
+    changePoints : (String) -> Unit,
+    isValid : (Context) -> Boolean,
+    addReward : (Context) -> Unit
+) {
+    val context = LocalContext.current
+    Column() {
+        Topbar("New Reward", onCancel)
+        Column(modifier = Modifier
+            .padding(10.dp)) {
+            InputField(name = "Reward name", description = name, changeName)
+            InputNumberField(name = "How many points?", value = points, changePoints)
+            Button(onClick = {
+                if (isValid(context)) {
+                    addReward(context)
+                    onCancel()
+                }
+            },
+                modifier = Modifier.padding(10.dp)) {
+                Text(stringResource(R.string.Add))
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun AddShopItemRoutePreview() {
+
+    var name by remember { mutableStateOf("")}
+    var points by remember { mutableStateOf("")}
+    fun changeName(str : String) {name = str}
+    fun changePoints(str: String) {points = str}
+    fun isValid(c : Context): Boolean {return true}
+
+    AddShopItemScreen(
+        onCancel = {},
+        name = name,
+        points = points,
+        changeName = ::changeName,
+        changePoints = ::changePoints,
+        isValid = ::isValid,
+        addReward = {}
+    )
+
+}

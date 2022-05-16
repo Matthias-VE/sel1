@@ -37,12 +37,17 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
 
     init {
         refreshInvites()
+        refreshGroups()
+    }
+
+    fun setGroup(g : Group) {
+        rep.changeGroup(g)
     }
 
     fun refreshInvites() {
         viewModelScope.launch {
-            var temp = rep.getAllInvites()
-            _hasInvites.value = !temp.isEmpty()
+            val temp = rep.getAllInvites()
+            _hasInvites.value = temp.isNotEmpty()
         }
     }
 
@@ -84,9 +89,4 @@ class HomeGroupViewModel @Inject constructor(private val rep : HomeRepository) :
         }
     }
 
-    fun addGroupWithId(g : Group) {
-        viewModelScope.launch {
-            rep.addGroupWithId(g).collect {}
-        }
-    }
 }

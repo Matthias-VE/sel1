@@ -20,7 +20,7 @@
     <string name="EditGroup">Edit Group</string>
     <string name="InviteToGroup">Invite someone for this group</string>
     <string name="Invite">Invite</string>
-    <string name="GotInvite">You got invited to a group by </string>
+    <string name="GotInvite">You got invited to a group by\ </string>
     <string name="AcceptOrDeclineInvite">Accept or Decline this invite.</string>
     <string name="Accept">Accept</string>
     <string name="Decline">Decline</string>
@@ -29,20 +29,22 @@
     <string name="InvitePerson">Invite this person</string>
     <string name="YourInvites">Your invites</string>
     <string name="NoInvites">You have not been invited to any groups</string>
-    <string name="InviteFrom">Invite from: </string>
+    <string name="InviteFrom">Invite from:\ </string>
     <string name="Task">Task</string>
     <string name="AddTask">Add Task</string>
-    <string name="TaskForPerson">This task is for:</string>
+    <string name="TaskForPerson">This task is for:\ </string>
     <string name="OpenDatePicker">Open Date Picker</string>
     <string name="OpenTimePicker">Open Time Picker</string>
-    <string name="SelectedDate">Selected Date: </string>
-    <string name="SelectedTime">Selected Time: </string>
+    <string name="SelectedDate">Selected Date:\ </string>
+    <string name="SelectedTime">Selected Time:\ </string>
     <string name="LogOut">Log out</string>
     <string name="Loading">Loading</string>
     <string name="FeedbackGroupEdited">Group has been edited</string>
     <string name="FeedbackGroupDeleted">Group has been deleted</string>
     <string name="No">No</string>
     <string name="Yes">Yes</string>
+    <string name="Tasks">Tasks</string>
+    <string name="NoTasksDue">No tasks due on\ </string>
 
     <!-- FireBase -->
     <string name="fui_progress_dialog_loading" translation_description="Loading text in dialog">Loading…</string>
@@ -90,5 +92,6 @@
     <!-- Other error messages -->
     <string name="fui_error_unknown" translation_description="General error messages for an unknown failure.">An unknown error occurred.</string>
     <string name="fui_error_invalid_password" translation_description="Error message for when the user enters an invalid or wrong password.">Incorrect password.</string>
+
 
 </resources>

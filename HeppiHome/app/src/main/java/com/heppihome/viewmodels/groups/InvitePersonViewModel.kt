@@ -22,10 +22,10 @@ class InvitePersonViewModel @Inject constructor(private val rep : HomeRepository
     }
 
     // invite this email for this group
-    fun invitePerson(group : Group) {
+    fun invitePerson() {
         var succes = false
         viewModelScope.launch {
-            succes = rep.sendInviteTo(_email.value, group)
+            succes = rep.sendInviteTo(_email.value)
         }
 
     }
