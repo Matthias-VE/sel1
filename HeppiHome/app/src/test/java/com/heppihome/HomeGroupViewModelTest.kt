@@ -1,5 +1,6 @@
 package com.heppihome
 
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
@@ -32,9 +33,10 @@ class HomeGroupViewModelTest {
     }
 
     @org.junit.Test
-    fun addGroupId(){
+    fun leaveGroup(){
         val group = Group()
-        viewModel.addGroupWithId(group)
-        verify(mockRepository).addGroupWithId(group)
+        val context : Context = mock()
+        viewModel.leaveGroup(group, context)
+        verify(mockRepository).leaveGroup(group)
     }
 }

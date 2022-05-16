@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
-import com.heppihome.viewmodels.HomeShopViewModel
 import com.heppihome.viewmodels.tasks.AddTaskViewModel
 import org.junit.Rule
 import org.junit.Test
@@ -24,9 +23,8 @@ class AddTaskViewModelTest {
     @Test
     fun addTask(){
         val g = Group()
-        viewModel.addTask(g)
+        viewModel.addTask()
         verify(mockRepository).addTask(Task(), g)
     }
-
 
 }

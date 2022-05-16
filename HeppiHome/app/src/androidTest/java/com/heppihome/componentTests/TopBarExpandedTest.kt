@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.heppihome.R
 import com.heppihome.ui.components.Topbar
+import com.heppihome.ui.components.TopbarWithOptions
 import com.heppihome.ui.theme.HeppiHomeTheme
 import org.junit.Rule
 import org.junit.Test
@@ -22,9 +23,11 @@ class TopBarExpandedTest {
     @Test
     fun testDropdown(){
         test = mock<() -> Unit>()
+        val list : List<()->Unit> = mock()
         composeTestRule.setContent {
             HeppiHomeTheme {
-                Topbar(title = "TestBar", expanded = true, toggle = test, onBackPressed = test){}
+                TopbarWithOptions(title = "TestBar", expanded = true, toggle = test,
+                    onBackPressed = test, itemStrings = listOf(""), itemOnClicks = list)
             }
         }
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext

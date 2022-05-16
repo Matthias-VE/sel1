@@ -24,7 +24,7 @@ class GroupViewModelsTests {
     suspend fun invitePersonView(){
         val viewModel = InvitePersonViewModel(mockRepository)
         val group = Group()
-        viewModel.invitePerson(group)
+        viewModel.invitePerson()
         verify(mockRepository).sendInviteTo("", group)
     }
 

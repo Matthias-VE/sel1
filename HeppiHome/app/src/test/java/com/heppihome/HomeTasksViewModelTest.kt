@@ -33,10 +33,9 @@ class HomeTasksViewModelTest {
     }
 
     @Test
-    fun addTask(){
+    fun checkTask(){
         val task = Task()
-        val group = Group()
-        viewModel.addTask(task, group)
-        verify(mockRepository).addTask(task, group)
+        viewModel.toggleTask(task)
+        verify(mockRepository).checkTask(task)
     }
 }
