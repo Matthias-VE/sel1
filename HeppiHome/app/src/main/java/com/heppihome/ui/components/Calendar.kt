@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.CalendarView
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,6 +31,7 @@ fun Calendar(
 ) {
     vM.resetDate()
     val date by vM.date.collectAsState()
+
     Scaffold(
         topBar = { TopbarNoBackArrow(title = stringResource(R.string.Calendar)) },
         content = {

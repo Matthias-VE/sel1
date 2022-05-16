@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HeppiHome</string>
+    <string name="Calendar">Kalender</string>
+    <string name="NewGroup">Groep aanmaken</string>
+    <string name="JoinGroup">Groep toetreden</string>
+    <string name="LeaveGroup">Groep verlaten</string>
+    <string name="GroupName">Groepsnaam</string>
+    <string name="Description">Beschrijving</string>
+    <string name="Add">Voeg toe</string>
+    <string name="Cancel">Annuleren</string>
+    <string name="Groups">Groepen</string>
+    <string name="AllTasks">Alle taken</string>
+    <string name="Settings">Instellingen</string>
+    <string name="Profile">Profiel</string>
+    <string name="Notifications">Meldingen</string>
+    <string name="Language">Taal</string>
+    <string name="Help">Hulp</string>
+    <string name="Theme">Thema</string>
+    <string name="Edit">Wijzig</string>
+    <string name="EditGroup">Wijzig groep</string>
+    <string name="InviteToGroup">Nodig iemand uit voor deze groep</string>
+    <string name="Invite">Nodig uit</string>
+    <string name="GotInvite">Je werd tot een groep uitgenodigd door </string>
+    <string name="AcceptOrDeclineInvite">Aanvaard of weiger deze uitnodiging</string>
+    <string name="Accept">Aanvaard</string>
+    <string name="Decline">Weiger</string>
+    <string name="Invites">Uitnodigingen</string>
+    <string name="Email">email</string>
+    <string name="InvitePerson">Nodig deze persoon uit</string>
+    <string name="YourInvites">Jouw uitnodigingen</string>
+    <string name="NoInvites">Je hebt momenteel geen openstaande uitnodingen</string>
+    <string name="InviteFrom">Uitnodiging van: </string>
+    <string name="Task">Task</string>
+    <string name="TaskForPerson">Deze taak is voor:</string>
+    <string name="OpenDatePicker">Datumkiezer openen</string>
+    <string name="OpenTimePicker">Tijdkiezer openen</string>
+    <string name="SelectedDate">Geselecteerde datum: </string>
+    <string name="SelectedTime">Geselecteerde tijd: </string>
+    <string name="LogOut">Uitloggen</string>
+    <string name="Loading">Laden</string>
+</resources>

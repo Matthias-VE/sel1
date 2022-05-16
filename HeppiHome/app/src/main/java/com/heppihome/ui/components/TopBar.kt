@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -75,7 +76,7 @@ fun TopbarWithOptionsNoBackArrow(title : String, expanded: Boolean, toggle: () -
 }
 
 @Composable
-fun TopbarWithSettings(title: String, onSettingsPressed: () -> Unit) {
+fun TopbarWithIcon(title : String, icon : ImageVector, contentDesc : String, onIconPressed : () -> Unit) {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
         Row(modifier = Modifier.padding(10.dp)) {
             Text(title, fontSize = 30.sp, style = MaterialTheme.typography.h6)
@@ -83,11 +84,16 @@ fun TopbarWithSettings(title: String, onSettingsPressed: () -> Unit) {
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp), horizontalArrangement = Arrangement.End) {
-            IconButton(onClick =  onSettingsPressed) {
-                Icon(Icons.Default.Settings, contentDescription = "Settings", modifier = Modifier.size(40.dp))
+            IconButton(onClick =  onIconPressed) {
+                Icon(icon, contentDescription = contentDesc, modifier = Modifier.size(40.dp))
             }
         }
     }
+}
+
+@Composable
+fun TopbarWithSettings(title: String, onSettingsPressed: () -> Unit) {
+    TopbarWithIcon(title = title, icon = Icons.Filled.Settings, contentDesc = "Settings", onIconPressed = onSettingsPressed)
 }
 
 @Composable

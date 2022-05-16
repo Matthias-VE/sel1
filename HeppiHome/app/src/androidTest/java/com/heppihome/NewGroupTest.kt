@@ -1,5 +1,7 @@
 package com.heppihome
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.heppihome.data.FirebaseDao
@@ -43,10 +45,11 @@ class NewGroupTest {
     }
 
     @Test
+    @Composable
     fun testOnClickAdd(){
         composeTestRule.onNodeWithText("Add").performClick()
         composeTestRule.waitForIdle()
-        verify(vM.addGroups(), atLeastOnce())
+        verify(vM.addGroups(LocalContext.current), atLeastOnce())
     }
 
     @Test

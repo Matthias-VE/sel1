@@ -41,14 +41,25 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
           onChecked: (Task) -> Unit, group : Group,
           onBackPressed : () -> Unit,
           onInvitePerson : () -> Unit,
-          format : SimpleDateFormat
+          format : SimpleDateFormat,
+          isAdmin : Boolean,
+          resignAsAdmin : () -> Unit,
+          makeSomeoneAdmin : () -> Unit
 ) {
+    val lists = Pair(mutableListOf(stringResource(R.string.Invite)), mutableListOf(onInvitePerson))
+
+    if (isAdmin) {
+        lists.first.add("Resign as admin")
+        lists.first.add("Make someone admin")
+        lists.second.add(resignAsAdmin)
+        lists.second.add(makeSomeoneAdmin)
+    }
 
     Column {
         TopbarWithOptions(group.name,expandMenu, toggleMenu,
             onBackPressed = onBackPressed,
-            listOf(stringResource(R.string.Invite)),
-            listOf(onInvitePerson)
+            lists.first,
+            lists.second
         )
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {
