@@ -94,5 +94,31 @@
     <!-- Other error messages -->
     <string name="fui_error_unknown" translation_description="General error messages for an unknown failure.">Een onbekende fout is opgetreden.</string>
     <string name="fui_error_invalid_password" translation_description="Error message for when the user enters an invalid or wrong password.">Incorrect wachtwoord.</string>
+    <!-- end of FireBase resources -->
+
+    <string name="Today">vandaag</string>
+    <string name="Tomorrow">morgen</string>
+    <string name="ResignAdmin">Stop als beheerder</string>
+    <string name="MakeAdmin">Maak iemand beheerder</string>
+    <string name="NoTasks">Geen taken</string>
+    <string name="MadeAdmin">Persoon is beheerder gemaakt.</string>
+    <string name="ChooseWhoAdmin">Kies wie u beheerder wilt maken:</string>
+    <string name="MakeUserAdmin">Wil je <xliff:g user="user" example="Admin">%s</xliff:g>  beheerder maken?</string>
+    <string name="WantToLeaveGroup">Wilt u deze groep verlaten?</string>
+    <string name="NewReward">Nieuwe beloning</string>
+    <string name="RewardName">Naam van beloning</string>
+    <string name="NumberOfPoints">Hoeveel punten?</string>
+    <string name="EditReward">Bewerk beloning</string>
+    <string name="Inventory">Inventaris</string>
+    <string name="CashInReward">Wil je deze beloning verzilveren?</string>
+    <string name="CashIn">Verzilver</string>
+    <string name="PurchaseSuccessful">Dit artikel is gekocht!</string>
+    <string name="Shop">Winkel</string>
+    <string name="YouCurrentlyHave">U heeft momenteel\ </string>
+    <string name="PointsShort">ptn</string>
+    <string name="PtsBuy">\ ptn   KOOP</string>
+    <string name="NotEnoughPoints">Je hebt niet genoeg punten om deze beloning te kopen</string>
+    <string name="Points">Punten</string>
+    <string name="CantResignAdmin">Je kunt geen ontslag nemen als beheerder, want je bent de laatste beheerder van de groep</string>
 
 </resources>
