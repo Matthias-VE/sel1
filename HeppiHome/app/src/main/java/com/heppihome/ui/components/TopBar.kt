@@ -3,9 +3,7 @@ package com.heppihome.ui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -90,7 +88,7 @@ fun TopbarWithIcon(title : String, icon : ImageVector, contentDesc : String, onI
 
 @Composable
 fun TopbarWithSettings(title: String, onSettingsPressed: () -> Unit) {
-    TopbarWithIcon(title = title, icon = Icons.Filled.Settings, contentDesc = "Settings", onIconPressed = onSettingsPressed)
+    TopbarWithIcon(title = title, icon = Icons.Filled.AccountCircle, contentDesc = "Settings", onIconPressed = onSettingsPressed)
 }
 
 @Composable
