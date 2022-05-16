@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     //Population of database with dummy data.
+
                     val populate = false
                     if (populate) {
                         val viewm : PopulateViewModel = hiltViewModel()
@@ -42,10 +43,10 @@ class MainActivity : ComponentActivity() {
                         val p = PopulateDB(viewm)
                         p.Populate(populate)
                     }
+                    
                     HomeNavGraph(vM = hiltViewModel(), context = this)
                 }
             }
         }
     }
 }
-

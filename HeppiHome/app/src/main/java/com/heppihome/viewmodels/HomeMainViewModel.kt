@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +23,8 @@ class HomeMainViewModel @Inject constructor (private val rep : HomeRepository) :
 
     var toEditGroup : Group = Group()
 
+    var calendar : GregorianCalendar = GregorianCalendar()
+    
     var toEditShopItem : ShopItem = ShopItem()
 
 }

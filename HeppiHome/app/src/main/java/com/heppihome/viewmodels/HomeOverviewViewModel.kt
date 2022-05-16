@@ -19,22 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
-    val cal = GregorianCalendar()
-
-    private val _tasks = MutableStateFlow(emptyList<Task>())
-    val tasks = _tasks.asStateFlow()
-
-    private val _loading = MutableStateFlow(false)
-    val loading = _loading.asStateFlow()
-
-    fun refreshTasks() {
-        viewModelScope.launch {
-            rep.getTasksBetweenStartOfDayAnd24Hours(start = cal).collect {
-                _loading.value = it is ResultState.Loading
-                if (it is ResultState.Success) _tasks.value = it.data
-            }
-        }
-    }
+    var cal = GregorianCalendar()
 
     private val _date = MutableStateFlow(
         DateUtil.formatDate(
@@ -43,6 +28,15 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
             cal.get(Calendar.YEAR)
         )
     )
+
+    fun resetDate(){
+        cal = GregorianCalendar()
+        _date.value = DateUtil.formatDate(
+            cal.get(Calendar.DAY_OF_MONTH),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.YEAR)
+        )
+    }
 
     val date = _date.asStateFlow()
 
@@ -57,6 +51,5 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
         cal.set(Calendar.DAY_OF_MONTH, day)
         cal.set(Calendar.MONTH, month)
         cal.set(Calendar.YEAR, year)
-        refreshTasks()
     }
 }

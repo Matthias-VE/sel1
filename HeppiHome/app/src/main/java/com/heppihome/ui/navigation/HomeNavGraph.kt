@@ -27,8 +27,11 @@ import com.heppihome.ui.routes.shop.EditShopItemRoute
 import com.heppihome.ui.routes.shop.HomeInventoryRoute
 import com.heppihome.ui.routes.shop.HomeShopRoute
 import com.heppihome.ui.routes.tasks.AddTaskRoute
+import com.heppihome.ui.routes.tasks.AllTasksRoute
+import com.heppihome.ui.routes.tasks.DateTasksRoute
 import com.heppihome.ui.routes.tasks.HomeTasksRoute
 import com.heppihome.viewmodels.HomeMainViewModel
+import java.util.*
 
 @Composable
 fun HomeNavGraph(
@@ -61,7 +64,30 @@ fun HomeNavGraph(
                     navController.navigate(HomeAppDestinations.ALLINV_ROUTE)
                 }, onSettingsPressed = {
                     navController.navigate(BottomNavItem.Settings.screen_route)
+                },
+                onAllTasks = {navController.navigate(HomeAppDestinations.ALL_TASKS)}
+            )
+        }
+
+        composable(HomeAppDestinations.ALL_TASKS){
+            AllTasksRoute(vM = hiltViewModel()) {HomeAppDestinations.GROUP_ROUTE }
+        }
+
+        composable(BottomNavItem.Overview.screen_route) {
+            ContentWithNavbar(navController) {
+                HomeOverViewRoute(vM = hiltViewModel()
+                ) {
+                    vM.calendar = it
+                    navController.navigate(HomeAppDestinations.DATE_TASKS)
                 }
+            }
+        }
+
+        composable(HomeAppDestinations.DATE_TASKS){
+            DateTasksRoute(vM = hiltViewModel(),
+                onBackPressed = {navController.navigate(BottomNavItem.Overview.screen_route)},
+                vM.calendar,
+                vM.selectedGroup
             )
         }
 
@@ -89,9 +115,8 @@ fun HomeNavGraph(
         composable(HomeAppDestinations.INVITE_DETAIL) {
             DetailInviteRoute(
                 vM = hiltViewModel(),
-                invite = vM.selectedInvite,
-                {navController.navigate(HomeAppDestinations.GROUP_ROUTE)}
-            )
+                invite = vM.selectedInvite
+            ) { navController.navigate(HomeAppDestinations.GROUP_ROUTE) }
         }
 
         composable(HomeAppDestinations.GROUP_EDIT) {
@@ -99,12 +124,6 @@ fun HomeNavGraph(
                 onGroupCancel = {
                     navController.navigate(HomeAppDestinations.GROUP_ROUTE)
                 }, g = vM.toEditGroup)
-        }
-
-        composable(BottomNavItem.Overview.screen_route) {
-            ContentWithNavbar(navController) {
-                HomeOverViewRoute(vM = hiltViewModel())
-            }
         }
 
         composable(HomeAppDestinations.SHOP_ROUTE) {

@@ -23,7 +23,7 @@ Topbar(title : String,
         Row(modifier = Modifier
             .fillMaxWidth()) {
             Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Start) {
-                IconButton(onClick =  onBackPressed) {
+                IconButton(onClick = onBackPressed) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "Return", modifier = Modifier.size(40.dp))
                 }
             }

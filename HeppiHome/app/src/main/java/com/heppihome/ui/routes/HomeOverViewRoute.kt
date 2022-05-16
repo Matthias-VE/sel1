@@ -14,26 +14,22 @@ import java.util.*
 
 @Composable
 fun HomeOverViewRoute(
-    vM : HomeOverviewViewModel = hiltViewModel()
+    vM : HomeOverviewViewModel,
+    onButtonClicked : (GregorianCalendar) -> Unit,
 ) {
 
-    val tasks by vM.tasks.collectAsState()
-
-    val date by vM.date.collectAsState()
-
     HomeOverViewScreen(
+        vM,
         vM::onDateChange,
-        tasks,
-        date
+        onButtonClicked
     )
 }
 
 @Composable
 fun HomeOverViewScreen(
+    vM: HomeOverviewViewModel,
     onDateChange: (CalendarView, Int, Int, Int) -> Unit,
-    tasks : List<Task>,
-    date : String
+    onButtonClicked : (GregorianCalendar) -> Unit
 ) {
-    val format = SimpleDateFormat("kk:mm", Locale.getDefault())
-    Calendar(onDateChange, tasks, date)
+    Calendar(vM, onDateChange, onButtonClicked)
 }
