@@ -94,7 +94,7 @@ fun AddTaskScreen(
         ) {
             InputField(name = stringResource(R.string.Task), description = name, onNameChanged)
             if (isAdmin) {
-                InputNumberField(name = "Points", value = points, edit = updatePoints)
+                InputNumberField(name = stringResource(R.string.Points), value = points, edit = updatePoints)
             }
             UserSelection(users = usersInGroup, users, onCheckUser = onCheckUser)
             Log.i("AddTaskRoute", "users size: " + users.size)

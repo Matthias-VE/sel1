@@ -50,7 +50,7 @@ fun Calendar(
                 Button(onClick = {
                     onButtonClicked(vM.cal)
                 } ) {
-                    Text(text = "view tasks on $date")
+                    Text(text = stringResource(R.string.TasksOnDate) + date)
                 }
             }
         }

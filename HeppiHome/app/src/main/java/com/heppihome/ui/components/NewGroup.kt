@@ -39,8 +39,8 @@ fun NewGroup(
         Header(stringResource(R.string.NewGroup), onGroupCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
-            InputField(name = stringResource(R.string.GroupName), description = temp.text, { x -> vM.setGroup(x)})
-            InputField(name = stringResource(R.string.Description), description = temp2.text, { x -> vM.setDescription(x)})
+            InputField(name = stringResource(R.string.GroupName), description = temp.text) { x -> vM.setGroup(x) }
+            InputField(name = stringResource(R.string.Description), description = temp2.text) { x -> vM.setDescription(x) }
             Button(onClick = {
                     if (vM.isValid(context)) {
                         vM.addGroups(context)

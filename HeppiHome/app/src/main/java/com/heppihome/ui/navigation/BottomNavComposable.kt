@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,8 +36,8 @@ fun BottomNavigation(navController: NavController) {
         items.forEach { item ->
 
             BottomNavigationItem(
-                icon = { Icon(item.icon, item.title) },
-                label = { Text(text = item.title, fontSize = 14.sp) },
+                icon = { Icon(item.icon, stringResource(id = item.title)) },
+                label = { Text(text = stringResource(id = item.title), fontSize = 14.sp) },
                 selectedContentColor = Color.White,
                 unselectedContentColor = Color.LightGray,
                 alwaysShowLabel = true,

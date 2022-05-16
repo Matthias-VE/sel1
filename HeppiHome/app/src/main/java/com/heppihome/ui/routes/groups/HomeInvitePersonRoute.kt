@@ -23,7 +23,7 @@ fun HomeInvitePersonRoute(
     onBackPressed: () -> Unit
 ){
     val email by vM.email.collectAsState()
-    HomeInvitePersonScreen(email, onBackPressed, vM::onChangeEmail, {vM.invitePerson(); onBackPressed()})
+    HomeInvitePersonScreen(email, onBackPressed, vM::onChangeEmail) { vM.invitePerson(); onBackPressed() }
 }
 @Composable
 fun HomeInvitePersonScreen(

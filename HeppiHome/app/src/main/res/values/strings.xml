@@ -20,7 +20,7 @@
     <string name="EditGroup">Edit Group</string>
     <string name="InviteToGroup">Invite someone for this group</string>
     <string name="Invite">Invite</string>
-    <string name="GotInvite">You got invited to a group by\ </string>
+    <string name="GotInvite">You got invited to a group by:\ </string>
     <string name="AcceptOrDeclineInvite">Accept or Decline this invite.</string>
     <string name="Accept">Accept</string>
     <string name="Decline">Decline</string>
@@ -45,6 +45,7 @@
     <string name="Yes">Yes</string>
     <string name="Tasks">Tasks</string>
     <string name="NoTasksDue">No tasks due on\ </string>
+    <string name="TasksOnDate">view tasks on\ </string>
 
     <!-- FireBase -->
     <string name="fui_progress_dialog_loading" translation_description="Loading text in dialog">Loading…</string>
@@ -92,6 +93,33 @@
     <!-- Other error messages -->
     <string name="fui_error_unknown" translation_description="General error messages for an unknown failure.">An unknown error occurred.</string>
     <string name="fui_error_invalid_password" translation_description="Error message for when the user enters an invalid or wrong password.">Incorrect password.</string>
+    <!-- end of FireBase resources -->
+
+    <string name="Today">today</string>
+    <string name="Tomorrow">tomorrow</string>
+    <string name="ResignAdmin">Resign as admin</string>
+    <string name="MakeAdmin">Make someone admin</string>
+    <string name="NoTasks">No tasks</string>
+    <string name="MadeAdmin">Person has been made admin.</string>
+    <string name="ChooseWhoAdmin">Choose who to make admin:</string>
+    <string name="MakeUserAdmin">Do you want to make <xliff:g user="user" example="Admin">%s</xliff:g>  admin?</string>
+    <string name="WantToLeaveGroup">Do you want to leave this group?</string>
+    <string name="NewReward">New Reward</string>
+    <string name="RewardName">Reward name</string>
+    <string name="NumberOfPoints">How many points?</string>
+    <string name="EditReward">Edit Reward</string>
+    <string name="Inventory">Inventory</string>
+    <string name="CashInReward">Do you want to cash in this reward?</string>
+    <string name="CashIn">Cash in</string>
+    <string name="PurchaseSuccessful">Successfully bought this item!</string>
+    <string name="Shop">Shop</string>
+    <string name="YouCurrentlyHave">You currently have\ </string>
+    <string name="PointsShort">pts</string>
+    <string name="PtsBuy">\ pts   BUY</string>
+    <string name="NotEnoughPoints">You do not have enough points to buy this reward</string>
+    <string name="Points">Points</string>
+    <string name="CantResignAdmin">You can\'t resign as admin since you are the last admin of the group</string>
+    <string name="Overview">Overview</string>
 
 
 </resources>

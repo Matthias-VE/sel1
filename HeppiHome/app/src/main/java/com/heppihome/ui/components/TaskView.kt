@@ -49,8 +49,8 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
     val lists = Pair(mutableListOf(stringResource(R.string.Invite)), mutableListOf(onInvitePerson))
 
     if (isAdmin) {
-        lists.first.add("Resign as admin")
-        lists.first.add("Make someone admin")
+        lists.first.add(stringResource(R.string.ResignAdmin))
+        lists.first.add(stringResource(R.string.MakeAdmin))
         lists.second.add(resignAsAdmin)
         lists.second.add(makeSomeoneAdmin)
     }
@@ -63,8 +63,8 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
         )
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {
-                Day("today", tasksToday, onChecked, format)
-                Day("tomorrow", tasksTomorrow, onChecked, format)
+                Day(stringResource(R.string.Today), tasksToday, onChecked, format)
+                Day(stringResource(R.string.Tomorrow), tasksTomorrow, onChecked, format)
             }
         }
     }
@@ -119,7 +119,7 @@ fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit, format : S
             }
             if(expended){
                 if(tasks.isEmpty()){
-                    Text(text = "No tasks")
+                    Text(text = stringResource(R.string.NoTasks))
                 }else {
                     for (task in tasks) {
                         Row {
