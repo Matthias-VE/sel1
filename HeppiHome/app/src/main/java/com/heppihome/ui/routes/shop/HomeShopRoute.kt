@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -86,7 +87,7 @@ fun HomeShopScreen(
 
 ) {
     if (buySuccess.first && buySuccess.second) {
-        Toast.makeText(LocalContext.current, "Successfully bought this item!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(LocalContext.current, stringResource(R.string.PurchaseSuccessful), Toast.LENGTH_SHORT).show()
         reset()
     }
 
@@ -94,7 +95,7 @@ fun HomeShopScreen(
         Column(
             modifier = Modifier.padding(it)
         ) {
-            TopbarWithIcon(title = "Shop", Icons.Filled.List, "Inventory", goToInventory)
+            TopbarWithIcon(title = stringResource(R.string.Shop), Icons.Filled.List, "Inventory", goToInventory)
             PointsDisplay(points = points)
             Spacer(modifier = Modifier.height(15.dp))
             ShopItems(
@@ -120,7 +121,8 @@ fun PointsDisplay(points : Int) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(10.dp),) {
-        Text("You currently have ",
+        Text(
+                    stringResource(R.string.YouCurrentlyHave),
             style = MaterialTheme.typography.body1,
             modifier = Modifier.weight(0.8F)
         )
@@ -134,7 +136,7 @@ fun PointsDisplay(points : Int) {
             )
             Spacer(Modifier.padding(horizontal = 5.dp))
             Text(
-                "pts",
+                stringResource(R.string.PointsShort),
                 fontFamily = FontFamily(Font(R.font.partyconfetti_regular, FontWeight.Normal)),
                 fontWeight = FontWeight.Normal,
                 fontSize = 15.sp,
@@ -173,6 +175,7 @@ fun ListShopItem(
     onClickItem: (ShopItem) -> Unit
 ){
     val context = LocalContext.current
+    val txt = stringResource(R.string.NotEnoughPoints)
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -186,7 +189,7 @@ fun ListShopItem(
             Text(item.name)
         }
         Text(
-            "${item.points} pts   BUY", style = MaterialTheme.typography.button,
+            "${item.points}" + stringResource(R.string.PtsBuy), style = MaterialTheme.typography.button,
             textAlign = TextAlign.Center,
             modifier =
             Modifier
@@ -194,13 +197,11 @@ fun ListShopItem(
                 {
                     val str = onBuyItem(item)
                     if (!str) {
-                        Toast
-                            .makeText(
-                                context,
-                                "You do not have enough points to buy this reward",
-                                Toast.LENGTH_SHORT
-                            )
-                            .show()
+                        Toast.makeText(
+                            context,
+                            txt,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
                 )

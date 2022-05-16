@@ -207,7 +207,7 @@ fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel
     val anchors = mapOf(0f to 0f, sizePx to 1f)
 
     if (showDeleteConfirm) {
-        ConfirmDialog(content = "Do you want to leave this group?",
+        ConfirmDialog(content = stringResource(R.string.WantToLeaveGroup),
             onDismiss = { showDeleteConfirm = false},
             onConfirm = {
                 showDeleteConfirm = false

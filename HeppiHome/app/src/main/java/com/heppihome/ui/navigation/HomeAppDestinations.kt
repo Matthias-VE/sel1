@@ -1,6 +1,9 @@
 package com.heppihome.ui.navigation
 
+import com.heppihome.R
+
 object HomeAppDestinations {
+
     const val GROUP_ROUTE = "groups"
     const val TASKS_ROUTE = "tasks"
     const val LOGIN_ROUTE = "login"
@@ -20,4 +23,5 @@ object HomeAppDestinations {
     const val MAKE_ADMIN_ROUTE = "make_admin"
     const val ADD_SHOPITEM_ROUTE = "add_shopitem"
     const val EDIT_SHOPITEM_ROUTE = "edit_shopitem"
+
 }

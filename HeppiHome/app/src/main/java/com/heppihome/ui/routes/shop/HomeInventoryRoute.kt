@@ -13,8 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.ShopItem
 import com.heppihome.ui.components.ConfirmDialog
@@ -45,7 +47,7 @@ fun HomeInventoryScreen(
 
 ) {
     Column() {
-        Topbar(title = "Inventory", onBackPressed)
+        Topbar(title = stringResource(R.string.Inventory), onBackPressed)
         Spacer(modifier = Modifier.padding(vertical = 15.dp))
         InventoryList(
             inventoryItems = inventoryItems,
@@ -77,7 +79,7 @@ fun InventoryItem(si : ShopItem, onClick : (ShopItem) -> Unit) {
     var showCashInConfirm by remember { mutableStateOf(false) }
 
     if (showCashInConfirm) {
-        ConfirmDialog(content = "Do you want to cash in this reward?",
+        ConfirmDialog(content = stringResource(R.string.CashInReward),
             onDismiss = { showCashInConfirm = false},
             onConfirm = {
                 showCashInConfirm = false
@@ -99,7 +101,7 @@ fun InventoryItem(si : ShopItem, onClick : (ShopItem) -> Unit) {
             Text(si.name)
         }
         Text(
-            "Cash in", style = MaterialTheme.typography.button,
+            stringResource(R.string.CashIn), style = MaterialTheme.typography.button,
             textAlign = TextAlign.Center,
             modifier =
             Modifier

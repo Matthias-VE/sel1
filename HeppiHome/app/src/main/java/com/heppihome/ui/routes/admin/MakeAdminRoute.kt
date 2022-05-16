@@ -36,7 +36,7 @@ fun MakeAdminRoute(
     val admins by vM.admins.collectAsState()
 
     if (feedback) {
-        Toast.makeText(LocalContext.current, "Person has been made admin.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(LocalContext.current, stringResource(R.string.MadeAdmin), Toast.LENGTH_SHORT).show()
         vM.resetFeedback()
         onBackPressed()
     }
@@ -58,7 +58,7 @@ fun MakeAdminScreen(
     admins : List<String>
 ) {
     Column() {
-        Topbar(title = "Make someone admin", onBackPressed = onBackPressed)
+        Topbar(title = stringResource(R.string.MakeAdmin), onBackPressed = onBackPressed)
         Spacer(modifier = Modifier.padding(15.dp))
         AdminSelection(users = users, admins = admins, onMakeAdmin = onMakeAdmin)
     }
@@ -75,7 +75,7 @@ fun AdminSelection(users : List<User>, admins : List<String>, onMakeAdmin : (Use
             .padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(25.dp)
     ) {
-        Text("Choose who to make admin:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.ChooseWhoAdmin), fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.padding(5.dp))
         for (user in users) {
 
@@ -90,7 +90,7 @@ fun AdminSelection(users : List<User>, admins : List<String>, onMakeAdmin : (Use
                 ) {
 
                     if (showAdminConfirm) {
-                        ConfirmDialog(content = "Do you want to make ${user.name} admin?",
+                        ConfirmDialog(content = stringResource(R.string.MakeAdmin, user.name),
                             onDismiss = { showAdminConfirm = false},
                             onConfirm = {
                                 showAdminConfirm = false

@@ -41,7 +41,7 @@ fun DetailInviteScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             Column(Modifier.align(Alignment.TopCenter)) {
                 Text(
-                    stringResource(R.string.GotInvite) + ": ${invite.fromEmail}",
+                    stringResource(R.string.GotInvite) + invite.fromEmail,
                     style = MaterialTheme.typography.h6
                 )
                 Text(stringResource(R.string.AcceptOrDeclineInvite))

@@ -46,6 +46,7 @@
     <string name="Yes">Ja</string>
     <string name="Tasks">Taken</string>
     <string name="NoTasksDue">Geen taken tegen\ </string>
+    <string name="TasksOnDate">Zie taken op\ </string>
 
     <!-- FireBase -->
     <string name="fui_progress_dialog_loading" translation_description="Loading text in dialog">Laden…</string>

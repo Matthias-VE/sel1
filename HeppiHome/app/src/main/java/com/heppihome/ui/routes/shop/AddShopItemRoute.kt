@@ -51,11 +51,11 @@ fun AddShopItemScreen(
 ) {
     val context = LocalContext.current
     Column() {
-        Topbar("New Reward", onCancel)
+        Topbar(stringResource(R.string.NewReward), onCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
-            InputField(name = "Reward name", description = name, changeName)
-            InputNumberField(name = "How many points?", value = points, changePoints)
+            InputField(name = stringResource(R.string.RewardName), description = name, changeName)
+            InputNumberField(name = stringResource(R.string.NumberOfPoints), value = points, changePoints)
             Button(onClick = {
                 if (isValid(context)) {
                     addReward(context)
