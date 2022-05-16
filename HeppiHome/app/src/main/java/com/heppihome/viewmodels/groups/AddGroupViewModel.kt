@@ -45,7 +45,7 @@ class AddGroupViewModel @Inject constructor(private val rep : HomeRepository) : 
     }
 
     fun addGroups(context: Context) {
-        val toAdd = Group(_groupName.value.text, _description.value.text, listOf(rep.user.id))
+        val toAdd = Group(_groupName.value.text, _description.value.text, listOf(rep.user.id), listOf(rep.user.id))
 
 
         viewModelScope.launch {
