@@ -22,4 +22,6 @@ class HomeMainViewModel @Inject constructor (private val rep : HomeRepository) :
 
     var toEditGroup : Group = Group()
 
+    var toEditShopItem : ShopItem = ShopItem()
+
 }

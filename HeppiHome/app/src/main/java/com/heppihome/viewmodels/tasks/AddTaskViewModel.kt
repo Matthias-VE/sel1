@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
 import com.heppihome.Util.DateUtil
+import com.heppihome.Util.NumberUtil
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
@@ -80,17 +81,10 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         _users.value = _users.value.minus(u.id)
     }
 
-    private fun verifyInput(s : String) : Int {
-        var i = 0
-        runCatching {
-            i = Integer.parseInt(s)
-        }
-        return i
-    }
 
     fun addTask() {
         val task = Task(_name.value, false, Timestamp(calendar.time),
-            _users.value, verifyInput(_points.value))
+            _users.value, NumberUtil.verifyInput(_points.value))
         viewModelScope.launch {
             rep.addTask(task).collect {  }
         }

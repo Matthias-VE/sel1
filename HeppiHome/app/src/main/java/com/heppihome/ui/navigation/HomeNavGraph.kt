@@ -22,6 +22,8 @@ import com.heppihome.ui.routes.groups.DetailInviteRoute
 import com.heppihome.ui.routes.groups.HomeGroupRoute
 import com.heppihome.ui.routes.groups.HomeInvitePersonRoute
 import com.heppihome.ui.routes.groups.HomeInvitesRoute
+import com.heppihome.ui.routes.shop.AddShopItemRoute
+import com.heppihome.ui.routes.shop.EditShopItemRoute
 import com.heppihome.ui.routes.shop.HomeInventoryRoute
 import com.heppihome.ui.routes.shop.HomeShopRoute
 import com.heppihome.ui.routes.tasks.AddTaskRoute
@@ -107,10 +109,26 @@ fun HomeNavGraph(
 
         composable(HomeAppDestinations.SHOP_ROUTE) {
             ContentWithNavbar(navController) {
-                HomeShopRoute(hiltViewModel(), {} ,
-                    {navController.navigate(HomeAppDestinations.INVENTORY_ROUTE)}
+                HomeShopRoute(hiltViewModel(),
+                    {
+                        vM.toEditShopItem = it
+                        navController.navigate(HomeAppDestinations.EDIT_SHOPITEM_ROUTE)},
+                    {navController.navigate(HomeAppDestinations.INVENTORY_ROUTE)},
+                    {navController.navigate(HomeAppDestinations.ADD_SHOPITEM_ROUTE)}
                 )
             }
+        }
+
+        composable(HomeAppDestinations.ADD_SHOPITEM_ROUTE) {
+            AddShopItemRoute {
+                navController.navigate(HomeAppDestinations.SHOP_ROUTE)
+            }
+        }
+
+        composable(HomeAppDestinations.EDIT_SHOPITEM_ROUTE) {
+            EditShopItemRoute(goBackToShop = {
+               navController.navigate(HomeAppDestinations.SHOP_ROUTE)
+            }, shopItem = vM.toEditShopItem)
         }
 
         composable(HomeAppDestinations.INVENTORY_ROUTE) {

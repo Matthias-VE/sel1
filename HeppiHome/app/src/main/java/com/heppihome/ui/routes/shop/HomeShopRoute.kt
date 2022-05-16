@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,14 +37,15 @@ import com.heppihome.viewmodels.shop.HomeShopViewModel
 fun HomeShopRoute(
     vM : HomeShopViewModel = hiltViewModel(),
     goToItemDetail : (ShopItem) -> Unit,
-    goToInventory : () -> Unit
+    goToInventory : () -> Unit,
+    goToAddShopItem : () -> Unit,
 ){
     vM.setListener()
     vM.refreshItems()
 
     val points by vM.points.collectAsState()
     val items by vM.shopItems.collectAsState()
-    val clickable by vM.isAdmin.collectAsState()
+    val isAdmin by vM.isAdmin.collectAsState()
     val buySuccess by vM.buySuccess.collectAsState()
 
     HomeShopScreen(
@@ -53,8 +55,20 @@ fun HomeShopRoute(
         points = points.points,
         items,
         vM::buyItem,
-        clickable,
-        goToItemDetail
+        isAdmin,
+        goToItemDetail,
+        goToAddShopItem
+    )
+}
+
+@Composable
+fun WithAddButton(onClickAdd : () -> Unit, content : @Composable (PaddingValues) -> Unit) {
+    Scaffold(
+        floatingActionButton = {FloatingActionButton(onClick = onClickAdd)
+            {Icon(Icons.Default.Add, "add ShopItem button")}
+        },
+        floatingActionButtonPosition = FabPosition.End,
+        content = content
     )
 }
 
@@ -66,19 +80,36 @@ fun HomeShopScreen(
     points : Int,
     items : List<ShopItem>,
     onBuyItem: (ShopItem) -> Boolean,
-    clickable: Boolean,
-    onClickItem: (ShopItem) -> Unit
+    isAdmin: Boolean,
+    onClickItem: (ShopItem) -> Unit,
+    onAddItem: () -> Unit,
+
 ) {
     if (buySuccess.first && buySuccess.second) {
         Toast.makeText(LocalContext.current, "Successfully bought this item!", Toast.LENGTH_SHORT).show()
         reset()
     }
 
-    Column() {
-        TopbarWithIcon(title = "Shop", Icons.Filled.List, "Inventory", goToInventory)
-        PointsDisplay(points = points)
-        Spacer(modifier = Modifier.height(15.dp))
-        ShopItems(l = items, onBuyItem = onBuyItem, clickable = clickable, onClickItem = onClickItem)
+    val content : @Composable (PaddingValues) -> Unit = {
+        Column(
+            modifier = Modifier.padding(it)
+        ) {
+            TopbarWithIcon(title = "Shop", Icons.Filled.List, "Inventory", goToInventory)
+            PointsDisplay(points = points)
+            Spacer(modifier = Modifier.height(15.dp))
+            ShopItems(
+                l = items,
+                onBuyItem = onBuyItem,
+                clickable = isAdmin,
+                onClickItem = onClickItem
+            )
+        }
+    }
+
+    if (isAdmin) {
+        WithAddButton(onClickAdd = onAddItem, content = content)
+    } else {
+        Scaffold(content = content)
     }
 
 }
@@ -197,7 +228,8 @@ fun HomeShopRoutePreview() {
             ShopItem(name= "Test item", points = 5)
         ),
         onBuyItem = {true},
-        clickable = false,
-        onClickItem = {}
+        isAdmin = true,
+        onClickItem = {},
+        {}
     )
 }
