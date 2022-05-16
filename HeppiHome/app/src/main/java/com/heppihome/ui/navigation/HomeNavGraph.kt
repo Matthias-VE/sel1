@@ -70,7 +70,7 @@ fun HomeNavGraph(
         }
 
         composable(HomeAppDestinations.ALL_TASKS){
-            AllTasksRoute(vM = hiltViewModel()) {HomeAppDestinations.GROUP_ROUTE }
+            AllTasksRoute(vM = hiltViewModel()) {navController.navigate(HomeAppDestinations.GROUP_ROUTE) }
         }
 
         composable(BottomNavItem.Overview.screen_route) {

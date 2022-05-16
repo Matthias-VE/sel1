@@ -118,21 +118,25 @@ fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit, format : S
                 }
             }
             if(expended){
-                for (task in tasks) {
-                    Row {
-                        Checkbox(checked = task.done, onCheckedChange = {onChecked(task)})
-                        Text(
-                            text = task.text,
-                            fontSize = MaterialTheme.typography.subtitle1.fontSize
-                        )
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp), horizontalArrangement = Arrangement.End
-                        ) {
+                if(tasks.isEmpty()){
+                    Text(text = "No tasks")
+                }else {
+                    for (task in tasks) {
+                        Row {
+                            Checkbox(checked = task.done, onCheckedChange = { onChecked(task) })
                             Text(
-                                text = format.format(task.deadline.toDate())
+                                text = task.text,
+                                fontSize = MaterialTheme.typography.subtitle1.fontSize
                             )
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp), horizontalArrangement = Arrangement.End
+                            ) {
+                                Text(
+                                    text = format.format(task.deadline.toDate())
+                                )
+                            }
                         }
                     }
                 }

@@ -30,14 +30,10 @@ fun AllTasksRoute(
     vM : AllTasksViewModel,
     onBackPressed : () -> Unit ,
 ){
-    vM.refreshGroups()
-    val groups by vM.groups.collectAsState()
-    vM.updateGroupsWithTasks(groups)
+    vM.getGroupsWithTasks()
     val groupsWithTasks by vM.groupsWithTasks.collectAsState()
-    val tasks by vM.test.collectAsState()
     val date by vM.date.collectAsState()
     val format = SimpleDateFormat("kk:mm", Locale.getDefault())
-
 
     Column {
         Topbar(date,
@@ -45,9 +41,6 @@ fun AllTasksRoute(
         )
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {
-                Text(text = "$tasks")
-                Text(text = "$groups")
-                Text(text = "$groupsWithTasks")
                 for((group, tasks) in groupsWithTasks){
                     GroupWithTasks(group = group, tasks = tasks, onChecked = vM::toggleTask, format = format)
                 }
@@ -104,25 +97,30 @@ fun GroupWithTasks(group: Group, tasks : List<Task>, onChecked : (Task, Group) -
                 }
             }
             if(expended){
-                for (task in tasks) {
-                    Row {
-                        Checkbox(checked = task.done, onCheckedChange = {onChecked(task, group)})
-                        Text(
-                            text = task.text,
-                            fontSize = MaterialTheme.typography.subtitle1.fontSize
-                        )
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp), horizontalArrangement = Arrangement.End
-                        ) {
+                if(tasks.isEmpty()){
+                    Text(text = "No tasks")
+                } else {
+                    for (task in tasks) {
+                        Row {
+                            Checkbox(
+                                checked = task.done,
+                                onCheckedChange = { onChecked(task, group) })
                             Text(
-                                text = format.format(task.deadline.toDate())
+                                text = task.text,
+                                fontSize = MaterialTheme.typography.subtitle1.fontSize
                             )
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp), horizontalArrangement = Arrangement.End
+                            ) {
+                                Text(
+                                    text = format.format(task.deadline.toDate())
+                                )
+                            }
                         }
                     }
                 }
-
             }
         }
     }

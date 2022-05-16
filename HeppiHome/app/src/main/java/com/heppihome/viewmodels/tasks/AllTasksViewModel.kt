@@ -35,8 +35,7 @@ class AllTasksViewModel @Inject constructor(private val rep : HomeRepository) : 
     private val _groups : MutableStateFlow<List<Group>> = MutableStateFlow(emptyList())
     val groups : StateFlow<List<Group>> = _groups
 
-    private val _test : MutableStateFlow<MutableList<List<Task>>> = MutableStateFlow(mutableListOf())
-    val test : StateFlow<List<List<Task>>> = _test
+    private var temp : MutableMap<Group, List<Task>> =mutableMapOf()
 
     private val _groupsWithTasks : MutableStateFlow<MutableMap<Group, List<Task>>> = MutableStateFlow(mutableMapOf())
     val groupsWithTasks : StateFlow<MutableMap<Group, List<Task>>> = _groupsWithTasks
@@ -51,34 +50,31 @@ class AllTasksViewModel @Inject constructor(private val rep : HomeRepository) : 
         viewModelScope.launch {
             rep.checkTask(task, group).collect {
             }
+            getGroupsWithTasks()
         }
     }
 
-    fun updateGroupsWithTasks(groups : List<Group>) {
+    fun getGroupsWithTasks() {
         viewModelScope.launch {
-            for (group in groups) {
-                Log.d("groep", "$group")
+            _groups.value = rep.getAllGroups()
+        }
+        viewModelScope.launch {
+            for (group in groups.value) {
                 getTasks(group)
             }
         }
     }
 
-
     private fun getTasks(group : Group) {
         viewModelScope.launch{
-            Log.i("taskdate", "${calendar.get(Calendar.DAY_OF_MONTH)}-${calendar.get(Calendar.MONTH)}-${calendar.get(
-                Calendar.YEAR)}")
             rep.getTasksBetweenStartOfDayAnd24Hours(group, calendar).collect {
                 when(it){
                     is ResultState.Success -> {
-                        _test.value += it.data
-                        _groupsWithTasks.value[group] = it.data
-                        Log.d("data", "gettasks succes: ${it.data} \n ${_groupsWithTasks.value}\n ${_test.value}")
+                        temp[group] = it.data
+                        _groupsWithTasks.value = temp
+                        Log.d("data", "gettasks succes: ${it.data} \n ${temp}")
                     }
-                    else -> {
-                        Log.d("fail", "gettasks failed")
-                        Unit
-                    }
+                    else -> Unit
                 }
             }
         }
