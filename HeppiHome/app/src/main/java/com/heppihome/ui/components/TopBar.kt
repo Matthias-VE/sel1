@@ -32,13 +32,20 @@ Topbar(title : String,
 @Composable
 fun TopbarNoBackArrow(title : String) {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
+
+        Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Start) {
+            Spacer(Modifier.padding(horizontal = 10.dp))
+            Text(title, fontSize = 30.sp, style = MaterialTheme.typography.h6)
+        }
+        //dit doet helemaal niets maar zet padding in orde
         Row(modifier = Modifier
-            .fillMaxWidth()) {
-            Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Start) {
-                Spacer(Modifier.padding(horizontal = 10.dp))
-                Text(title, fontSize = 30.sp, style = MaterialTheme.typography.h6)
+            .fillMaxWidth()
+            .padding(10.dp), horizontalArrangement = Arrangement.End) {
+            IconButton(onClick = { println("xD") }) {
+                Icon(Icons.Default.ArrowBack, tint = MaterialTheme.colors.primary, contentDescription = "jeet", modifier = Modifier.size(40.dp))
             }
         }
+
     }
 }
 
@@ -74,6 +81,7 @@ fun TopbarWithOptionsNoBackArrow(title : String, expanded: Boolean, toggle: () -
 fun TopbarWithIcon(title : String, icon : ImageVector, contentDesc : String, onIconPressed : () -> Unit) {
     Surface(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colors.primary) {
         Row(modifier = Modifier.padding(10.dp)) {
+            Spacer(Modifier.padding(horizontal = 10.dp))
             Text(title, fontSize = 30.sp, style = MaterialTheme.typography.h6)
         }
         Row(modifier = Modifier
