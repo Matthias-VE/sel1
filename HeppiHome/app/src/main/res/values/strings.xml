@@ -119,6 +119,7 @@
     <string name="NotEnoughPoints">You do not have enough points to buy this reward</string>
     <string name="Points">Points</string>
     <string name="CantResignAdmin">You can\'t resign as admin since you are the last admin of the group</string>
+    <string name="Overview">Overview</string>
 
 
 </resources>
