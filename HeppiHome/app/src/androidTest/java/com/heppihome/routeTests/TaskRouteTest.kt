@@ -36,7 +36,11 @@ class TaskRouteTest {
                 onChecked = taskclick,
                 group = Group(),
                 onBackPressed = click,
-                onInvitePerson = click)
+                onInvitePerson = click,
+                isAdmin = true,
+                click,
+                click
+            )
         }
         composeTestRule.onNodeWithContentDescription("add task button").assertIsDisplayed()
         // Tasks wordt al op een andere plaats getest
