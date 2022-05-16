@@ -25,7 +25,7 @@ import java.util.*
 fun DateTasksRoute(
     vM : DateTasksViewModel,
     onBackPressed : () -> Unit,
-    calendar: GregorianCalendar,
+    calendar: GregorianCalendar
 ) {
     vM.setCalendar(calendar)
     vM.getTasks()

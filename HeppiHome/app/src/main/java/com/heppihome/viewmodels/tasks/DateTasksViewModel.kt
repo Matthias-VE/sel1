@@ -48,7 +48,7 @@ class DateTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     fun toggleTask(task: Task) {
         viewModelScope.launch {
-            rep.checkTask(task, rep.selectedGroup).collect {
+            rep.checkTask(task).collect {
             }
         }
     }
@@ -56,7 +56,7 @@ class DateTasksViewModel @Inject constructor(private val rep : HomeRepository) :
     fun getTasks() {
         Log.i("date", "${cal.get(Calendar.DAY_OF_MONTH)}-${cal.get(Calendar.MONTH)}-${cal.get(Calendar.YEAR)}")
         viewModelScope.launch{
-            rep.getTasksBetweenStartOfDayAnd24Hours(rep.selectedGroup, cal).collect {
+            rep.getTasksBetweenStartOfDayAnd24Hours(start = cal).collect {
                 when(it){
                     is ResultState.Success -> {
                         _tasks.value = it.data
