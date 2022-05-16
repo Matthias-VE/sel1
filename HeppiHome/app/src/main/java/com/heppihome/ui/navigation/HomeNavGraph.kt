@@ -64,7 +64,7 @@ fun HomeNavGraph(
                 onInvitesClicked = {
                     navController.navigate(HomeAppDestinations.ALLINV_ROUTE)
                 }, onSettingsPressed = {
-                    navController.navigate(BottomNavItem.Settings.screen_route)
+                    navController.navigate(HomeAppDestinations.PROFILE_ROUTE)
                 },
                 onAllTasks = {navController.navigate(HomeAppDestinations.ALL_TASKS)}
             )
@@ -197,7 +197,7 @@ fun HomeNavGraph(
         composable(HomeAppDestinations.PROFILE_ROUTE) {
             HomeProfileRoute(
                 context,
-                {navController.navigate(BottomNavItem.Settings.screen_route)},
+                {navController.navigate(HomeAppDestinations.GROUP_ROUTE)},
                 {navController.navigate(HomeAppDestinations.LOGIN_ROUTE)}
             )
         }
@@ -211,4 +211,5 @@ fun ContentWithNavbar(navController : NavController, content : @Composable (BoxS
     ) {
         Box(modifier = Modifier.padding(it), content = content)
     }
+
 }

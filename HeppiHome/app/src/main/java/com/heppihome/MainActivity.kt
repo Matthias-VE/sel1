@@ -38,10 +38,11 @@ class MainActivity : ComponentActivity() {
                         val p = PopulateDB(viewm)
                         p.Populate(populate)
                     }
-                    
+
                     HomeNavGraph(vM = hiltViewModel(), context = this)
                 }
             }
         }
     }
 }
+
