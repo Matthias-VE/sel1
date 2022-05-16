@@ -1,17 +1,15 @@
-package com.heppihome.ui.routes
+package com.heppihome.ui.routes.admin
 
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,7 +34,7 @@ fun MakeAdminRoute(
     val admins by vM.admins.collectAsState()
 
     if (feedback) {
-        Toast.makeText(LocalContext.current, "Person has been made admin.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(LocalContext.current, stringResource(R.string.MadeAdmin), Toast.LENGTH_SHORT).show()
         vM.resetFeedback()
         onBackPressed()
     }
@@ -58,7 +56,7 @@ fun MakeAdminScreen(
     admins : List<String>
 ) {
     Column() {
-        Topbar(title = "Make someone admin", onBackPressed = onBackPressed)
+        Topbar(title = stringResource(R.string.MakeAdmin), onBackPressed = onBackPressed)
         Spacer(modifier = Modifier.padding(15.dp))
         AdminSelection(users = users, admins = admins, onMakeAdmin = onMakeAdmin)
     }
@@ -75,7 +73,7 @@ fun AdminSelection(users : List<User>, admins : List<String>, onMakeAdmin : (Use
             .padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(25.dp)
     ) {
-        Text("Choose who to make admin:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.ChooseWhoAdmin), fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.padding(5.dp))
         for (user in users) {
 
@@ -90,7 +88,7 @@ fun AdminSelection(users : List<User>, admins : List<String>, onMakeAdmin : (Use
                 ) {
 
                     if (showAdminConfirm) {
-                        ConfirmDialog(content = "Do you want to make ${user.name} admin?",
+                        ConfirmDialog(content = stringResource(R.string.MakeUserAdmin, user.name),
                             onDismiss = { showAdminConfirm = false},
                             onConfirm = {
                                 showAdminConfirm = false

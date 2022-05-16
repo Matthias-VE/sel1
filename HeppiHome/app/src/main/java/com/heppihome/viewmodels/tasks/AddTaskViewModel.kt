@@ -6,19 +6,15 @@ import com.google.firebase.Timestamp
 import com.heppihome.Util.DateUtil
 import com.heppihome.Util.NumberUtil
 import com.heppihome.data.HomeRepository
-import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
 import com.heppihome.data.models.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.time.Year
 import java.util.*
 import javax.inject.Inject
-import kotlin.math.min
 
 @HiltViewModel
 class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)

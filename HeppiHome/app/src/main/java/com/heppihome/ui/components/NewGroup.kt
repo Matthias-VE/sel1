@@ -1,6 +1,5 @@
 package com.heppihome.ui.components
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -12,11 +11,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Observer
 import com.heppihome.R
 import com.heppihome.viewmodels.groups.AddGroupViewModel
 
@@ -39,8 +36,8 @@ fun NewGroup(
         Header(stringResource(R.string.NewGroup), onGroupCancel)
         Column(modifier = Modifier
             .padding(10.dp)) {
-            InputField(name = stringResource(R.string.GroupName), description = temp.text, { x -> vM.setGroup(x)})
-            InputField(name = stringResource(R.string.Description), description = temp2.text, { x -> vM.setDescription(x)})
+            InputField(name = stringResource(R.string.GroupName), description = temp.text) { x -> vM.setGroup(x) }
+            InputField(name = stringResource(R.string.Description), description = temp2.text) { x -> vM.setDescription(x) }
             Button(onClick = {
                     if (vM.isValid(context)) {
                         vM.addGroups(context)

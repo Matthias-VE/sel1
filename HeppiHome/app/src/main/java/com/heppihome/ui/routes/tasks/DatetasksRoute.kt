@@ -91,35 +91,3 @@ fun DateTasksRoute(
         }
     }
 }
-
-@Composable
-fun DisplayTasks(tasks : List<Task>, date : String, toggleTask : (Task) -> Unit, getTasks : () -> Unit, format : SimpleDateFormat){
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(1) {
-            for (task in tasks) {
-                Row {
-                    Checkbox(
-                        checked = task.done,
-                        onCheckedChange = {
-                            toggleTask(task)
-                            getTasks()
-                        })
-                    Text(
-                        text = task.text,
-                        fontSize = MaterialTheme.typography.subtitle1.fontSize
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Text(
-                            text = format.format(task.deadline.toDate())
-                        )
-                    }
-                }
-            }
-        }
-    }
-}

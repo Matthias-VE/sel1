@@ -2,12 +2,9 @@ package com.heppihome.ui.routes.groups
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -41,7 +38,7 @@ fun DetailInviteScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             Column(Modifier.align(Alignment.TopCenter)) {
                 Text(
-                    stringResource(R.string.GotInvite) + ": ${invite.fromEmail}",
+                    stringResource(R.string.GotInvite) + invite.fromEmail,
                     style = MaterialTheme.typography.h6
                 )
                 Text(stringResource(R.string.AcceptOrDeclineInvite))

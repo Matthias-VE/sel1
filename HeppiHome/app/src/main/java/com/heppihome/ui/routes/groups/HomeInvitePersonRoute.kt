@@ -12,7 +12,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.heppihome.R
-import com.heppihome.data.models.Group
 import com.heppihome.ui.components.InputField
 import com.heppihome.ui.components.Topbar
 import com.heppihome.viewmodels.groups.InvitePersonViewModel
@@ -23,7 +22,7 @@ fun HomeInvitePersonRoute(
     onBackPressed: () -> Unit
 ){
     val email by vM.email.collectAsState()
-    HomeInvitePersonScreen(email, onBackPressed, vM::onChangeEmail, {vM.invitePerson(); onBackPressed()})
+    HomeInvitePersonScreen(email, onBackPressed, vM::onChangeEmail) { vM.invitePerson(); onBackPressed() }
 }
 @Composable
 fun HomeInvitePersonScreen(

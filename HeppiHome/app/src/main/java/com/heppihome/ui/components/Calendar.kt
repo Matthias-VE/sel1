@@ -1,25 +1,16 @@
 package com.heppihome.ui.components
 
-import android.util.Log
 import android.widget.CalendarView
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.heppihome.R
-import com.heppihome.data.models.Group
-import com.heppihome.data.models.Task
 import com.heppihome.viewmodels.HomeOverviewViewModel
-import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.concurrent.timerTask
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -50,7 +41,7 @@ fun Calendar(
                 Button(onClick = {
                     onButtonClicked(vM.cal)
                 } ) {
-                    Text(text = "view tasks on $date")
+                    Text(text = stringResource(R.string.TasksOnDate) + date)
                 }
             }
         }

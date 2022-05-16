@@ -26,9 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.ui.components.ConfirmDialog
-import com.heppihome.ui.components.TopbarWithOptionsNoBackArrow
 import com.heppihome.ui.components.TopbarWithSettings
-import com.heppihome.ui.navigation.HomeAppDestinations
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
 import kotlin.math.roundToInt
 
@@ -207,7 +205,7 @@ fun SideView(g : Group, onGroupClicked: (Group) -> Unit, vM : HomeGroupViewModel
     val anchors = mapOf(0f to 0f, sizePx to 1f)
 
     if (showDeleteConfirm) {
-        ConfirmDialog(content = "Do you want to leave this group?",
+        ConfirmDialog(content = stringResource(R.string.WantToLeaveGroup),
             onDismiss = { showDeleteConfirm = false},
             onConfirm = {
                 showDeleteConfirm = false

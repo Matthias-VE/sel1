@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.google.firebase.auth.FirebaseUser
 import com.heppihome.ui.authentication.AuthResultCode
 import com.heppihome.viewmodels.users.HomeLoginViewModel
 
