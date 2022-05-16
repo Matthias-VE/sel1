@@ -86,8 +86,7 @@ fun HomeNavGraph(
         composable(HomeAppDestinations.DATE_TASKS){
             DateTasksRoute(vM = hiltViewModel(),
                 onBackPressed = {navController.navigate(BottomNavItem.Overview.screen_route)},
-                vM.calendar,
-                vM.selectedGroup
+                vM.calendar
             )
         }
 
@@ -98,10 +97,10 @@ fun HomeNavGraph(
             })
         }
         composable(HomeAppDestinations.INVITE_ROUTE) {
-            HomeInvitePersonRoute(hiltViewModel(), {
+            HomeInvitePersonRoute(hiltViewModel()
+            ) {
                 navController.navigate(BottomNavItem.Tasks.screen_route)
             }
-            )
         }
 
         composable(HomeAppDestinations.ALLINV_ROUTE) {

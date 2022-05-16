@@ -26,9 +26,7 @@ fun DateTasksRoute(
     vM : DateTasksViewModel,
     onBackPressed : () -> Unit,
     calendar: GregorianCalendar,
-    group : Group
 ) {
-    vM.setGroup(group)
     vM.setCalendar(calendar)
     vM.getTasks()
     val date by vM.date.collectAsState()

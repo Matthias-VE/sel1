@@ -32,12 +32,6 @@ class DateTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     val date = _date.asStateFlow()
 
-    private var selectedGroup = Group()
-
-    fun setGroup(group : Group){
-        selectedGroup = group
-    }
-
     private val _tasks : MutableStateFlow<List<Task>> = MutableStateFlow(emptyList())
 
     val tasks : StateFlow<List<Task>> = _tasks
@@ -54,7 +48,7 @@ class DateTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     fun toggleTask(task: Task) {
         viewModelScope.launch {
-            rep.checkTask(task, selectedGroup).collect {
+            rep.checkTask(task, rep.selectedGroup).collect {
             }
         }
     }
@@ -62,7 +56,7 @@ class DateTasksViewModel @Inject constructor(private val rep : HomeRepository) :
     fun getTasks() {
         Log.i("date", "${cal.get(Calendar.DAY_OF_MONTH)}-${cal.get(Calendar.MONTH)}-${cal.get(Calendar.YEAR)}")
         viewModelScope.launch{
-            rep.getTasksBetweenStartOfDayAnd24Hours(selectedGroup, cal).collect {
+            rep.getTasksBetweenStartOfDayAnd24Hours(rep.selectedGroup, cal).collect {
                 when(it){
                     is ResultState.Success -> {
                         _tasks.value = it.data
