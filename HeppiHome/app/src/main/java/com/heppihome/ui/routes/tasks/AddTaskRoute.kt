@@ -101,7 +101,7 @@ fun AddTaskScreen(
             CalendarView(cal,
                 hours, date,
                 updateDatepicker, updateTimePicker)
-            Button(onClick = onSaveTask , enabled = users.isNotEmpty(), modifier = Modifier.padding(10.dp)) {
+            Button(onClick = onSaveTask , enabled = users.isNotEmpty() && name.isNotBlank(), modifier = Modifier.padding(10.dp)) {
                 Text(stringResource(R.string.Add))
             }
 
