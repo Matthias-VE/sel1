@@ -1,7 +1,5 @@
 package com.heppihome.ui.navigation
 
-import com.heppihome.R
-
 object HomeAppDestinations {
 
     const val GROUP_ROUTE = "groups"

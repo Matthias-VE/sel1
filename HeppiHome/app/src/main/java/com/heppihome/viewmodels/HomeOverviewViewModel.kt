@@ -2,18 +2,11 @@ package com.heppihome.viewmodels
 
 import android.util.Log
 import android.widget.CalendarView
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.heppihome.Util.DateUtil
 import com.heppihome.data.HomeRepository
-import com.heppihome.data.models.Group
-import com.heppihome.data.models.ResultState
-import com.heppihome.data.models.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 

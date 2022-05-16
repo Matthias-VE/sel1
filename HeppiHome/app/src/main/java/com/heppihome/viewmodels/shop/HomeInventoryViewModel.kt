@@ -3,7 +3,6 @@ package com.heppihome.viewmodels.shop
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heppihome.data.HomeRepository
-import com.heppihome.data.models.Group
 import com.heppihome.data.models.ResultState
 import com.heppihome.data.models.ShopItem
 import dagger.hilt.android.lifecycle.HiltViewModel

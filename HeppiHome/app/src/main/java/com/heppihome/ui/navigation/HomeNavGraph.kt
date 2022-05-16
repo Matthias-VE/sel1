@@ -18,6 +18,7 @@ import com.heppihome.ui.components.NewGroup
 
 import com.heppihome.ui.components.EditGroup
 import com.heppihome.ui.routes.*
+import com.heppihome.ui.routes.admin.MakeAdminRoute
 import com.heppihome.ui.routes.groups.DetailInviteRoute
 import com.heppihome.ui.routes.groups.HomeGroupRoute
 import com.heppihome.ui.routes.groups.HomeInvitePersonRoute

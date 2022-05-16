@@ -1,17 +1,15 @@
-package com.heppihome.ui.routes
+package com.heppihome.ui.routes.admin
 
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -90,7 +88,7 @@ fun AdminSelection(users : List<User>, admins : List<String>, onMakeAdmin : (Use
                 ) {
 
                     if (showAdminConfirm) {
-                        ConfirmDialog(content = stringResource(R.string.MakeAdmin, user.name),
+                        ConfirmDialog(content = stringResource(R.string.MakeUserAdmin, user.name),
                             onDismiss = { showAdminConfirm = false},
                             onConfirm = {
                                 showAdminConfirm = false

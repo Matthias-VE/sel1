@@ -1,6 +1,5 @@
 package com.heppihome.ui.routes.shop
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.heppihome.R
-import com.heppihome.data.models.Group
 import com.heppihome.data.models.ShopItem
 import com.heppihome.ui.components.ConfirmDialog
 import com.heppihome.ui.components.Topbar

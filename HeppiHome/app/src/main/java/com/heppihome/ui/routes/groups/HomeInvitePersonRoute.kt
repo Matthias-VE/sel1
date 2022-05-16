@@ -12,7 +12,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.heppihome.R
-import com.heppihome.data.models.Group
 import com.heppihome.ui.components.InputField
 import com.heppihome.ui.components.Topbar
 import com.heppihome.viewmodels.groups.InvitePersonViewModel
