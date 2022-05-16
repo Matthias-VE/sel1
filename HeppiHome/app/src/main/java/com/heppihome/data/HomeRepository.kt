@@ -194,7 +194,7 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
         fdao.removeListeners()
     }
 
-    fun getTasksBetweenStartOfDayAnd24Hours(group : Group, start : Calendar):
+    fun getTasksBetweenStartOfDayAnd24Hours(group : Group = selectedGroup, start : Calendar):
             Flow<ResultState<List<Task>>> {
         val copy = GregorianCalendar()
         copy.set(Calendar.HOUR_OF_DAY, 0)

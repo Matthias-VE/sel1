@@ -21,21 +21,18 @@ import javax.inject.Inject
 class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
     val cal = GregorianCalendar()
 
-    private var selectedGroup = Group()
+    private val _tasks = MutableStateFlow(emptyList<Task>())
+    val tasks = _tasks.asStateFlow()
 
-    private val _groups : MutableStateFlow<List<Group>> = MutableStateFlow(emptyList())
-    val groups : StateFlow<List<Group>> = _groups
+    private val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
 
-    private var _groupsWithTasks : MutableMap<Group, List<Task>> = mutableMapOf()
-    val groupsWithTasks : StateFlow<MutableMap<Group, List<Task>>> = MutableStateFlow(_groupsWithTasks)
-
-    fun setGroup(g : Group) {
-        selectedGroup = g
-    }
-
-    fun refreshGroups() {
+    fun refreshTasks() {
         viewModelScope.launch {
-            _groups.value = rep.getAllGroups()
+            rep.getTasksBetweenStartOfDayAnd24Hours(start = cal).collect {
+                _loading.value = it is ResultState.Loading
+                if (it is ResultState.Success) _tasks.value = it.data
+            }
         }
     }
 
@@ -60,38 +57,6 @@ class HomeOverviewViewModel @Inject constructor(private val rep : HomeRepository
         cal.set(Calendar.DAY_OF_MONTH, day)
         cal.set(Calendar.MONTH, month)
         cal.set(Calendar.YEAR, year)
-    }
-
-    fun updateGroupsWithTasks(groups : List<Group>, calendar : Calendar) {
-        viewModelScope.launch {
-            for (group in groups) {
-                Log.d("groep", "$group")
-                getTasks(group, calendar)
-            }
-        }
-    }
-
-
-    private fun getTasks(group : Group, calendar : Calendar) {
-        viewModelScope.launch{
-            Log.i("taskdate", "${calendar.get(Calendar.DAY_OF_MONTH)}-${calendar.get(Calendar.MONTH)}-${calendar.get(Calendar.YEAR)}")
-            rep.getTasksBetweenStartOfDayAnd24Hours(group, calendar).collect {
-                when(it){
-                    is ResultState.Success -> {
-                        Log.d("data", "gettasks succes: ${it.data}")
-                        _groupsWithTasks[group] = it.data}
-                    else -> {
-                        Log.d("fail", "gettasks failed")
-                        Unit}
-                }
-            }
-        }
-    }
-
-    fun toggleTask(task: Task, group : Group) {
-        viewModelScope.launch {
-            rep.checkTask(task, group).collect {
-            }
-        }
+        refreshTasks()
     }
 }

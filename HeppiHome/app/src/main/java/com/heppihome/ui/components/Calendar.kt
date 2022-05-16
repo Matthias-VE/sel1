@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,14 +24,12 @@ import java.text.SimpleDateFormat
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Calendar(
-             vM: HomeOverviewViewModel,
              onDateChange : (CalendarView, Int, Int, Int) -> Unit,
+             tasks : List<Task>,
+             date : String
 ) {
-    vM.refreshGroups()
-    val groups by vM.groups.collectAsState()
-    vM.updateGroupsWithTasks(groups, vM.cal)
-    val date by vM.date.collectAsState()
-    val groupsWithTasks by vM.groupsWithTasks.collectAsState()
+
+
     Scaffold(
         topBar = { TopbarNoBackArrow(title = stringResource(R.string.Calendar)) },
         content = {
@@ -43,7 +42,6 @@ fun Calendar(
                     factory = { CalendarView(it)},
                     update = {
                         it.setOnDateChangeListener(onDateChange)
-                        vM.updateGroupsWithTasks(groups, vM.cal)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -53,11 +51,8 @@ fun Calendar(
 
                 //om te testen
                 LazyColumn(modifier = Modifier.fillMaxWidth()){
-                    items(1){
-                        Text(text = "groupsWithTasks:")
-                        for((group, tasks) in groupsWithTasks){
-                            Text(text = "groep ${group.name}, tasks $tasks")
-                        }
+                    items(tasks){
+                        Text(text = "Task: ${it.text}")
                     }
                 }
             }
