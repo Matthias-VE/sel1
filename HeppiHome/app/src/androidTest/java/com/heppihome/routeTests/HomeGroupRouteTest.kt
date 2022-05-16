@@ -52,7 +52,8 @@ class HomeGroupRouteTest {
                 onEditGroupClicked = groupclick,
                 onInvitesClicked = click,
                 onLeaveGroupClicked = leave,
-                onSettingsPressed = click
+                onSettingsPressed = click,
+                onAllTasks = click
             )
         }
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -79,7 +80,8 @@ class HomeGroupRouteTest {
                 onEditGroupClicked = groupclick,
                 onInvitesClicked = click,
                 onLeaveGroupClicked = leave,
-                onSettingsPressed = click
+                onSettingsPressed = click,
+                onAllTasks = click
             )
         }
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext

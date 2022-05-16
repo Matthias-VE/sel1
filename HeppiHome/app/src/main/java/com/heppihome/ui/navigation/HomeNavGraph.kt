@@ -97,10 +97,10 @@ fun HomeNavGraph(
             })
         }
         composable(HomeAppDestinations.INVITE_ROUTE) {
-            HomeInvitePersonRoute(hiltViewModel(), {
+            HomeInvitePersonRoute(hiltViewModel()
+            ) {
                 navController.navigate(BottomNavItem.Tasks.screen_route)
             }
-            )
         }
 
         composable(HomeAppDestinations.ALLINV_ROUTE) {
