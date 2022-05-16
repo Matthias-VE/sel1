@@ -9,6 +9,8 @@ import com.google.firebase.firestore.ktx.toObjects
 import com.google.type.Date
 import com.heppihome.data.models.*
 import com.heppihome.data.models.Constants.COLLECTION_GROUPS
+import com.heppihome.data.models.Constants.COLLECTION_GROUP_SHOP
+import com.heppihome.data.models.Constants.COLLECTION_INVENTORY
 import com.heppihome.data.models.Constants.COLLECTION_INVITES
 import com.heppihome.data.models.Constants.COLLECTION_TASKS
 import com.heppihome.data.models.Constants.COLLECTION_USERS
@@ -18,8 +20,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
-import com.heppihome.R
-import com.heppihome.data.models.Constants.COLLECTION_POINTS
+
+import com.heppihome.data.models.Constants.COLLECTION_SHOP
 import javax.inject.Singleton
 
 @Singleton
@@ -41,6 +43,16 @@ class FirebaseDao {
         groupDoc = db.collection(COLLECTION_GROUPS)
         userDoc = db.collection(COLLECTION_USERS)
     }
+
+    fun registerGroupListener(
+        listener: (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit,
+        gid : String
+    ) {
+        listeners.add(
+            groupDoc.document(gid).addSnapshotListener(listener)
+        )
+    }
+
     fun registerListenerForRecentTasks(
         listener : (QuerySnapshot?, FirebaseFirestoreException?) -> Unit,
         group : Group,
@@ -52,6 +64,7 @@ class FirebaseDao {
             .whereArrayContains(COLLECTION_USERS, user.id)
             .whereGreaterThan("deadline", start)
             .whereLessThan("deadline", end)
+            .orderBy("deadline")
             .addSnapshotListener(listener))
     }
 
@@ -102,10 +115,10 @@ class FirebaseDao {
 
     suspend fun addPersonToGroupId(u : User, groupId : String) {
         groupDoc.document(groupId).update(COLLECTION_USERS, FieldValue.arrayUnion(u.id)).await()
-        val docref = userDoc.document(u.id).collection(COLLECTION_POINTS).document(groupId)
-        val points = docref.get().await().toObject(Points::class.java)
+        val docref = userDoc.document(u.id).collection(COLLECTION_SHOP).document(groupId)
+        val points = docref.get().await().toObject(Shop::class.java)
         if (points == null) {
-            docref.set(Points(groupId)).await()
+            docref.set(Shop(groupId)).await()
         }
     }
 
@@ -128,6 +141,7 @@ class FirebaseDao {
             emit(ResultState.loading())
             val groupref = groupDoc.document(group.id)
             groupref.set(group).await()
+
             emit(ResultState.success(groupref))
         }.catch {
             emit(ResultState.failed(it.message.toString()))
@@ -139,9 +153,9 @@ class FirebaseDao {
             emit(ResultState.loading())
 
             val groupRef = groupDoc.document()
-            groupRef.set(Group(group.name, group.description, group.users, groupRef.id)).await()
-            userDoc.document(group.users[0]).collection(COLLECTION_POINTS).document(groupRef.id)
-                .set(Points(groupRef.id)).await()
+            groupRef.set(Group(group.name, group.description, group.users, group.admins,  groupRef.id)).await()
+            userDoc.document(group.users[0]).collection(COLLECTION_SHOP).document(groupRef.id)
+                .set(Shop(groupRef.id)).await()
             emit(ResultState.success(groupRef))
         }.catch {
             emit(ResultState.failed(it.message.toString()))
@@ -169,11 +183,6 @@ class FirebaseDao {
         }.flowOn(Dispatchers.IO)
     }
 
-
-    // Register a listener to changes to tasks in a certain group
-    fun registerTaskSnapshotListener(listener : (QuerySnapshot?, FirebaseFirestoreException?) -> Unit, group : Group) {
-        listeners.add(groupDoc.document(group.id).collection(COLLECTION_TASKS).addSnapshotListener(listener))
-    }
 
     // Remove all listeners
     fun removeListeners() {
@@ -266,8 +275,8 @@ class FirebaseDao {
 
     fun getPoints(user: User, gid : String) = flow {
         emit(ResultState.loading())
-        val p = userDoc.document(user.id).collection(COLLECTION_POINTS).document(gid).get().await()
-            .toObject(Points::class.java)
+        val p = userDoc.document(user.id).collection(COLLECTION_SHOP).document(gid).get().await()
+            .toObject(Shop::class.java)
         emit(ResultState.success(p))
     }.catch {
         emit(ResultState.failed(it.message.toString()))
@@ -278,17 +287,138 @@ class FirebaseDao {
         user : User,
         groupId: String
     ) {
-        userDoc.document(user.id).collection(COLLECTION_POINTS).document(groupId)
+        listeners.add(
+            userDoc.document(user.id).collection(COLLECTION_SHOP).document(groupId)
             .addSnapshotListener(listener)
+        )
     }
 
-    fun updatePoints(user : User, gid : String, newPoints : Int) = flow {
+    fun setPoints(userId: String, gid:String, s : Shop) = flow {
         emit(ResultState.loading())
-        userDoc.document(user.id).collection(COLLECTION_POINTS)
-            .document(gid).update(COLLECTION_POINTS, newPoints).await()
+        userDoc.document(userId).collection(COLLECTION_SHOP)
+            .document(gid).set(s).await()
+
         emit(ResultState.success("Successfully updated points"))
     }.catch {
         emit(ResultState.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)
+
+    fun updatePoints(userId : String, gid : String, tobeAdded : Int) = flow {
+        emit(ResultState.loading())
+        val docref = userDoc.document(userId).collection(COLLECTION_SHOP)
+            .document(gid)
+        val shop = docref.get().await().toObject(Shop::class.java)
+        if (shop != null) {
+            docref.update("points", (shop.points + tobeAdded)).await()
+        } else {
+            val temp = Shop(gid, tobeAdded)
+            println("tobeAdded = ${temp.points}")
+            docref.set(temp).await()
+        }
+        emit(ResultState.success("Successfully updated points"))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+    fun getAllInventoryItems(uid : String, gid : String) = flow {
+        emit(ResultState.loading())
+
+        val items = userDoc.document(uid).collection(COLLECTION_SHOP).document(gid)
+            .collection(COLLECTION_INVENTORY).orderBy("points")
+            .get().await().toObjects(ShopItem::class.java)
+        emit(ResultState.success(items))
+
+    }.catch{
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
+    fun addShopItemToInventory(user : User, groupId : String, item : ShopItem) =
+        flow {
+            emit(ResultState.loading())
+            val docref = userDoc.document(user.id).collection(COLLECTION_SHOP).document(groupId)
+                .collection(COLLECTION_INVENTORY).document()
+            docref.set(ShopItem(docref.id, item.name, item.points)).await()
+            emit(ResultState.success("Successfully added shopItem to inventory"))
+        }.catch{
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+
+    fun deleteShopItemFromInventory(user : User, groupId : String, item : ShopItem) =
+        flow {
+            emit(ResultState.loading())
+            val docref = userDoc.document(user.id).collection(COLLECTION_SHOP).document(groupId)
+                .collection(COLLECTION_INVENTORY).document(item.id)
+            docref.delete().await()
+            emit(ResultState.success("Successfully added shopItem to inventory"))
+        }.catch{
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+
+
+    suspend fun getAllAdmins(gid : String) : List<String> {
+        val group = groupDoc.document(gid).get().await().toObject(Group::class.java)
+        return group?.admins ?: emptyList()
+    }
+
+    fun makeOtherUserAdmin(otherUser : User, groupId : String) = flow {
+        emit(ResultState.loading())
+        groupDoc.document(groupId).update("admins", FieldValue.arrayUnion(otherUser.id)).await()
+        emit(ResultState.success("Successfully made ${otherUser.name} admin"))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
+    fun removeUserFromAdmin(otherUser: User, groupId: String) = flow {
+        emit(ResultState.loading())
+        groupDoc.document(groupId).update("admins", FieldValue.arrayRemove(otherUser.id)).await()
+        emit(ResultState.success("Successfully removed ${otherUser.name} from admin"))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
+    fun getAllShopItems(groupId : String) = flow {
+        emit(ResultState.loading())
+        val items = groupDoc.document(groupId).collection(COLLECTION_GROUP_SHOP).orderBy("points")
+            .get().await().toObjects(ShopItem::class.java)
+        emit(ResultState.success(items))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
+    fun addItemToShop(groupId : String, item : ShopItem) =
+        flow {
+            emit(ResultState.loading())
+            val docref = groupDoc.document(groupId).collection(COLLECTION_GROUP_SHOP).document()
+            docref.set(ShopItem(docref.id, item.name, item.points)).await()
+            emit(ResultState.success("Successfully added shopItem to the shop"))
+        }.catch{
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+
+
+    fun updateShopItem(groupId : String, item : ShopItem) =
+        flow {
+            emit(ResultState.loading())
+            groupDoc.document(groupId).collection(COLLECTION_GROUP_SHOP).document(item.id)
+                .update("name", item.name, "points", item.points).await()
+            emit(ResultState.success("Successfully edited shopItem in the shop"))
+        }.catch{
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
+
+
+    fun deleteShopItem(groupId : String, item : ShopItem) =
+        flow {
+            emit(ResultState.loading())
+            groupDoc.document(groupId).collection(COLLECTION_GROUP_SHOP).document(item.id)
+                .delete()
+            emit(ResultState.success("Successfully removed shopItem from the shop"))
+        }.catch{
+            emit(ResultState.failed(it.message.toString()))
+        }.flowOn(Dispatchers.IO)
 
 }

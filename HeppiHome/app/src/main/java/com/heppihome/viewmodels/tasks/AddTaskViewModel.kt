@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
 import com.heppihome.Util.DateUtil
+import com.heppihome.Util.NumberUtil
 import com.heppihome.data.HomeRepository
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
@@ -43,6 +44,8 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         )
     )
 
+    val isAdmin = rep.isAdmin
+
     val name = _name.asStateFlow()
     val points = _points.asStateFlow()
     val users = _users.asStateFlow()
@@ -50,9 +53,10 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
     val hours = _hours.asStateFlow()
     val date = _date.asStateFlow()
 
-    fun usersInGroup(g : Group) {
+
+    fun usersInGroup() {
         viewModelScope.launch {
-            _usersInGroup.value = rep.getAllUsersInGroup(g.users)
+            _usersInGroup.value = rep.getAllUsersInGroup(rep.selectedGroup.users)
         }
     }
 
@@ -77,19 +81,12 @@ class AddTaskViewModel @Inject constructor(private val rep : HomeRepository)
         _users.value = _users.value.minus(u.id)
     }
 
-    private fun verifyInput(s : String) : Int {
-        var i = 0
-        runCatching {
-            i = Integer.parseInt(s)
-        }
-        return i
-    }
 
-    fun addTask(g : Group) {
+    fun addTask() {
         val task = Task(_name.value, false, Timestamp(calendar.time),
-            _users.value, verifyInput(_points.value))
+            _users.value, NumberUtil.verifyInput(_points.value))
         viewModelScope.launch {
-            rep.addTask(task, g).collect {  }
+            rep.addTask(task).collect {  }
         }
     }
 

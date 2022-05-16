@@ -1,11 +1,14 @@
 package com.heppihome.ui.routes.tasks
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.intl.Locale
 import com.heppihome.data.models.Group
 import com.heppihome.data.models.Task
@@ -20,20 +23,28 @@ fun HomeTasksRoute(
     onAddTask : () -> Unit,
     onBackPressed : () -> Unit,
     onInvitePerson: () -> Unit,
-    group : Group?
+    onMakeSomeoneAdmin: () -> Unit
 ){
 
-    group?.let {
-        vM.onChangeGroup(it)
-    }
+    vM.startListeners()
+
+    val context = LocalContext.current
+
     val tasksToday by vM.tasksToday.collectAsState()
     val tasksTomorrow by vM.tasksTomorrow.collectAsState()
     val expanded by vM.expanded.collectAsState()
+    val isAdmin by vM.isAdmin.collectAsState()
 
     HomeTasksScreen(tasksToday, tasksTomorrow,expanded,vM::toggleDropdownMenu, onAddTask ,
         {vM.toggleTask(it)}, vM.group(),
         {vM.onGoBack(); onBackPressed()},
-        onInvitePerson
+        onInvitePerson, isAdmin,
+        {
+            // Als resign failed
+            if (!vM.resignAsAdmin()) {
+                Toast.makeText(context, "You can't resign as admin since you are the last admin of the group", Toast.LENGTH_LONG).show()
+            }
+        }, onMakeSomeoneAdmin
     )
 }
 
@@ -48,7 +59,10 @@ fun HomeTasksScreen(
     onChecked : (Task) -> Unit,
     group : Group,
     onBackPressed: () -> Unit,
-    onInvitePerson : () -> Unit
+    onInvitePerson : () -> Unit,
+    isAdmin : Boolean,
+    onResignAsAdmin : () -> Unit,
+    onMakeSomeoneAdmin : () -> Unit
     ) {
     val format = SimpleDateFormat("kk:mm", java.util.Locale.getDefault())
     Scaffold(floatingActionButton = {
@@ -57,6 +71,8 @@ fun HomeTasksScreen(
         }
     }, floatingActionButtonPosition = FabPosition.End) {
         Tasks(today, tomorrow,expanded, toggleDropDown, onChecked = onChecked,
-            group = group, onBackPressed, onInvitePerson, format)
+            group = group, onBackPressed, onInvitePerson, format,
+            isAdmin, onResignAsAdmin, onMakeSomeoneAdmin
+        )
     }
 }

@@ -17,12 +17,10 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) : ViewModel() {
 
-    private var testGroup : Group = Group("test groep", "dit is een groep dus", listOf(), "KXuXm9sRW43maz0Dbi2u")
-
     private val _tasksTod = MutableStateFlow<List<Task>>(emptyList())
     private val _tasksTom = MutableStateFlow<List<Task>>(emptyList())
+    private val _canNotResign = MutableStateFlow(false)
 
-    val group = {testGroup}
     val tasksToday : StateFlow<List<Task>> = _tasksTod
 
     val tasksTomorrow : StateFlow<List<Task>> = _tasksTom
@@ -30,10 +28,10 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
     private var _expanded : MutableStateFlow<Boolean> = MutableStateFlow(false)
     var expanded : StateFlow<Boolean> = _expanded
 
-    init {
-        rep.registerTaskSnapshotListener(this::taskListenerToday, testGroup)
-        rep.registerTaskSnapshotListener(this::taskListenerTomorrow, testGroup)
-    }
+    val canNotResign = _canNotResign.asStateFlow()
+    val group = {rep.selectedGroup}
+    val isAdmin = rep.isAdmin
+
     private fun taskListenerToday(value : QuerySnapshot?, ex : FirebaseFirestoreException?) {
         if (ex != null) {
             Log.w("HomeMainViewModel", "Listen failed.", ex)
@@ -58,11 +56,22 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
         _tasksTom.value = newList
     }
 
-    fun onChangeGroup(group : Group) {
-        rep.removeListeners()
-        testGroup = group
-        rep.registerTodayTasksListenerForUserAndGroup(this::taskListenerToday, testGroup)
-        rep.registerTomorrowTasksListenerForUserAndGroup(this::taskListenerTomorrow, testGroup)
+    fun startListeners() {
+        rep.registerTodayTasksListenerForUserAndGroup(this::taskListenerToday)
+        rep.registerTomorrowTasksListenerForUserAndGroup(this::taskListenerTomorrow)
+    }
+
+    // Return true for success and false for failed
+    fun resignAsAdmin() : Boolean {
+        // true if last admin, false if not
+        val check = rep.checkLastAdmin()
+        if (!check) {
+            viewModelScope.launch {
+                rep.removeSelfAdmin()
+            }
+            return true
+        }
+        return false
     }
 
     fun onGoBack() {
@@ -75,15 +84,9 @@ class HomeTasksViewModel @Inject constructor(private val rep : HomeRepository) :
 
     fun toggleTask(t : Task) {
         viewModelScope.launch {
-            rep.checkTask(t, testGroup).collect {
+            rep.checkTask(t).collect {
             }
         }
     }
 
-    fun addTask(t : Task , g : Group = testGroup) {
-        viewModelScope.launch {
-            rep.addTask(t, g).collect { s ->
-            }
-        }
-    }
 }

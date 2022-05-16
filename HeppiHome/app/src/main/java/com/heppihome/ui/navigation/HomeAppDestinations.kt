@@ -12,5 +12,9 @@ object HomeAppDestinations {
     const val ALLINV_ROUTE = "allinvites"
     const val INVITE_DETAIL = "invitedetail"
     const val SHOP_ROUTE = "shop"
+    const val INVENTORY_ROUTE = "inventory"
     const val SETTINGS_ROUTE = "settings"
+    const val MAKE_ADMIN_ROUTE = "make_admin"
+    const val ADD_SHOPITEM_ROUTE = "add_shopitem"
+    const val EDIT_SHOPITEM_ROUTE = "edit_shopitem"
 }

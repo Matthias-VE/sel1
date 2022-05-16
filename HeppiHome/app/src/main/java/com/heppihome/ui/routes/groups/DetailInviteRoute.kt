@@ -41,18 +41,18 @@ fun DetailInviteScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             Column(Modifier.align(Alignment.TopCenter)) {
                 Text(
-                    stringResource(R.string.GotInvite) + invite.fromEmail,
+                    stringResource(R.string.GotInvite) + ": ${invite.fromEmail}",
                     style = MaterialTheme.typography.h6
                 )
                 Text(stringResource(R.string.AcceptOrDeclineInvite))
             }
             Row(Modifier.align(Alignment.Center)) {
-                    Button(onClick = {onAcceptInvite(invite)}) {
-                        Text(stringResource(R.string.Accept))
-                    }
-                    Spacer(modifier = Modifier.padding(20.dp))
                     Button(onClick = {onDeclineInvite(invite)}) {
                         Text(stringResource(R.string.Decline))
+                    }
+                    Spacer(modifier = Modifier.padding(20.dp))
+                    Button(onClick = {onAcceptInvite(invite)}) {
+                        Text(stringResource(R.string.Accept))
                     }
             }
 
