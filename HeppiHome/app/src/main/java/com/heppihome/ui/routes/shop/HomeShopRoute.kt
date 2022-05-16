@@ -28,9 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.heppihome.R
-import com.heppihome.data.models.Group
 import com.heppihome.data.models.ShopItem
-import com.heppihome.ui.components.TopbarNoBackArrow
 import com.heppihome.ui.components.TopbarWithIcon
 import com.heppihome.viewmodels.shop.HomeShopViewModel
 

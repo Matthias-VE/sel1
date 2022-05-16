@@ -26,9 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.heppihome.R
 import com.heppihome.data.models.Group
 import com.heppihome.ui.components.ConfirmDialog
-import com.heppihome.ui.components.TopbarWithOptionsNoBackArrow
 import com.heppihome.ui.components.TopbarWithSettings
-import com.heppihome.ui.navigation.HomeAppDestinations
 import com.heppihome.viewmodels.groups.HomeGroupViewModel
 import kotlin.math.roundToInt
 

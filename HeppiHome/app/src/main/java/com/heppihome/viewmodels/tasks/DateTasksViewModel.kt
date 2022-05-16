@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heppihome.Util.DateUtil
 import com.heppihome.data.HomeRepository
-import com.heppihome.data.models.Group
 import com.heppihome.data.models.ResultState
 import com.heppihome.data.models.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
