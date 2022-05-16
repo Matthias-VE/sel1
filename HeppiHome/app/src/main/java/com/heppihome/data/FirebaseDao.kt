@@ -252,7 +252,7 @@ class FirebaseDao {
             emit(ResultState.loading())
 
             val taskRef = groupDoc.document(group.id).collection(COLLECTION_TASKS).document()
-            taskRef.set(Task(task.text, task.done,task.deadline, task.users,0, taskRef.id)).await()
+            taskRef.set(Task(task.text, task.done,task.deadline, task.users,task.points, taskRef.id)).await()
 
             //emit data
             emit(ResultState.success(taskRef))
