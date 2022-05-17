@@ -213,6 +213,9 @@ class HomeRepository @Inject constructor(private val fdao : FirebaseDao) {
     fun addTask(task : Task, group: Group = selectedGroup) : Flow<ResultState<DocumentReference>> =
         fdao.addTask(task, group)
 
+    fun updateTask(task : Task, group : Group = selectedGroup) : Flow<ResultState<String>> =
+        fdao.updateTask(task, group)
+
     fun updatePoints(group : Group = selectedGroup, toBeAdded : Int) =
         fdao.updatePoints(user.id, group.id, toBeAdded)
 

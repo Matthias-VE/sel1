@@ -2,6 +2,7 @@ package com.heppihome.ui.routes
 
 import android.widget.CalendarView
 import androidx.compose.runtime.Composable
+import com.heppihome.data.models.Task
 import com.heppihome.ui.components.Calendar
 import com.heppihome.viewmodels.HomeOverviewViewModel
 import java.util.*
@@ -9,7 +10,7 @@ import java.util.*
 @Composable
 fun HomeOverViewRoute(
     vM : HomeOverviewViewModel,
-    onButtonClicked : (GregorianCalendar) -> Unit,
+    onButtonClicked : (GregorianCalendar) -> Unit
 ) {
 
     HomeOverViewScreen(

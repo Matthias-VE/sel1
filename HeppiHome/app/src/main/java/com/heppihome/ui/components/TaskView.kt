@@ -36,7 +36,8 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
           format : SimpleDateFormat,
           isAdmin : Boolean,
           resignAsAdmin : () -> Unit,
-          makeSomeoneAdmin : () -> Unit
+          makeSomeoneAdmin : () -> Unit,
+          onTaskPressed : (Task) -> Unit
 ) {
     val lists = Pair(mutableListOf(stringResource(R.string.Invite)), mutableListOf(onInvitePerson))
 
@@ -55,8 +56,8 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
         )
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(1) {
-                Day(stringResource(R.string.Today), tasksToday, onChecked, format)
-                Day(stringResource(R.string.Tomorrow), tasksTomorrow, onChecked, format)
+                Day(stringResource(R.string.Today), tasksToday, onChecked, format, onTaskPressed)
+                Day(stringResource(R.string.Tomorrow), tasksTomorrow, onChecked, format, onTaskPressed)
             }
         }
     }
@@ -65,7 +66,9 @@ fun Tasks(tasksToday: List<Task>, tasksTomorrow: List<Task>,
 
 @ExperimentalMaterialApi
 @Composable
-fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit, format : SimpleDateFormat){
+fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit, format : SimpleDateFormat,
+        onTaskPressed: (Task) -> Unit
+){
     var expended by remember { mutableStateOf(true)}
     val rotation by animateFloatAsState(targetValue = if(expended) 180f else 0f)
 
@@ -114,7 +117,7 @@ fun Day(day : String, tasks : List<Task>, onChecked : (Task) -> Unit, format : S
                     Text(text = stringResource(R.string.NoTasks))
                 }else {
                     for (task in tasks) {
-                        Row {
+                        Row(Modifier.clickable(true, onClick = {onTaskPressed(task)})) {
                             Checkbox(checked = task.done, onCheckedChange = { onChecked(task) })
                             Text(
                                 text = task.text,

@@ -17,6 +17,10 @@ class HomeMainViewModel @Inject constructor (private val rep : HomeRepository) :
         "default"
     )
 
+    var fromTasks = true
+
+    var selectedTask : Task = Task()
+
     var toEditGroup : Group = Group()
 
     var calendar : GregorianCalendar = GregorianCalendar()

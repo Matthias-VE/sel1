@@ -27,10 +27,7 @@ import com.heppihome.ui.routes.shop.AddShopItemRoute
 import com.heppihome.ui.routes.shop.EditShopItemRoute
 import com.heppihome.ui.routes.shop.HomeInventoryRoute
 import com.heppihome.ui.routes.shop.HomeShopRoute
-import com.heppihome.ui.routes.tasks.AddTaskRoute
-import com.heppihome.ui.routes.tasks.AllTasksRoute
-import com.heppihome.ui.routes.tasks.DateTasksRoute
-import com.heppihome.ui.routes.tasks.HomeTasksRoute
+import com.heppihome.ui.routes.tasks.*
 import com.heppihome.viewmodels.HomeMainViewModel
 import java.util.*
 
@@ -74,6 +71,28 @@ fun HomeNavGraph(
             AllTasksRoute(vM = hiltViewModel()) {navController.navigate(HomeAppDestinations.GROUP_ROUTE) }
         }
 
+        composable(HomeAppDestinations.TASK_EDIT_ROUTE) {
+            EditTaskRoute(onCancelled = {
+                vM.selectedTask = it
+                navController.navigate(HomeAppDestinations.TASK_DETAIL_ROUTE)
+            },
+                task = vM.selectedTask
+            )
+        }
+
+        composable(HomeAppDestinations.TASK_DETAIL_ROUTE) {
+            TaskDetailRoute(
+                onGoBack = {
+                           if (vM.fromTasks) {
+                               navController.navigate(HomeAppDestinations.TASKS_ROUTE)
+                           } else {
+                               navController.navigate(HomeAppDestinations.DATE_TASKS)
+                           }
+                },
+                task = vM.selectedTask,
+                onEditPressed = { navController.navigate(HomeAppDestinations.TASK_EDIT_ROUTE) })
+        }
+
         composable(BottomNavItem.Overview.screen_route) {
             ContentWithNavbar(navController) {
                 HomeOverViewRoute(vM = hiltViewModel()
@@ -87,7 +106,11 @@ fun HomeNavGraph(
         composable(HomeAppDestinations.DATE_TASKS){
             DateTasksRoute(vM = hiltViewModel(),
                 onBackPressed = {navController.navigate(BottomNavItem.Overview.screen_route)},
-                vM.calendar
+                vM.calendar,
+                onTaskPressed = {
+                    vM.selectedTask = it
+                    vM.fromTasks = false
+                    navController.navigate(HomeAppDestinations.TASK_DETAIL_ROUTE)}
             )
         }
 
@@ -172,7 +195,11 @@ fun HomeNavGraph(
                 },
                     onAddTask = {navController.navigate(HomeAppDestinations.TASK_ADD)},
                     onInvitePerson = {navController.navigate(HomeAppDestinations.INVITE_ROUTE)},
-                    onMakeSomeoneAdmin = {navController.navigate(HomeAppDestinations.MAKE_ADMIN_ROUTE)}
+                    onMakeSomeoneAdmin = {navController.navigate(HomeAppDestinations.MAKE_ADMIN_ROUTE)},
+                    onTaskPressed = {
+                        vM.selectedTask = it
+                        vM.fromTasks = true
+                        navController.navigate(HomeAppDestinations.TASK_DETAIL_ROUTE)}
                 )
             }
         }

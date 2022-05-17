@@ -25,7 +25,8 @@ import java.util.*
 fun DateTasksRoute(
     vM : DateTasksViewModel,
     onBackPressed : () -> Unit,
-    calendar: GregorianCalendar
+    calendar: GregorianCalendar,
+    onTaskPressed : (Task) -> Unit
 ) {
     vM.setCalendar(calendar)
     vM.getTasks()
@@ -63,7 +64,7 @@ fun DateTasksRoute(
                 items(1) {
                     Spacer(Modifier.padding(10.dp))
                     for (task in tasks) {
-                        Row {
+                        Row(Modifier.clickable(true, onClick = {onTaskPressed(task)})) {
                             Checkbox(
                                 checked = task.done,
                                 onCheckedChange = {

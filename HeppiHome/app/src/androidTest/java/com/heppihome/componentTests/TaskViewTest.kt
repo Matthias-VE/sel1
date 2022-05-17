@@ -40,7 +40,8 @@ class TaskViewTest {
                     SimpleDateFormat("kk:mm", java.util.Locale.getDefault()),
                     true,
                     test3,
-                    test4
+                    test4,
+                    test1
                 )
             }
         }

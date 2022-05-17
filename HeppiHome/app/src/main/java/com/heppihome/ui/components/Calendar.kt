@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import com.heppihome.R
+import com.heppihome.data.models.Task
 import com.heppihome.viewmodels.HomeOverviewViewModel
 import java.util.*
 

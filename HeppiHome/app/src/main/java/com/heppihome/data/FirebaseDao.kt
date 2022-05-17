@@ -262,6 +262,15 @@ class FirebaseDao {
             emit(ResultState.failed(it.message.toString()))
         }.flowOn(Dispatchers.IO)
 
+
+    fun updateTask(task : Task, group : Group) = flow {
+        emit(ResultState.loading())
+        groupDoc.document(group.id).collection(COLLECTION_TASKS).document(task.id).set(task).await()
+        emit(ResultState.success("Success"))
+    }.catch {
+        emit(ResultState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
     // This updates a task in a certain group's entry 'done' field. Changes true to false and false to true
     fun checkTask(task : Task, group : Group) : Flow<ResultState<DocumentReference>> =
         flow {

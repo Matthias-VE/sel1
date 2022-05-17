@@ -21,5 +21,7 @@ object HomeAppDestinations {
     const val MAKE_ADMIN_ROUTE = "make_admin"
     const val ADD_SHOPITEM_ROUTE = "add_shopitem"
     const val EDIT_SHOPITEM_ROUTE = "edit_shopitem"
+    const val TASK_DETAIL_ROUTE = "task_detail"
+    const val TASK_EDIT_ROUTE = "task_edit"
 
 }

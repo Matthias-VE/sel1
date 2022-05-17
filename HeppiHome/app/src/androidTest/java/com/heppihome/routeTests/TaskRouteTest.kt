@@ -39,7 +39,8 @@ class TaskRouteTest {
                 onInvitePerson = click,
                 isAdmin = true,
                 click,
-                click
+                click,
+                taskclick
             )
         }
         composeTestRule.onNodeWithContentDescription("add task button").assertIsDisplayed()

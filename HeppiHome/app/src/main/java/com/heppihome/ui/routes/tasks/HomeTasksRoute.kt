@@ -25,7 +25,8 @@ fun HomeTasksRoute(
     onAddTask : () -> Unit,
     onBackPressed : () -> Unit,
     onInvitePerson: () -> Unit,
-    onMakeSomeoneAdmin: () -> Unit
+    onMakeSomeoneAdmin: () -> Unit,
+    onTaskPressed : (Task) -> Unit
 ){
 
     vM.startListeners()
@@ -48,7 +49,7 @@ fun HomeTasksRoute(
             if (!vM.resignAsAdmin()) {
                 Toast.makeText(context, txt, Toast.LENGTH_LONG).show()
             }
-        }, onMakeSomeoneAdmin
+        }, onMakeSomeoneAdmin, onTaskPressed
     )
 }
 
@@ -66,7 +67,8 @@ fun HomeTasksScreen(
     onInvitePerson : () -> Unit,
     isAdmin : Boolean,
     onResignAsAdmin : () -> Unit,
-    onMakeSomeoneAdmin : () -> Unit
+    onMakeSomeoneAdmin : () -> Unit,
+    onTaskPressed: (Task) -> Unit
     ) {
     val format = SimpleDateFormat("kk:mm", java.util.Locale.getDefault())
     Scaffold(floatingActionButton = {
@@ -76,7 +78,7 @@ fun HomeTasksScreen(
     }, floatingActionButtonPosition = FabPosition.End) {
         Tasks(today, tomorrow,expanded, toggleDropDown, onChecked = onChecked,
             group = group, onBackPressed, onInvitePerson, format,
-            isAdmin, onResignAsAdmin, onMakeSomeoneAdmin
+            isAdmin, onResignAsAdmin, onMakeSomeoneAdmin, onTaskPressed
         )
     }
 }
